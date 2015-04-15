@@ -18,11 +18,11 @@ gulp.task('browserify', function() {
     .pipe(gulp.dest('.'));
 });
 
-gulp.task('mocha', shell.task(['mocha --reporter dot --compilers js:babel/register']));
+gulp.task('mocha', shell.task(['mocha --recursive --colors --reporter dot --compilers js:babel/register']));
 
 gulp.task('build', ['babel']);
 
-gulp.task('test', ['babel', 'babel:test', 'mocha']);
+gulp.task('test', ['babel', 'mocha']);
 
 gulp.task('watch', function() {
   gulp.watch('src/**/*.js', ['babel', 'mocha']);
