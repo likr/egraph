@@ -5,7 +5,7 @@ var expect = require('expect.js'),
 
 describe('cross(g, h1, h2)', () => {
   it('returns the number of crossing', () => {
-    let graph = getGraph();
+    var graph = getGraph();
     var a = graph.addVertex();
     var b = graph.addVertex();
     var c = graph.addVertex();
