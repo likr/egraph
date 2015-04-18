@@ -1,7 +1,6 @@
 'use strict';
 
-const priority = (g, h1, h2, x1, w2) => {
-  const x2 = {};
+const priority = (g, h1, h2, x1, sizes, xMargin, inverse=false) => {
   const spaces = [[-Infinity, Infinity]];
   const allocateSpace = (x, width) => {
     const xs = spaces
@@ -40,14 +39,22 @@ const priority = (g, h1, h2, x1, w2) => {
     spaces.splice(index, 1, left, right);
     return minX;
   };
+
+  const positions = {},
+        vertices = inverse ? u => g.outVertices(u) : u => g.inVertices(u),
+        degree = inverse ? u => g.outDegree(u) : u => g.inDegree(u);
+  [h1, h2] = inverse ? [h2, h1] : [h1, h2];
   for (let u of h2) {
     let sum = 0;
-    for (let v of g.inVertices(u)) {
+    for (let v of vertices(u)) {
       sum += x1[v];
     }
-    x2[u] = allocateSpace(+(sum / g.inDegree(u)).toFixed(), w2[u]);
+    let x = +(sum / degree(u)).toFixed();
+    positions[u] = {
+      x: allocateSpace(isNaN(x) ? 0 : x, sizes[u].width + xMargin)
+    };
   }
-  return x2;
+  return positions;
 };
 
 module.exports = priority;
