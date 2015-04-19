@@ -54,6 +54,18 @@ module.exports = function graph() {
       }
     }
 
+    *outEdges(u) {
+      for (let v of this.outVertices(u)) {
+        yield [u, v];
+      }
+    }
+
+    *inEdges(u) {
+      for (let v of this.inVertices(u)) {
+        yield [v, u];
+      }
+    }
+
     numVertices() {
       return numVertices;
     }

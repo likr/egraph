@@ -1,6 +1,7 @@
 'use strict';
 var expect = require('expect.js'),
-    graph = require('../lib/graph');
+    graph = require('../lib/graph'),
+    copy = require('../lib/graph/copy');
 
 describe('graph', () => {
   it('returns empty Graph', () => {
@@ -155,5 +156,79 @@ describe('Graph', () => {
       }
       expect(count).to.be(g.outDegree(u));
     });
+  });
+
+  describe('inVertices(u)', () => {
+    it('returns generator of in vertices to u', () => {
+      var g = graph();
+      var u = g.addVertex();
+      var v = g.addVertex();
+      var w = g.addVertex();
+      g.addEdge(u, v);
+      g.addEdge(u, w);
+      g.addEdge(v, w);
+      var inVertices = new Set([u, v]);
+      var count = 0;
+      for (let v of g.inVertices(w)) {
+        expect(inVertices.has(v)).to.be.ok();
+        count++;
+      }
+      expect(count).to.be(g.inDegree(w));
+    });
+  });
+
+  describe('outEdges(u)', () => {
+    it('returns generator of out edges from u', () => {
+      const g = graph();
+      const u = g.addVertex();
+      const v = g.addVertex();
+      const w = g.addVertex();
+      g.addEdge(u, v);
+      g.addEdge(u, w);
+      g.addEdge(v, w);
+      const outVertices = new Set([v, w]);
+      let count = 0;
+      for (const [v, w] of g.outEdges(u)) {
+        expect(v).to.be(u);
+        expect(outVertices.has(w)).to.be.ok();
+        count++;
+      }
+      expect(count).to.be(g.outDegree(u));
+    });
+  });
+
+  describe('inEdges(u)', () => {
+    it('returns generator of in vertices to u', () => {
+      const g = graph();
+      const u = g.addVertex();
+      const v = g.addVertex();
+      const w = g.addVertex();
+      g.addEdge(u, v);
+      g.addEdge(u, w);
+      g.addEdge(v, w);
+      const inVertices = new Set([u, v]);
+      let count = 0;
+      for (const [u, v] of g.inEdges(w)) {
+        expect(v).to.be(w);
+        expect(inVertices.has(u)).to.be.ok();
+        count++;
+      }
+      expect(count).to.be(g.inDegree(w));
+    });
+  });
+});
+
+describe('copy', () => {
+  it('returns copied graph', () => {
+    const g = graph();
+    const u = g.addVertex();
+    const v = g.addVertex();
+    const w = g.addVertex();
+    g.addEdge(u, v);
+    g.addEdge(u, w);
+    g.addEdge(v, w);
+    const newGraph = copy(g);
+    expect(newGraph.numVertices()).to.be(g.numVertices());
+    expect(newGraph.numEdges()).to.be(g.numEdges());
   });
 });
