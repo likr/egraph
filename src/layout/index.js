@@ -25,6 +25,10 @@ const layout = (g, sizes, {xMargin=10, yMargin=10}) => {
     }
   }
   crossingReduction(g, layers);
+  const descDegree = (u, v) => (g.inDegree(u) + g.outDegree(u) - (g.inDegree(v) + g.outDegree(v)));
+  for (const index in layers) {
+    layers[index].sort(descDegree);
+  }
   const positions = positionAssignment(g, layers, sizes, xMargin, yMargin);
   return positions;
 };

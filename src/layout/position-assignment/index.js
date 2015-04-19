@@ -4,21 +4,22 @@ const priority = require('./priority');
 
 const positionAssignment = (g, layers, sizes, xMargin, yMargin) => {
   const n = Object.keys(layers).length,
-        positions = {0: {}};
+        positions = {};
   let offset = 0;
   for (let u of layers[0]) {
-    positions[0][u] = {
-      x: offset = offset + sizes[u].width
+    positions[u] = {
+      x: offset + sizes[u].width / 2
     };
+    offset += sizes[u].width + xMargin;
   }
   for (let i = 1; i < n; ++i) {
-    positions[i] = priority(g, layers[i - 1], layers[i], positions[i - 1], sizes, xMargin);
+    priority(g, layers[i - 1], layers[i], positions, sizes, xMargin);
   }
   for (let i = n - 1; i > 0; --i) {
-    positions[i] = priority(g, layers[i - 1], layers[i], positions[i - 1], sizes, xMargin, true);
+    priority(g, layers[i - 1], layers[i], positions, sizes, xMargin, true);
   }
   for (let i = 1; i < n; ++i) {
-    positions[i] = priority(g, layers[i - 1], layers[i], positions[i - 1], sizes, xMargin);
+    priority(g, layers[i - 1], layers[i], positions, sizes, xMargin);
   }
   let yOffset = 0;
   for (let i = 0; i < n; ++i) {
@@ -28,7 +29,7 @@ const positionAssignment = (g, layers, sizes, xMargin, yMargin) => {
     }
     yOffset += maxHeight / 2;
     for (let u of layers[i]) {
-      positions[i][u].y = yOffset;
+      positions[u].y = yOffset;
     }
     yOffset += maxHeight / 2 + yMargin;
   }
