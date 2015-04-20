@@ -7,7 +7,7 @@ var gulp = require('gulp'),
 
 gulp.task('babel', function() {
   return gulp.src('src/**/*.js')
-      .pipe(babel())
+      .pipe(babel({optional: ['runtime']}))
       .pipe(gulp.dest('lib'));
 });
 

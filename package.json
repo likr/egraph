@@ -20,5 +20,8 @@
     "gulp-shell": "^0.4.0",
     "mocha": "^2.2.4",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "babel-runtime": "^5.1.10"
   }
 }
