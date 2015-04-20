@@ -32,6 +32,27 @@ const createGraph = () => {
   return g;
 };
 
+const renderVertex = () => {
+  return (selection) => {
+    selection.each(function (data) {
+      d3.select(this)
+        .append('circle')
+        .attr({
+          cx: 0,
+          cy: 0,
+          r: 10,
+          fill: d => d.dummy ? 'red' : 'black'
+        });
+    });
+
+    selection.select('circle')
+      .attr({
+        cx: d => d.x,
+        cy: d => d.y
+      });
+  };
+};
+
 const renderVertices = () => {
   return (selection) => {
     selection.each(function (data) {
@@ -41,24 +62,37 @@ const renderVertices = () => {
 
       bindSelection.enter()
         .append('g')
-        .classed('vertex', true)
-        .append('circle')
-        .attr({
-          cx: 0,
-          cy: 0,
-          r: 10,
-          fill: d => d.dummy ? 'red' : 'black'
-        });
+        .classed('vertex', true);
 
       bindSelection.exit()
         .remove();
     });
 
     selection.selectAll('g.vertex')
-      .select('circle')
+      .call(renderVertex());
+  };
+};
+
+const renderEdge = () => {
+  return (selection) => {
+    selection.each(function (data) {
+      d3.select(this)
+        .append('line')
+        .attr({
+          x1: 0,
+          y1: 0,
+          x2: 0,
+          y2: 0,
+          stroke: 'black'
+        });
+    });
+
+    selection.select('line')
       .attr({
-        cx: d => d.x,
-        cy: d => d.y
+        x1: d => d.x1,
+        y1: d => d.y1,
+        x2: d => d.x2,
+        y2: d => d.y2
       });
   };
 };
@@ -72,28 +106,14 @@ const renderEdges = () => {
 
       bindSelection.enter()
         .append('g')
-        .classed('edge', true)
-        .append('line')
-        .attr({
-          x1: 0,
-          y1: 0,
-          x2: 0,
-          y2: 0,
-          stroke: 'black'
-        });
+        .classed('edge', true);
 
       bindSelection.exit()
         .remove();
     });
 
     selection.selectAll('g.edge')
-      .select('line')
-      .attr({
-        x1: d => d.x1,
-        y1: d => d.y1,
-        x2: d => d.x2,
-        y2: d => d.y2
-      });
+      .call(renderEdge());
   };
 };
 
