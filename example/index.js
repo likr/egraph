@@ -32,11 +32,10 @@ const createGraph = () => {
   return g;
 };
 
-const renderVertices = (g, positions) => {
+const renderVertices = () => {
   return (selection) => {
     selection.each(function (data) {
       const element = d3.select(this);
-
       const bindSelection = element.selectAll('g.vertex')
         .data(data);
 
@@ -45,24 +44,26 @@ const renderVertices = (g, positions) => {
         .classed('vertex', true)
         .append('circle')
         .attr({
+          cx: 0,
+          cy: 0,
           r: 10,
-          fill: (u) => g.vertex(u).dummy ? 'red' : 'black'
+          fill: d => d.dummy ? 'red' : 'black'
         });
 
       bindSelection.exit()
         .remove();
-
-      element.selectAll('g.vertex')
-        .select('circle')
-        .attr({
-          cx: (u) => positions[u].x,
-          cy: (u) => positions[u].y
-        });
     });
+
+    selection.selectAll('g.vertex')
+      .select('circle')
+      .attr({
+        cx: d => d.x,
+        cy: d => d.y
+      });
   };
 };
 
-const renderEdges = (positions) => {
+const renderEdges = () => {
   return (selection) => {
     selection.each(function (data) {
       const element = d3.select(this);
@@ -74,28 +75,30 @@ const renderEdges = (positions) => {
         .classed('edge', true)
         .append('line')
         .attr({
+          x1: 0,
+          y1: 0,
+          x2: 0,
+          y2: 0,
           stroke: 'black'
         });
 
       bindSelection.exit()
         .remove();
-
-      element.selectAll('g.edge')
-        .select('line')
-        .attr({
-          x1: ([u, _]) => positions[u].x,
-          y1: ([u, _]) => positions[u].y,
-          x2: ([_, v]) => positions[v].x,
-          y2: ([_, v]) => positions[v].y
-        });
     });
+
+    selection.selectAll('g.edge')
+      .select('line')
+      .attr({
+        x1: d => d.x1,
+        y1: d => d.y1,
+        x2: d => d.x2,
+        y2: d => d.y2
+      });
   };
 };
 
 const render = (selection) => {
   selection.each(function (data) {
-    const element = d3.select(this);
-
     const sizes = {};
     for (const u of g.vertices()) {
       sizes[u] = {
@@ -105,14 +108,20 @@ const render = (selection) => {
     }
     const positions = layout(data, sizes, {xMargin: 30, yMargin: 30});
 
+    const element = d3.select(this);
+
     let edgesSelection = element.select('g.edges');
     if (edgesSelection.empty()) {
       edgesSelection = element.append('g')
         .classed('edges', true);
     }
     edgesSelection
-      .datum(Array.from(data.edges()))
-      .call(renderEdges(positions));
+      .datum(Array.from(data.edges()).map(([u, v]) => ({
+        x1: positions[u].x,
+        y1: positions[u].y,
+        x2: positions[v].x,
+        y2: positions[v].y
+      })));
 
     let verticesSelection = element.select('g.vertices');
     if (verticesSelection.empty()) {
@@ -120,9 +129,17 @@ const render = (selection) => {
         .classed('vertices', true);
     }
     verticesSelection
-      .datum(Array.from(data.vertices()))
-      .call(renderVertices(data, positions));
+      .datum(Array.from(data.vertices()).map(u => ({
+        x: positions[u].x,
+        y: positions[u].y,
+        dummy: !!data.vertex(u).dummy
+      })));
   });
+
+  selection.selectAll('g.edges')
+    .call(renderEdges());
+  selection.selectAll('g.vertices')
+    .call(renderVertices());
 };
 
 const g = createGraph();
@@ -133,4 +150,5 @@ d3.select('#screen')
     height: 1000
   })
   .datum(g)
+  .transition()
   .call(render);

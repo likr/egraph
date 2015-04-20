@@ -9,9 +9,9 @@ var gulp = require('gulp'),
 
 gulp.task('babel', function() {
   return gulp.src('src/**/*.js')
-      .pipe(plumber())
-      .pipe(babel({optional: ['runtime']}))
-      .pipe(gulp.dest('lib'));
+    .pipe(plumber())
+    .pipe(babel({optional: ['runtime']}))
+    .pipe(gulp.dest('lib'));
 });
 
 gulp.task('browserify', function() {
