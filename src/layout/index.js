@@ -10,7 +10,7 @@ const layout = (g, sizes, {xMargin=10, yMargin=10}) => {
   cycleRemoval(g);
   const ranks = layerAssignment(g);
   normalize(g, ranks);
-  const layers = {};
+  const layers = [];
   for (const u of g.vertices()) {
     const rank = ranks[u];
     if (layers[rank] === undefined) {
@@ -26,8 +26,8 @@ const layout = (g, sizes, {xMargin=10, yMargin=10}) => {
   }
   crossingReduction(g, layers);
   const descDegree = (u, v) => (g.inDegree(u) + g.outDegree(u) - (g.inDegree(v) + g.outDegree(v)));
-  for (const index in layers) {
-    layers[index].sort(descDegree);
+  for (const layer of layers) {
+    layer.sort(descDegree);
   }
   const positions = positionAssignment(g, layers, sizes, xMargin, yMargin);
   return positions;

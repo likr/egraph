@@ -3,7 +3,7 @@
 const priority = require('./priority');
 
 const positionAssignment = (g, layers, sizes, xMargin, yMargin) => {
-  const n = Object.keys(layers).length,
+  const n = layers.length,
         positions = {};
   let offset = 0;
   for (let u of layers[0]) {
