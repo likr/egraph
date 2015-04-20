@@ -32,11 +32,25 @@ const createGraph = () => {
   return g;
 };
 
+const g = createGraph();
+
 d3.select('#screen')
   .attr({
     width: 1000,
     height: 1000
   })
-  .datum(createGraph())
+  .datum(g)
   .transition()
   .call(renderer());
+
+setTimeout(() => {
+  g.addEdge(0, 6);
+  g.addEdge(0, 9);
+  g.addEdge(0, 10);
+  g.addEdge(0, 11);
+  g.removeVertex(8);
+
+  d3.select('#screen')
+    .transition()
+    .call(renderer());
+}, 1000);

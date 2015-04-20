@@ -5,15 +5,18 @@ const d3 = require('d3');
 const edgeRenderer = () => {
   return (selection) => {
     selection.each(function (data) {
-      d3.select(this)
-        .append('line')
-        .attr({
-          x1: 0,
-          y1: 0,
-          x2: 0,
-          y2: 0,
-          stroke: 'black'
-        });
+      const element = d3.select(this);
+      if (element.select('line').empty()) {
+        element
+          .append('line')
+          .attr({
+            x1: 0,
+            y1: 0,
+            x2: 0,
+            y2: 0,
+            stroke: 'black'
+          });
+      }
     });
 
     selection.select('line')
