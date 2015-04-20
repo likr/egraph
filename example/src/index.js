@@ -50,7 +50,6 @@ setTimeout(() => {
   g.addEdge(0, 10);
   g.addEdge(0, 11);
   g.removeVertex(8);
-
   d3.select('#screen')
     .transition()
     .duration(1500)

@@ -3,7 +3,7 @@ var expect = require('expect.js'),
     graph = require('../../lib/graph'),
     priority = require('../../lib/layout/position-assignment/priority');
 
-describe('priority(g, h1, h2, positions, sizes, xMargin)', () => {
+describe('priority(g, h1, h2, positions, sizes)', () => {
   it('returns x2', () => {
     var g = graph();
     var u1 = g.addVertex();
@@ -31,7 +31,7 @@ describe('priority(g, h1, h2, positions, sizes, xMargin)', () => {
     g.addEdge(u7, v4);
     g.addEdge(u9, v4);
     var h1 = [u1, u2, u3, u4, u5, u6, u7, u8, u9];
-    var h2 = [v2, v1, v3, v4];
+    var h2 = [v1, v2, v3, v4];
     var positions = {
       [u1]: {
         x: 1
@@ -59,6 +59,18 @@ describe('priority(g, h1, h2, positions, sizes, xMargin)', () => {
       },
       [u9]: {
         x: 9
+      },
+      [v1]: {
+        x: 1
+      },
+      [v2]: {
+        x: 2
+      },
+      [v3]: {
+        x: 3
+      },
+      [v4]: {
+        x: 4
       }
     };
     var sizes = {
@@ -75,7 +87,7 @@ describe('priority(g, h1, h2, positions, sizes, xMargin)', () => {
         width: 1
       }
     };
-    priority(g, h1, h2, positions, sizes, 0);
+    priority(g, h1, h2, positions, sizes);
     expect(positions).to.be.eql({
       [u1]: {
         x: 1
