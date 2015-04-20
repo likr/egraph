@@ -6,18 +6,18 @@ const d3 = require('d3'),
 
 const createGraph = () => {
   const g = graph();
-  const a1 = g.addVertex();
-  const a2 = g.addVertex();
-  const a3 = g.addVertex();
-  const b1 = g.addVertex();
-  const b2 = g.addVertex();
-  const b3 = g.addVertex();
-  const c1 = g.addVertex();
-  const c2 = g.addVertex();
-  const c3 = g.addVertex();
-  const d1 = g.addVertex();
-  const d2 = g.addVertex();
-  const d3 = g.addVertex();
+  const a1 = g.addVertex({color: '#f00'});
+  const a2 = g.addVertex({color: '#0f0'});
+  const a3 = g.addVertex({color: '#00f'});
+  const b1 = g.addVertex({color: '#f00'});
+  const b2 = g.addVertex({color: '#0f0'});
+  const b3 = g.addVertex({color: '#00f'});
+  const c1 = g.addVertex({color: '#f00'});
+  const c2 = g.addVertex({color: '#0f0'});
+  const c3 = g.addVertex({color: '#00f'});
+  const d1 = g.addVertex({color: '#f00'});
+  const d2 = g.addVertex({color: '#0f0'});
+  const d3 = g.addVertex({color: '#00f'});
   g.addEdge(a1, b2);
   g.addEdge(a2, b1);
   g.addEdge(a3, b1);
@@ -41,6 +41,7 @@ d3.select('#screen')
   })
   .datum(g)
   .transition()
+  .duration(1000)
   .call(renderer());
 
 setTimeout(() => {
@@ -52,5 +53,6 @@ setTimeout(() => {
 
   d3.select('#screen')
     .transition()
+    .duration(1500)
     .call(renderer());
-}, 1000);
+}, 2000);

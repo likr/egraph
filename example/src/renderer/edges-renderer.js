@@ -8,7 +8,7 @@ const edgesRenderer = () => {
     selection.each(function (data) {
       const element = d3.select(this);
       const bindSelection = element.selectAll('g.edge')
-        .data(data);
+        .data(Object.keys(data).map(key => data[key]).filter(d => d.active), (d) => d.key);
 
       bindSelection.enter()
         .append('g')

@@ -10,10 +10,10 @@ const vertexRenderer = () => {
         element
           .append('circle')
           .attr({
-            cx: 0,
-            cy: 0,
-            r: 10,
-            fill: d => d.dummy ? 'red' : 'black'
+            cx: d => d.px,
+            cy: d => d.py,
+            r: d => d.dummy ? 0 : 10,
+            fill: 'black'
           });
       }
     });
@@ -21,7 +21,8 @@ const vertexRenderer = () => {
     selection.select('circle')
       .attr({
         cx: d => d.x,
-        cy: d => d.y
+        cy: d => d.y,
+        fill: d => d.data.color
       });
   };
 };

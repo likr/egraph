@@ -10,10 +10,10 @@ const edgeRenderer = () => {
         element
           .append('line')
           .attr({
-            x1: 0,
-            y1: 0,
-            x2: 0,
-            y2: 0,
+            x1: d => d.px1,
+            y1: d => d.py1,
+            x2: d => d.px2,
+            y2: d => d.py2,
             stroke: 'black'
           });
       }
