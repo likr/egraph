@@ -22,7 +22,7 @@ gulp.task('browserify', function() {
 });
 
 gulp.task('example', ['babel'], function() {
-  return browserify({entries: ['./example/index.js']})
+  return browserify({entries: ['./example/src/index.js']})
     .transform(babelify)
     .bundle()
     .pipe(source('app.js'))
@@ -38,7 +38,7 @@ gulp.task('test', ['babel', 'mocha']);
 gulp.task('watch', function() {
   gulp.watch('src/**/*.js', ['babel', 'mocha', 'example']);
   gulp.watch(['test/**/*.js'], ['mocha']);
-  gulp.watch(['example/index.js', 'example/**/*.html'], ['example']);
+  gulp.watch(['example/src/**/*.js', 'example/**/*.html'], ['example']);
 });
 
 gulp.task('default', ['build']);
