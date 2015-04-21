@@ -20,13 +20,20 @@ const greedySwitch = (g, h1, h2, inverse=false) => {
     return count;
   };
 
-  for (let i = 1; i < h2.length; ++i) {
-    const v1 = h2[i - 1],
-          v2 = h2[i];
-    if (c(v1, v2) > c(v2, v1)) {
-      [h2[i - 1], h2[i]] = [v2, v1];
+  let improve;
+  do {
+    improve = 0;
+    for (let i = 1; i < h2.length; ++i) {
+      const v1 = h2[i - 1],
+            v2 = h2[i],
+            c12 = c(v1, v2),
+            c21 = c(v2, v1);
+      if (c12 > c21) {
+        [h2[i - 1], h2[i]] = [v2, v1];
+        improve += c12 - c21;
+      }
     }
-  }
+  } while (improve > 0);
 };
 
 module.exports = greedySwitch;
