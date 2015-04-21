@@ -15,7 +15,7 @@ const renderer = ({vertexWidth, vertexHeight}) => {
           height: vertexHeight({u, d: data.vertex(u)})
         };
       }
-      const positions = layout(data, sizes, {xMargin: 10, yMargin: 10});
+      const positions = layout(data, sizes, {xMargin: 20, yMargin: 20});
 
       const element = d3.select(this);
 
@@ -84,7 +84,7 @@ const renderer = ({vertexWidth, vertexHeight}) => {
     });
 
     selection.selectAll('g.edges')
-      .call(edgesRenderer());
+      .call(edgesRenderer({vertexHeight}));
     selection.selectAll('g.vertices')
       .call(verticesRenderer({vertexWidth, vertexHeight}));
   };
