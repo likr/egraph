@@ -2,14 +2,28 @@
 
 const priority = require('./priority');
 
-const initLayer = (g, h, positions, sizes) => {
+const initLayer = (g, h, positions, sizes, xMargin) => {
   let offset = 0;
   for (const u of h) {
     positions[u] = {
       x: offset + sizes[u].width / 2
     };
-    offset += sizes[u].width;
+    offset += sizes[u].width + xMargin;
   }
+};
+
+const maxWidthLayer = (g, layers, positions) => {
+  let widthMax = 0,
+      widthMaxLayer;
+  for (let i = 0; i < layers.length; ++i) {
+    const layer = layers[i],
+          width = positions[layer[layer.length - 1]].x - positions[layer[0]].x;
+    if (width > widthMax) {
+      widthMax = width;
+      widthMaxLayer = i;
+    }
+  }
+  return widthMaxLayer;
 };
 
 const positionAssignment = (g, layers, sizes, xMargin, yMargin, edgeMargin) => {
@@ -17,7 +31,7 @@ const positionAssignment = (g, layers, sizes, xMargin, yMargin, edgeMargin) => {
         normalizedSizes = {},
         positions = {};
   for (const layer of layers) {
-    initLayer(g, layer, positions, sizes);
+    initLayer(g, layer, positions, sizes, xMargin);
     for (const u of layer) {
       if (g.vertex(u).dummy) {
         normalizedSizes[u] = {
@@ -33,14 +47,12 @@ const positionAssignment = (g, layers, sizes, xMargin, yMargin, edgeMargin) => {
     }
   }
 
-  for (let i = 1; i < n; ++i) {
+  const j = maxWidthLayer(g, layers, positions);
+  for (let i = j + 1; i < n; ++i) {
     priority(g, layers[i - 1], layers[i], positions, normalizedSizes);
   }
-  for (let i = n - 1; i > 0; --i) {
+  for (let i = j; i > 0; --i) {
     priority(g, layers[i - 1], layers[i], positions, normalizedSizes, true);
-  }
-  for (let i = 1; i < n; ++i) {
-    priority(g, layers[i - 1], layers[i], positions, normalizedSizes);
   }
 
   let yOffset = 0;
