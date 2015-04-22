@@ -1,7 +1,8 @@
 'use strict';
+
 var expect = require('expect.js'),
-    graph = require('../../lib/graph'),
-    priority = require('../../lib/layout/position-assignment/priority');
+    graph = require('../../../lib/graph'),
+    priority = require('../../../lib/layout/position-assignment/priority');
 
 describe('priority(g, h1, h2, positions, sizes)', () => {
   it('returns x2', () => {
