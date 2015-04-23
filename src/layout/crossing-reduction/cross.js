@@ -1,18 +1,11 @@
 'use strict';
 
+const layerMatrix = require('../misc/layer-matrix');
+
 module.exports = function cross(g, h1, h2) {
   const n = h1.length,
         m = h2.length,
-        a = new Int8Array(n * m);
-
-  let index = 0;
-  for (let i = 0; i < n; ++i) {
-    const u = h1[i];
-    for (let j = 0; j < m; ++j) {
-      const v = h2[j];
-      a[index++] = g.edge(u, v) ? 1 : 0;
-    }
-  }
+        a = layerMatrix(g, h1, h2);
 
   let result = 0;
   for (let j2 = 0; j2 < m - 1; ++j2) {
