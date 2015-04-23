@@ -1,15 +1,23 @@
 'use strict';
 
-const crossingEdges = function* (g, h1, h2, u, v) {
-  for (let j = g.vertex(v).order + 1; j < h2.length; ++j) {
-    const v = h2[j];
-    for (let i = g.vertex(u).order - 1; i >= 0; --i) {
-      const u = h1[i];
-      if (g.edge(u, v)) {
-        yield [u, v];
+const crossingEdges = (g, h1, h2, u1, v1) => {
+  const result = [],
+        order = {};
+  for (const u of h1) {
+    order[u] = g.vertex(u).order;
+  }
+  for (const u of h2) {
+    order[u] = g.vertex(u).order;
+  }
+  for (let j = order[v1] + 1; j < h2.length; ++j) {
+    const v2 = h2[j];
+    for (const u2 of g.inVertices(v2)) {
+      if (order[u2] < order[u1]) {
+        result.push([u2, v2]);
       }
     }
   }
+  return result;
 };
 
 module.exports = crossingEdges;

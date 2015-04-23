@@ -28,10 +28,8 @@ module.exports = function graph() {
       return null;
     }
 
-    *vertices() {
-      for (let u in vertices) {
-        yield +u;
-      }
+    vertices() {
+      return Object.keys(vertices).map(u => +u);
     }
 
     *edges() {
@@ -42,16 +40,12 @@ module.exports = function graph() {
       }
     }
 
-    *outVertices(u) {
-      for (let v in vertices[u].outVertices) {
-        yield +v;
-      }
+    outVertices(u) {
+      return Object.keys(vertices[u].outVertices).map(v => +v);
     }
 
-    *inVertices(u) {
-      for (let v in vertices[u].inVertices) {
-        yield +v;
-      }
+    inVertices(u) {
+      return Object.keys(vertices[u].inVertices).map(v => +v);
     }
 
     *outEdges(u) {

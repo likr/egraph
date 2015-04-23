@@ -5,7 +5,7 @@ const d3 = require('d3'),
       verticesRenderer = require('./vertices-renderer'),
       edgesRenderer = require('./edges-renderer');
 
-const renderer = ({vertexWidth, vertexHeight}) => {
+const renderer = ({vertexWidth, vertexHeight, xMargin, yMargin, edgeMargin}) => {
   return (selection) => {
     selection.each(function (data) {
       const sizes = {};
@@ -15,7 +15,7 @@ const renderer = ({vertexWidth, vertexHeight}) => {
           height: vertexHeight({u, d: data.vertex(u)})
         };
       }
-      const positions = layout(data, sizes, {xMargin: 10, yMargin: 20});
+      const positions = layout(data, sizes, {xMargin, yMargin, edgeMargin});
 
       const element = d3.select(this);
 

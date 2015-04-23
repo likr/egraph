@@ -1,24 +1,9 @@
 'use strict';
 
-const layerEdges = function* (g, h1, h2) {
-  for (const v of h2) {
-    for (const u of g.inVertices(v)) {
-      yield [u, v];
-    }
-  }
-};
 
-const crossingEdges = function* (g, h1, h2, u, v) {
-  for (let j = g.vertex(v).order + 1; j < h2.length; ++j) {
-    const v = h2[j];
-    for (let i = g.vertex(u).order - 1; i >= 0; --i) {
-      const u = h1[i];
-      if (g.edge(u, v)) {
-        yield [u, v];
-      }
-    }
-  }
-};
+
+const layerEdges = require('../../misc/layer-edges'),
+      crossingEdges = require('../../misc/crossing-edges');
 
 const markConflicts = (g, layers) => {
   const h = layers.length - 2;
