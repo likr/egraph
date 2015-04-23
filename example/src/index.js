@@ -28,7 +28,7 @@ d3.json('data/graph5.json', (data) => {
       vertexWidth: () => 10,
       vertexHeight: () => 10,
       xMargin: 10,
-      yMargin: 10,
+      yMargin: 20,
       edgeMargin: 5,
       ltor: true
     }));

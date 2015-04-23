@@ -2,12 +2,22 @@
 
 const brandes = require('./brandes');
 
-const positionAssignment = (g, layers, sizes, xMargin, yMargin, edgeMargin) => {
+const normalize = (g) => {
+  let xMin = Infinity,
+      yMin = Infinity;
   for (const u of g.vertices()) {
-    const node = g.vertex(u);
-    node.width = sizes[u].width + (node.dummy ? edgeMargin : xMargin);
-    node.height = sizes[u].height + yMargin;
+    const uNode = g.vertex(u);
+    xMin = Math.min(xMin, uNode.x - uNode.width / 2);
+    yMin = Math.min(yMin, uNode.y - uNode.height / 2);
   }
+  for (const u of g.vertices()) {
+    const uNode = g.vertex(u);
+    uNode.x -= xMin;
+    uNode.y -= yMin;
+  }
+};
+
+const positionAssignment = (g, layers) => {
   brandes(g, layers);
 
   let yOffset = 0;
@@ -22,6 +32,7 @@ const positionAssignment = (g, layers, sizes, xMargin, yMargin, edgeMargin) => {
     }
     yOffset += maxHeight / 2;
   }
+  normalize(g);
 };
 
 module.exports = positionAssignment;

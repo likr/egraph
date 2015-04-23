@@ -1,12 +1,23 @@
 'use strict';
 
+const group = (g) => {
+  const result = [];
+  for (const u of g.vertices()) {
+    const layer = g.vertex(u).layer;
+    if (result[layer] === undefined) {
+      result[layer] = [];
+    }
+    result[layer].push(u);
+  }
+  return result;
+};
+
 const layerAssignment = (g) => {
-  const layers = {},
-        visited = {};
+  const visited = {};
 
   const dfs = (u) => {
     if (visited[u]) {
-      return layers[u];
+      return g.vertex(u).layer;
     }
     visited[u] = true;
 
@@ -17,7 +28,7 @@ const layerAssignment = (g) => {
     if (layer === Infinity) {
       layer = 0;
     }
-    layers[u] = layer;
+    g.vertex(u).layer = layer;
     return layer;
   };
 
@@ -29,13 +40,13 @@ const layerAssignment = (g) => {
 
   let minLayer = Infinity;
   for (const u of g.vertices()) {
-    minLayer = Math.min(minLayer, layers[u]);
+    minLayer = Math.min(minLayer, g.vertex(u).layer);
   }
   for (const u of g.vertices()) {
-    layers[u] -= minLayer;
+    g.vertex(u).layer -= minLayer;
   }
 
-  return layers;
+  return group(g);
 };
 
 module.exports = layerAssignment;

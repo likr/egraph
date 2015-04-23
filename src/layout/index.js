@@ -1,98 +1,94 @@
 'use strict';
 
-const cycleRemoval = require('./cycle-removal'),
-      layerAssignment = require('./layering'),
+const graph = require('../graph'),
+      cycleRemoval = require('./cycle-removal'),
+      layerAssignment = require('./layer-assignment'),
       normalize = require('./normalize'),
       crossingReduction = require('./crossing-reduction'),
-      positionAssignment = require('./position-assignment'),
-      layerEdges = require('./misc/layer-edges'),
-      crossingEdges = require('./misc/crossing-edges');
+      positionAssignment = require('./position-assignment');
 
-const setOrder = (g, layers) => {
-  for (let i = 0; i < layers.length; ++i) {
-    const layer = layers[i];
-    for (let j = 0; j < layer.length; ++j) {
-      const u = layer[j];
-      g.vertex(u).layer = i;
-      g.vertex(u).order = j;
-    }
+const initGraph = (gOrig, {width, height, xMargin, yMargin}) => {
+  const g = graph();
+  for (const u of gOrig.vertices()) {
+    const uNode = gOrig.vertex(u),
+          w = width({u, d: uNode}),
+          h = height({u, d: uNode});
+    g.addVertex(u, {
+      width: w + xMargin,
+      height: h + yMargin,
+      origHeight: h
+    });
   }
+  for (const [u, v] of gOrig.edges()) {
+    g.addEdge(u, v);
+  }
+  return g;
 };
 
-const fixType2Conflicts = (g, layers) => {
-  for (let i = 1; i < layers.length; ++i) {
-    for (const [u1, v1] of layerEdges(g, layers[i - 1], layers[i])) {
-      let l = Infinity,
-          k2 = -Infinity;
-      const dummy1 = g.vertex(u1).dummy && g.vertex(v1).dummy;
-      for (const [u2, v2] of crossingEdges(g, layers[i - 1], layers[i], u1, v1)) {
-        const dummy2 = g.vertex(u2).dummy && g.vertex(v2).dummy;
-        if (dummy1 && dummy2) {
-          const lTmp = layers[i - 1].indexOf(u2);
-          if (lTmp < l) {
-            l = lTmp;
-            k2 = layers[i].indexOf(v2);
+const buildResult = (g, layers) => {
+  const result = {
+          vertices: {},
+          edges: {}
+        },
+        layerHeights = [];
+
+  for (const layer of layers) {
+    let maxHeight = -Infinity;
+    for (const u of layer) {
+      maxHeight = Math.max(maxHeight, g.vertex(u).origHeight || 0);
+    }
+    layerHeights.push(maxHeight);
+  }
+
+  for (let i = 0; i < layers.length; ++i) {
+    const layer = layers[i],
+          layerHeight = layerHeights[i];
+    for (const u of layer) {
+      const uNode = g.vertex(u);
+      if (!uNode.dummy) {
+        result.vertices[u] = {
+          x: uNode.x,
+          y: uNode.y,
+          layer: uNode.layer,
+          order: uNode.order
+        };
+
+        if (result.edges[u] === undefined) {
+          result.edges[u] = {};
+        }
+
+        for (const v of g.outVertices(u)) {
+          const points = [[uNode.x, uNode.y + (uNode.origHeight || 0) / 2], [uNode.x, uNode.y + layerHeight / 2]];
+          let w = v,
+              wNode = g.vertex(w);
+          while (wNode.dummy) {
+            points.push([wNode.x, wNode.y - layerHeight / 2]);
+            points.push([wNode.x, wNode.y + layerHeight / 2]);
+            w = g.outVertices(w)[0];
+            wNode = g.vertex(w);
           }
+          points.push([wNode.x, wNode.y - layerHeight / 2]);
+          points.push([wNode.x, wNode.y - (wNode.origHeight || 0) / 2]);
+          result.edges[u][w] = {
+            points: points
+          };
         }
       }
-      if (k2 > -Infinity) {
-        const k1 = layers[i].indexOf(v1),
-              v2 = layers[i][k2];
-        let tmp = layers[i][k1];
-        layers[i][k1] = layers[i][k2];
-        layers[i][k2] = tmp;
-        tmp = g.vertex(v1).order;
-        g.vertex(v1).order = g.vertex(v2).order;
-        g.vertex(v2).order = tmp;
-      }
     }
   }
+
+  return result;
 };
 
-const normalizePositions = (g, sizes, positions) => {
-  let xMin = Infinity,
-      yMin = Infinity;
-  for (const u of g.vertices()) {
-    xMin = Math.min(xMin, positions[u].x - sizes[u].width / 2);
-    yMin = Math.min(yMin, positions[u].y - sizes[u].height / 2);
-  }
-  for (const u of g.vertices()) {
-    positions[u].x -= xMin;
-    positions[u].y -= yMin;
-  }
-};
-
-const layout = (g, sizes, {xMargin=10, yMargin=10, edgeMargin=5}) => {
+const layout = (gOrig, options) => {
+  const {edgeMargin} = options;
+  const g = initGraph(gOrig, options);
   cycleRemoval(g);
-  const ranks = layerAssignment(g);
-  normalize(g, ranks);
-  const layers = [];
-  for (const u of g.vertices()) {
-    const rank = ranks[u];
-    if (layers[rank] === undefined) {
-      layers[rank] = [];
-    }
-    layers[rank].push(u);
-    if (g.vertex(u).dummy) {
-      sizes[u] = {
-        width: 0,
-        height: 0
-      };
-    }
-  }
+  const layers = layerAssignment(g);
+  normalize(g, layers, edgeMargin);
   crossingReduction(g, layers);
-  setOrder(g, layers);
-  fixType2Conflicts(g, layers);
-  positionAssignment(g, layers, sizes, xMargin, yMargin, edgeMargin);
-  const positions = {};
-  for (const u of g.vertices()) {
-    positions[u] = {
-      x: g.vertex(u).x,
-      y: g.vertex(u).y
-    };
-  }
-  normalizePositions(g, sizes, positions);
-  return positions;
+  positionAssignment(g, layers);
+  return buildResult(g, layers);
 };
 
 module.exports = layout;

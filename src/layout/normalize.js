@@ -1,17 +1,20 @@
 'use strict';
-module.exports = function normalize(g, layers) {
+module.exports = function normalize(g, layers, edgeMargin) {
   var i, w1, w2;
   for (let [u, v] of g.edges()) {
-    if (layers[v] - layers[u] > 1) {
+    if (g.vertex(v).layer - g.vertex(u).layer > 1) {
       w1 = u;
-      for (i = layers[u] + 1; i < layers[v]; ++i) {
+      for (i = g.vertex(u).layer + 1; i < g.vertex(v).layer; ++i) {
         w2 = g.addVertex({
-          dummy: true
+          dummy: true,
+          width: edgeMargin,
+          height: 0,
+          layer: i
         });
         g.addEdge(w1, w2, {
           dummy: true
         });
-        layers[w2] = i;
+        layers[i].push(w2);
         w1 = w2;
       }
       g.addEdge(w1, v, {

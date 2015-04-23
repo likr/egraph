@@ -29,20 +29,14 @@ describe('layout(g, sizes, options)', () => {
     g.addEdge(c1, d3);
     g.addEdge(c2, d1);
     g.addEdge(c2, d2);
-    const sizes = {};
-    for (const u of g.vertices()) {
-      sizes[u] = {
-        width: 10,
-        height: 10
-      };
-    }
-    const positions = layout(g, sizes, {
+    const result = layout(g, {
+      width: () => 10,
+      height: () => 10,
       xMargin: 10,
-      yMargin: 10
+      yMargin: 10,
+      edgeMargin: 5
     });
-    for (const u of g.vertices()) {
-      expect(positions[u].x).to.be.a('number');
-      expect(positions[u].y).to.be.a('number');
-    }
+    expect(result).to.have.property('vertices');
+    expect(result).to.have.property('edges');
   });
 });

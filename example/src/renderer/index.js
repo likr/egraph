@@ -8,14 +8,7 @@ const d3 = require('d3'),
 const renderer = ({vertexWidth, vertexHeight, xMargin, yMargin, edgeMargin}) => {
   return (selection) => {
     selection.each(function (data) {
-      const sizes = {};
-      for (const u of data.vertices()) {
-        sizes[u] = {
-          width: vertexWidth({u, d: data.vertex(u)}),
-          height: vertexHeight({u, d: data.vertex(u)})
-        };
-      }
-      const positions = layout(data, sizes, {xMargin, yMargin, edgeMargin});
+      const positions = layout(data, {width: vertexWidth, height: vertexHeight, xMargin, yMargin, edgeMargin});
 
       const element = d3.select(this);
 
@@ -49,8 +42,8 @@ const renderer = ({vertexWidth, vertexHeight, xMargin, yMargin, edgeMargin}) => 
         }
         vertices[u].px = vertices[u].x;
         vertices[u].py = vertices[u].y;
-        vertices[u].x = positions[u].x;
-        vertices[u].y = positions[u].y;
+        vertices[u].x = positions.vertices[u].x;
+        vertices[u].y = positions.vertices[u].y;
         vertices[u].dummy = !!data.vertex(u).dummy;
         vertices[u].active = true;
       }
@@ -64,27 +57,18 @@ const renderer = ({vertexWidth, vertexHeight, xMargin, yMargin, edgeMargin}) => 
             key: key,
             source: vertices[u],
             target: vertices[v],
-            x1: vertices[u].px,
-            y1: vertices[u].py,
-            x2: vertices[v].px,
-            y2: vertices[v].py,
+            points: [[0, 0], [0, 0], [0, 0], [0, 0]],
             data: data.edge(u, v)
           };
         }
-        edges[key].px1 = edges[key].x1;
-        edges[key].py1 = edges[key].y1;
-        edges[key].px2 = edges[key].x2;
-        edges[key].py2 = edges[key].y2;
-        edges[key].x1 = positions[u].x;
-        edges[key].y1 = positions[u].y;
-        edges[key].x2 = positions[v].x;
-        edges[key].y2 = positions[v].y;
+        edges[key].ppoints = edges[key].points;
+        edges[key].points = positions.edges[u][v].points;
         edges[key].active = true;
       }
     });
 
     selection.selectAll('g.edges')
-      .call(edgesRenderer({vertexHeight}));
+      .call(edgesRenderer());
     selection.selectAll('g.vertices')
       .call(verticesRenderer({vertexWidth, vertexHeight}));
   };
