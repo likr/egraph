@@ -14,6 +14,7 @@ const verticalAlignment = (g, layers, {rtol=false, btot=false}) => {
       }
     }
   };
+
   const iterLayer = function* (layer) {
     if (rtol) {
       for (let i = layer.length - 1; i >= 0; --i) {
@@ -38,7 +39,7 @@ const verticalAlignment = (g, layers, {rtol=false, btot=false}) => {
     for (const v of iterLayer(layer)) {
       if (degree(v) > 0) {
         const {left, right} = med(g, v);
-        const medians = left === right ? [left] : [left, right];
+        const medians = left === right ? [left] : (rtol ? [right, left] : [left, right]);
         for (const u of medians) {
           if (!edge(u, v).type1Conflict && !edge(u, v).type2Conflict) {
             if (rtol ? r > g.vertex(u).order : r < g.vertex(u).order) {
