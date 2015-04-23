@@ -1,24 +1,41 @@
 'use strict';
 
-module.exports = function layering(g) {
-  var layers = {},
-      queue = [];
-  for (let u of g.vertices()) {
+const layerAssignment = (g) => {
+  const layers = {},
+        visited = {};
+
+  const dfs = (u) => {
+    if (visited[u]) {
+      return layers[u];
+    }
+    visited[u] = true;
+
+    let layer = Infinity;
+    for (const v of g.outVertices(u)) {
+      layer = Math.min(layer, dfs(v) - 1);
+    }
+    if (layer === Infinity) {
+      layer = 0;
+    }
+    layers[u] = layer;
+    return layer;
+  };
+
+  for (const u of g.vertices()) {
     if (g.inDegree(u) === 0) {
-      layers[u] = 0;
-      queue.push(u);
+      dfs(u);
     }
   }
-  while (queue.length > 0) {
-    let u = queue.shift();
-    for (let v of g.outVertices(u)) {
-      if (layers[v] === undefined) {
-        layers[v] = layers[u] + 1;
-        queue.push(v);
-      } else if (layers[v] < layers[u] + 1) {
-        layers[v] = layers[u] + 1;
-      }
-    }
+
+  let minLayer = Infinity;
+  for (const u of g.vertices()) {
+    minLayer = Math.min(minLayer, layers[u]);
   }
+  for (const u of g.vertices()) {
+    layers[u] -= minLayer;
+  }
+
   return layers;
 };
+
+module.exports = layerAssignment;

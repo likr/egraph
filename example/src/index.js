@@ -17,19 +17,19 @@ d3.json('data/graph5.json', (data) => {
 
   d3.select('#screen')
     .attr({
-      width: 1000,
-      height: 1000
+      width: 10000,
+      height: 10000
     })
     .datum(g)
     .transition()
     .duration(1000)
-    .delay(2000)
+    .delay(3000)
     .call(renderer({
-      vertexWidth: () => 4,
-      vertexHeight: () => 5,
-      xMargin: 2,
+      vertexWidth: () => 10,
+      vertexHeight: () => 10,
+      xMargin: 10,
       yMargin: 10,
-      edgeMargin: 1,
+      edgeMargin: 5,
       ltor: true
     }));
 });

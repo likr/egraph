@@ -13,10 +13,11 @@ const crossAll = (g, layers) => {
 };
 
 const crossingReduction = (g, layers) => {
-  const n = layers.length;
+  const n = layers.length,
+        repeat = 5;
   let c0 = Infinity,
       c1 = crossAll(g, layers);
-  while (c0 !== c1) {
+  for (let loop = 0; loop < repeat && c0 !== c1; ++loop) {
     for (let i = 1; i < n; ++i) {
       baryCenter(g, layers[i - 1], layers[i]);
     }

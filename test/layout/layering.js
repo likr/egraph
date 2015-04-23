@@ -19,7 +19,7 @@ describe('layering(g)', () => {
     expect(layers[a]).to.be(0);
     expect(layers[b]).to.be(1);
     expect(layers[c]).to.be(2);
-    expect(layers[d]).to.be(0);
-    expect(layers[e]).to.be(1);
+    expect(layers[d]).to.be(1);
+    expect(layers[e]).to.be(2);
   });
 });
