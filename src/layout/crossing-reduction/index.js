@@ -46,7 +46,7 @@ const fixType2Conflicts = (g, layers) => {
 
 const crossingReduction = (g, layers) => {
   const n = layers.length,
-        repeat = 5;
+        repeat = 8;
   let c0 = Infinity,
       c1 = crossAll(g, layers);
   for (let loop = 0; loop < repeat && c0 !== c1; ++loop) {

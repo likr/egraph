@@ -25,11 +25,11 @@ d3.json('data/graph5.json', (data) => {
     .duration(1000)
     .delay(3000)
     .call(renderer({
-      vertexWidth: () => 10,
-      vertexHeight: () => 10,
-      xMargin: 10,
-      yMargin: 20,
-      edgeMargin: 5,
+      vertexWidth: () => 3,
+      vertexHeight: () => 3,
+      xMargin: 1,
+      yMargin: 15,
+      edgeMargin: 3,
       ltor: true
     }));
 });

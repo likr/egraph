@@ -34,7 +34,8 @@ const edgeRenderer = () => {
           .attr({
             d: d => svgPath(d.ppoints),
             stroke: 'black',
-            fill: 'none'
+            fill: 'none',
+            opacity: 0.3
           });
       }
       if (data.ppoints.length < data.points.length) {
