@@ -2,7 +2,6 @@
 
 const cross = require('./cross'),
       baryCenter = require('./bary-center'),
-      greedySwitch = require('./greedy-switch'),
       layerEdges = require('../misc/layer-edges'),
       crossingEdges = require('../misc/crossing-edges');
 
@@ -58,12 +57,6 @@ const crossingReduction = (g, layers) => {
     }
     c0 = c1;
     c1 = crossAll(g, layers);
-  }
-  for (let i = 1; i < n; ++i) {
-    greedySwitch(g, layers[i - 1], layers[i]);
-  }
-  for (let i = n - 1; i > 0; --i) {
-    greedySwitch(g, layers[i - 1], layers[i], true);
   }
 
   for (let i = 0; i < layers.length; ++i) {

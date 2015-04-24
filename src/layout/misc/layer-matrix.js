@@ -3,13 +3,16 @@
 const layerMatrix = (g, h1, h2) => {
   const n = h1.length,
         m = h2.length,
+        orders = {},
         a = new Int8Array(n * m);
-  let index = 0;
+
+  for (let i = 0; i < m; ++i) {
+    orders[h2[i]] = i;
+  }
   for (let i = 0; i < n; ++i) {
     const u = h1[i];
-    for (let j = 0; j < m; ++j) {
-      const v = h2[j];
-      a[index++] = g.edge(u, v) ? 1 : 0;
+    for (const v of g.outVertices(u)) {
+      a[i * m + orders[v]] = 1;
     }
   }
   return a;
