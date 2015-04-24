@@ -2,8 +2,7 @@
 
 const cross = require('./cross'),
       baryCenter = require('./bary-center'),
-      layerEdges = require('../misc/layer-edges'),
-      crossingEdges = require('../misc/crossing-edges');
+      layerMatrix = require('../misc/layer-matrix');
 
 const crossAll = (g, layers) => {
   let count = 0;
@@ -14,32 +13,48 @@ const crossAll = (g, layers) => {
 };
 
 const fixType2Conflicts = (g, layers) => {
+  const dummy = {},
+        order = {};
+
+  for (const u of g.vertices()) {
+    const node = g.vertex(u);
+    dummy[u] = node.dummy;
+    order[u] = node.order;
+  }
+
   for (let i = 1; i < layers.length; ++i) {
-    for (const [u1, v1] of layerEdges(g, layers[i - 1], layers[i])) {
-      let l = Infinity,
-          k2 = -Infinity;
-      const dummy1 = g.vertex(u1).dummy && g.vertex(v1).dummy;
-      for (const [u2, v2] of crossingEdges(g, layers[i - 1], layers[i], u1, v1)) {
-        const dummy2 = g.vertex(u2).dummy && g.vertex(v2).dummy;
-        if (dummy1 && dummy2) {
-          const lTmp = layers[i - 1].indexOf(u2);
-          if (lTmp < l) {
-            l = lTmp;
-            k2 = layers[i].indexOf(v2);
+    const h1 = layers[i - 1],
+          h2 = layers[i],
+          n = h1.length,
+          m = h2.length,
+          a = layerMatrix(g, h1, h2);
+    for (let j2 = 0; j2 < m - 1; ++j2) {
+      const v2 = h2[j2];
+      if (!dummy[v2]) {
+        continue;
+      }
+      for (let j1 = j2 + 1; j1 < m; ++j1) {
+        const v1 = h2[j1];
+        if (!dummy[v1]) {
+          continue;
+        }
+        for (let i2 = n - 1; i2 > 0; --i2) {
+          const i1 = i2 - 1,
+                u1 = h1[i1],
+                u2 = h1[i2];
+          if (dummy[u1] && dummy[u2] && a[i1 * m + j1] && a[i2 * m + j2]) {
+            h2[j1] = v2;
+            h2[j2] = v1;
+            order[v1] = j2;
+            order[v2] = i1;
           }
         }
       }
-      if (k2 > -Infinity) {
-        const k1 = layers[i].indexOf(v1),
-              v2 = layers[i][k2];
-        let tmp = layers[i][k1];
-        layers[i][k1] = layers[i][k2];
-        layers[i][k2] = tmp;
-        tmp = g.vertex(v1).order;
-        g.vertex(v1).order = g.vertex(v2).order;
-        g.vertex(v2).order = tmp;
-      }
     }
+  }
+
+  for (const u of g.vertices()) {
+    g.vertex(u).order = order[u];
   }
 };
 
