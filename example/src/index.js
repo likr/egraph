@@ -23,7 +23,7 @@ d3.json('data/graph5.json', (data) => {
     .datum(g)
     .transition()
     .duration(1000)
-    .delay(3000)
+    .delay(1000)
     .call(renderer({
       vertexWidth: () => 3,
       vertexHeight: () => 3,
