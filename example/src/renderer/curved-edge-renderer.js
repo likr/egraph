@@ -1,14 +1,8 @@
 'use strict';
 
-const d3 = require('d3');
-
-const startFrom = ([x, y]) => {
-  return `M${x} ${y}`;
-};
-
-const lineTo = ([x, y]) => {
-  return ` L ${x} ${y}`;
-};
+const d3 = require('d3'),
+      startFrom = require('./svg/path/start-from'),
+      lineTo = require('./svg/path/line-to');
 
 const curveTo = ([x1, y1], [x2, y2], ltor) => {
   const dx = x2 - x1,
@@ -26,7 +20,7 @@ const svgPath = (points, ltor) => {
   return d;
 };
 
-const edgeRenderer = ({ltor}) => {
+const curvedEdgeRenderer = ({edgeColor, ltor}) => {
   return (selection) => {
     selection.each(function (data) {
       const element = d3.select(this);
@@ -35,7 +29,7 @@ const edgeRenderer = ({ltor}) => {
           .append('path')
           .attr({
             d: d => svgPath(d.ppoints, ltor),
-            stroke: 'black',
+            stroke: (d, i) => edgeColor({d: d.data, u: d.key}, i),
             fill: 'none',
             opacity: 0.3
           });
@@ -51,9 +45,10 @@ const edgeRenderer = ({ltor}) => {
 
     selection.select('path')
       .attr({
-        d: d => svgPath(d.points, ltor)
+        d: d => svgPath(d.points, ltor),
+        stroke: (d, i) => edgeColor({d: d.data, u: d.key}, i)
       });
   };
 };
 
-module.exports = edgeRenderer;
+module.exports = curvedEdgeRenderer;

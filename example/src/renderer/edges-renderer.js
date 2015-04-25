@@ -1,9 +1,11 @@
 'use strict';
 
 const d3 = require('d3'),
-      edgeRenderer = require('./edge-renderer');
+      edgeRenderer = require('./curved-edge-renderer');
 
 const edgesRenderer = ({ltor}) => {
+  const edgeColor = () => 'black';
+
   return (selection) => {
     selection.each(function (data) {
       const element = d3.select(this);
@@ -19,7 +21,7 @@ const edgesRenderer = ({ltor}) => {
     });
 
     selection.selectAll('g.edge')
-      .call(edgeRenderer({ltor}));
+      .call(edgeRenderer({edgeColor, ltor}));
   };
 };
 
