@@ -6,23 +6,28 @@ const vertexRenderer = ({vertexWidth, vertexHeight}) => {
   return (selection) => {
     selection.each(function (data) {
       const element = d3.select(this);
-      if (element.select('circle').empty()) {
+      if (element.select('rect').empty()) {
         element
-          .append('circle')
+          .append('rect')
           .attr({
-            cx: d => d.px,
-            cy: d => d.py,
-            r: d => d.dummy ? 0 : 0.5 * Math.min(vertexWidth({u: d.key, d: d.data}),
-                                                 vertexHeight({u: d.key, d: d.data})),
-            fill: 'black'
+            x: d => d.px - vertexWidth({u: d.key, d: d.data}) / 2,
+            y: d => d.py - vertexHeight({u: d.key, d: d.data}) / 2,
+            width: d => vertexWidth({u: d.key, d: d.data}),
+            height: d => vertexHeight({u: d.key, d: d.data}),
+            rx: 1,
+            ry: 1,
+            stroke: 'black',
+            'stroke-opacity': 0.3
           });
       }
     });
 
-    selection.select('circle')
+    selection.select('rect')
       .attr({
-        cx: d => d.x,
-        cy: d => d.y,
+        x: d => d.x - vertexWidth({u: d.key, d: d.data}) / 2,
+        y: d => d.y - vertexHeight({u: d.key, d: d.data}) / 2,
+        width: d => vertexWidth({u: d.key, d: d.data}),
+        height: d => vertexHeight({u: d.key, d: d.data}),
         fill: d => d.data.color
       });
   };

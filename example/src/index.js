@@ -7,6 +7,7 @@ const d3 = require('d3'),
 d3.json('data/graph5.json', (data) => {
   const g = graph();
   for (const node of data.nodes) {
+    node.color = node.color || 'white';
     g.addVertex(node);
   }
   for (const link of data.links) {
@@ -17,6 +18,7 @@ d3.json('data/graph5.json', (data) => {
 
   d3.select('#screen')
     .attr({
+      transform: 'scale(0.3)',
       width: 10000,
       height: 10000
     })
@@ -25,11 +27,11 @@ d3.json('data/graph5.json', (data) => {
     .duration(1000)
     .delay(1000)
     .call(renderer({
-      vertexWidth: () => 4,
-      vertexHeight: () => 4,
-      xMargin: 35,
-      yMargin: 1,
-      edgeMargin: 2,
+      vertexWidth: ({d}) => Math.min(d.text.length, 20) * 8,
+      vertexHeight: () => 12,
+      xMargin: 30,
+      yMargin: 3,
+      edgeMargin: 3,
       ltor: true
     }));
 });

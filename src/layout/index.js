@@ -16,7 +16,7 @@ const initGraph = (gOrig, {ltor, width, height, xMargin, yMargin}) => {
     g.addVertex(u, {
       width: ltor ? h + yMargin : w + xMargin,
       height: ltor ? w + xMargin : h + yMargin,
-      origHeight: h
+      origHeight: ltor ? w : h
     });
   }
   for (const [u, v] of gOrig.edges()) {
@@ -62,23 +62,25 @@ const buildResult = (g, layers, ltor) => {
             ? [[uNode.y + (uNode.origHeight || 0) / 2, uNode.x], [uNode.y + layerHeight / 2, uNode.x]]
             : [[uNode.x, uNode.y + (uNode.origHeight || 0) / 2], [uNode.x, uNode.y + layerHeight / 2]];
           let w = v,
-              wNode = g.vertex(w);
+              wNode = g.vertex(w),
+              j = i + 1;
           while (wNode.dummy) {
             if (ltor) {
-              points.push([wNode.y - layerHeight / 2, wNode.x]);
-              points.push([wNode.y + layerHeight / 2, wNode.x]);
+              points.push([wNode.y - layerHeights[j] / 2, wNode.x]);
+              points.push([wNode.y + layerHeights[j] / 2, wNode.x]);
             } else {
-              points.push([wNode.x, wNode.y - layerHeight / 2]);
-              points.push([wNode.x, wNode.y + layerHeight / 2]);
+              points.push([wNode.x, wNode.y - layerHeights[j] / 2]);
+              points.push([wNode.x, wNode.y + layerHeights[j] / 2]);
             }
             w = g.outVertices(w)[0];
             wNode = g.vertex(w);
+            j += 1;
           }
           if (ltor) {
-            points.push([wNode.y - layerHeight / 2, wNode.x]);
+            points.push([wNode.y - layerHeights[j] / 2, wNode.x]);
             points.push([wNode.y - (wNode.origHeight || 0) / 2, wNode.x]);
           } else {
-            points.push([wNode.x, wNode.y - layerHeight / 2]);
+            points.push([wNode.x, wNode.y - layerHeights[j] / 2]);
             points.push([wNode.x, wNode.y - (wNode.origHeight || 0) / 2]);
           }
           result.edges[u][w] = {
