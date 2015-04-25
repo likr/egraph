@@ -5,10 +5,10 @@ const d3 = require('d3'),
       verticesRenderer = require('./vertices-renderer'),
       edgesRenderer = require('./edges-renderer');
 
-const renderer = ({vertexWidth, vertexHeight, xMargin, yMargin, edgeMargin}) => {
+const renderer = ({vertexWidth, vertexHeight, xMargin, yMargin, edgeMargin, ltor}) => {
   return (selection) => {
     selection.each(function (data) {
-      const positions = layout(data, {width: vertexWidth, height: vertexHeight, xMargin, yMargin, edgeMargin});
+      const positions = layout(data, {width: vertexWidth, height: vertexHeight, xMargin, yMargin, edgeMargin, ltor});
 
       const element = d3.select(this);
 
@@ -68,7 +68,7 @@ const renderer = ({vertexWidth, vertexHeight, xMargin, yMargin, edgeMargin}) => 
     });
 
     selection.selectAll('g.edges')
-      .call(edgesRenderer());
+      .call(edgesRenderer({ltor}));
     selection.selectAll('g.vertices')
       .call(verticesRenderer({vertexWidth, vertexHeight}));
   };
