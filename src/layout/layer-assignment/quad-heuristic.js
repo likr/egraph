@@ -11,9 +11,7 @@ const quadHeuristic = (g) => {
     minLayer = Math.min(minLayer, g.vertex(u).layer);
     maxLayer = Math.max(maxLayer, g.vertex(u).layer);
   }
-  const weights = {};
   for (const u of g.vertices()) {
-    weights[u] = 0;
     if (g.inDegree(u) === 0) {
       g.vertex(u).layer = 0;
     } else {
@@ -21,58 +19,41 @@ const quadHeuristic = (g) => {
     }
   }
 
-  for (const [u, v] of g.edges()) {
-    const l = g.vertex(v).layer - g.vertex(u).layer;
-    weights[u] += l * l;
-    weights[v] += l * l;
-  }
+  const repeat = 4,
+        vertices = g.vertices().filter(u => g.inDegree(u) > 0 && g.outDegree(u) > 0),
+        weights = {},
+        cmp = (u, v) => weights[v] - weights[u];
+  for (let loop = 0; loop < repeat; ++loop) {
+    for (const u of g.vertices()) {
+      weights[u] = 0;
+    }
+    for (const [u, v] of g.edges()) {
+      const l = g.vertex(v).layer - g.vertex(u).layer;
+      weights[u] += l;
+      weights[v] += l;
+    }
 
-  const vertices = new Set(g.vertices().filter(u => g.inDegree(u) > 0 && g.outDegree(u) > 0));
-  for (let i = 0; i < vertices.size; ++i) {
-    let maxWeight = 0,
-        u;
-    for (const v of vertices) {
-      if (weights[v] > maxWeight) {
-        maxWeight = weights[v];
-        u = v;
+    vertices.sort(cmp);
+    for (const u of vertices) {
+      let sum = 0,
+          count = 0,
+          leftMax = -Infinity,
+          rightMin = Infinity;
+      for (const v of g.inVertices(u)) {
+        const layer = g.vertex(v).layer;
+        leftMax = Math.max(leftMax, layer);
+        sum += layer;
+        count += 1;
       }
-    }
-    vertices.delete(u);
-
-    const uLayer0 = g.vertex(u).layer;
-    let sum = 0,
-        count = 0,
-        leftMax = -Infinity,
-        rightMin = Infinity;
-    for (const v of g.inVertices(u)) {
-      const layer = g.vertex(v).layer,
-            l = uLayer0 - layer;
-      leftMax = Math.max(leftMax, layer);
-      sum += layer;
-      count += 1;
-      weights[v] -= l * l;
-    }
-    for (const v of g.outVertices(u)) {
-      const layer = g.vertex(v).layer,
-            l = layer - uLayer0;
-      rightMin = Math.min(rightMin, layer);
-      sum += layer;
-      count += 1;
-      weights[v] -= l * l;
-    }
-    const uLayer = g.vertex(u).layer = Math.min(rightMin - 1, Math.max(leftMax + 1, Math.floor(sum / count)));
-    for (const v of g.inVertices(u)) {
-      const layer = g.vertex(v).layer,
-            l = uLayer - layer;
-      weights[v] += l * l;
-    }
-    for (const v of g.outVertices(u)) {
-      const layer = g.vertex(v).layer,
-            l = layer - uLayer0;
-      weights[v] += l * l;
+      for (const v of g.outVertices(u)) {
+        const layer = g.vertex(v).layer;
+        rightMin = Math.min(rightMin, layer);
+        sum += layer;
+        count += 1;
+      }
+      g.vertex(u).layer = Math.min(rightMin - 1, Math.max(leftMax + 1, Math.round(sum / count)));
     }
   }
-
 };
 
 module.exports = quadHeuristic;
