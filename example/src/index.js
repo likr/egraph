@@ -7,7 +7,6 @@ const d3 = require('d3'),
 d3.json('data/graph5.json', (data) => {
   const g = graph();
   for (const node of data.nodes) {
-    node.color = node.color || 'white';
     g.addVertex(node);
   }
   for (const link of data.links) {
@@ -29,6 +28,7 @@ d3.json('data/graph5.json', (data) => {
     .call(renderer({
       vertexWidth: ({d}) => Math.min(d.text.length, 20) * 8,
       vertexHeight: () => 12,
+      vertexColor: ({d}) => d.color || '#ccc',
       xMargin: 30,
       yMargin: 3,
       edgeMargin: 3,

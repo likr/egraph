@@ -2,7 +2,7 @@
 
 const d3 = require('d3');
 
-const vertexRenderer = ({vertexWidth, vertexHeight}) => {
+const vertexRenderer = ({vertexWidth, vertexHeight, vertexColor}) => {
   return (selection) => {
     selection.each(function (data) {
       const element = d3.select(this);
@@ -28,7 +28,7 @@ const vertexRenderer = ({vertexWidth, vertexHeight}) => {
         y: d => d.y - vertexHeight({u: d.key, d: d.data}) / 2,
         width: d => vertexWidth({u: d.key, d: d.data}),
         height: d => vertexHeight({u: d.key, d: d.data}),
-        fill: d => d.data.color
+        fill: d => vertexColor({u: d.key, d: d.data})
       });
   };
 };
