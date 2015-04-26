@@ -25,6 +25,19 @@ const initGraph = (gOrig, {ltor, width, height, xMargin, yMargin}) => {
   return g;
 };
 
+const simplify = (points, ltor) => {
+  let index = 1;
+  while (index < points.length - 1) {
+    const x0 = ltor ? points[index][1] : points[index][0],
+          x1 = ltor ? points[index + 1][1] : points[index + 1][0];
+    if (x0 === x1) {
+      points.splice(index, 2);
+    } else {
+      index += 2;
+    }
+  }
+};
+
 const buildResult = (g, layers, ltor) => {
   const result = {
           vertices: {},
@@ -83,6 +96,7 @@ const buildResult = (g, layers, ltor) => {
             points.push([wNode.x, wNode.y - layerHeights[j] / 2]);
             points.push([wNode.x, wNode.y - (wNode.origHeight || 0) / 2]);
           }
+          simplify(points, ltor);
           result.edges[u][w] = {
             points: points
           };

@@ -12,7 +12,7 @@ const multipleEdgeRenderer = ({ltor}) => {
     selection.each(function (data) {
       const element = d3.select(this);
       const bindSelection = element.selectAll('g.sub-edge')
-        .data([data, data, data]);
+        .data(data.participants.map(() => data));
 
       bindSelection.enter()
         .append('g')

@@ -5,6 +5,17 @@ const d3 = require('d3'),
       verticesRenderer = require('./vertices-renderer'),
       edgesRenderer = require('./edges-renderer');
 
+const union = (participants1, participants2) => {
+  const set = new Set(participants2),
+        result = [];
+  for (const participant of participants1) {
+    if (set.has(participant)) {
+      result.push(participant);
+    }
+  }
+  return result;
+};
+
 const renderer = ({vertexWidth, vertexHeight, vertexColor, xMargin, yMargin, edgeMargin, ltor}) => {
   return (selection) => {
     selection.each(function (data) {
@@ -37,6 +48,7 @@ const renderer = ({vertexWidth, vertexHeight, vertexColor, xMargin, yMargin, edg
             key: u,
             x: 0,
             y: 0,
+            participants: data.vertex(u).participants,
             data: data.vertex(u)
           };
         }
@@ -58,6 +70,7 @@ const renderer = ({vertexWidth, vertexHeight, vertexColor, xMargin, yMargin, edg
             source: vertices[u],
             target: vertices[v],
             points: [[0, 0], [0, 0], [0, 0], [0, 0]],
+            participants: union(vertices[u].participants, vertices[v].participants),
             data: data.edge(u, v)
           };
         }
