@@ -21,9 +21,9 @@ gulp.task('browserify', function() {
     .pipe(gulp.dest('.'));
 });
 
-gulp.task('example', ['babel'], function() {
+gulp.task('example', function() {
   return browserify({entries: ['./example/src/index.js']})
-    .transform(babelify)
+    .transform(babelify.configure({optional: ['runtime']}))
     .bundle()
     .pipe(source('app.js'))
     .pipe(gulp.dest('example'));
