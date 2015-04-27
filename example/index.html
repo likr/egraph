@@ -3,14 +3,40 @@
 <head>
 <meta charset="utf-8"/>
 <title></title>
+<style>
+body {
+  background-color: #eee;
+}
+#controller {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 10px;
+  height: 40px;
+}
+#screen-wrapper {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 50px;
+  bottom: 10px;
+}
+#screen {
+  background-color: #fff;
+  cursor: move;
+}
+#screen g.vertex {
+  cursor: pointer;
+}
+</style>
 </head>
 <body>
 <div>
-  <div>
+  <div id="controller">
     <input id="threshold" type="range" min="0" max="1" step="0.05">
     <button id="update-button">Update</button>
   </div>
-  <div>
+  <div id="screen-wrapper">
     <svg id="screen"></svg>
   </div>
 </div>

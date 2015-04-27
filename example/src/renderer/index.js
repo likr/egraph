@@ -56,15 +56,28 @@ const renderer = ({vertexColor, vertexText, vertexVisibility, xMargin, yMargin, 
 
       const element = d3.select(this);
 
+      let contentsSelection = element.selectAll('g.contents');
+      if (contentsSelection.empty()) {
+        const zoom = d3.behavior.zoom()
+          .scaleExtent([0.1, 1])
+          .on('zoom', () => {
+            const e = d3.event,
+                  transform = `translate(${e.translate[0]},${e.translate[1]})scale(${e.scale})`;
+            contentsSelection.attr('transform', transform);
+          });
+        element.call(zoom);
+        contentsSelection = element.append('g')
+          .classed('contents', true);
+      }
       let edgesSelection = element.selectAll('g.edges');
       if (edgesSelection.empty()) {
-        edgesSelection = element.append('g')
+        edgesSelection = contentsSelection.append('g')
           .classed('edges', true)
           .datum({});
       }
       let verticesSelection = element.selectAll('g.vertices');
       if (verticesSelection.empty()) {
-        verticesSelection = element.append('g')
+        verticesSelection = contentsSelection.append('g')
           .classed('vertices', true)
           .datum({});
       }

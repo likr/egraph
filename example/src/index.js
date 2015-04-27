@@ -52,13 +52,13 @@ d3.json('data/graph5.json', (data) => {
     ltor: true
   });
 
-  const selection = d3.select('#screen')
-    .attr({
-      transform: 'scale(0.3)',
-      width: 3000,
-      height: 2000
-    });
+  const wrapper = d3.select('#screen-wrapper').node(),
+        selection = d3.select('#screen');
   selection
+    .attr({
+      width: wrapper.clientWidth,
+      height: wrapper.clientHeight
+    })
     .datum(g)
     .transition()
     .duration(1000)
@@ -75,5 +75,13 @@ d3.json('data/graph5.json', (data) => {
         .duration(1000)
         .delay(delay)
         .call(r);
+    });
+
+  d3.select(window)
+    .on('resize', () => {
+      selection.attr({
+        width: wrapper.clientWidth,
+        height: wrapper.clientHeight
+      });
     });
 });
