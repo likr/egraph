@@ -65,9 +65,14 @@ d3.json('data/graph5.json', (data) => {
     .delay(1000)
     .call(r);
 
-  d3.select('#update-button')
-    .on('click', () => {
-      const threshold = +d3.select('#threshold').node().value,
+  d3.select('#threshold').node().value = '0';
+  d3.select('#threshold')
+    .on('input', function() {
+      const threshold = +this.value;
+      d3.select('#threshold-value').text(`${((1 - threshold) * 100).toFixed()}%`);
+    })
+    .on('change', function () {
+      const threshold = +this.value,
             delay = threshold <= 0.2 ? 800 : 400;
       filter.threshold = threshold;
       selection
