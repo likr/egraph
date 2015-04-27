@@ -3,7 +3,7 @@
 const d3 = require('d3'),
       vertexRenderer = require('./vertex-renderer');
 
-const verticesRenderer = ({vertexWidth, vertexHeight, vertexColor}) => {
+const verticesRenderer = ({vertexColor}) => {
   return (selection) => {
     selection.each(function (data) {
       const element = d3.select(this);
@@ -19,7 +19,7 @@ const verticesRenderer = ({vertexWidth, vertexHeight, vertexColor}) => {
     });
 
     selection.selectAll('g.vertex')
-      .call(vertexRenderer({vertexWidth, vertexHeight, vertexColor}));
+      .call(vertexRenderer({vertexColor}));
   };
 };
 

@@ -17,12 +17,23 @@ const union = (participants1, participants2) => {
   return result;
 };
 
-const renderer = ({vertexWidth, vertexHeight, vertexColor, vertexVisibility, xMargin, yMargin, edgeMargin, ltor}) => {
+const renderer = ({vertexColor, vertexText, vertexVisibility, xMargin, yMargin, edgeMargin, ltor}) => {
   return (selection) => {
     selection.each(function (gOrig) {
       const g = graph();
+      const texts = {},
+            widths = {},
+            heights = {},
+            tmpSvg = d3.select('body').append('svg'),
+            text = tmpSvg.append('text');
       for (const u of gOrig.vertices()) {
-        g.addVertex(u, gOrig.vertex(u));
+        const d = gOrig.vertex(u),
+              s = vertexText({u, d}),
+              bbox = text.text(s).node().getBBox();
+        g.addVertex(u, d);
+        texts[u] = s;
+        widths[u] = bbox.width;
+        heights[u] = bbox.height;
       }
       for (const [u, v] of gOrig.edges()) {
         g.addEdge(u, v, gOrig.edge(u, v));
@@ -37,8 +48,11 @@ const renderer = ({vertexWidth, vertexHeight, vertexColor, vertexVisibility, xMa
           g.removeVertex(u);
         }
       }
+      tmpSvg.remove();
 
-      const positions = layout(g, {width: vertexWidth, height: vertexHeight, xMargin, yMargin, edgeMargin, ltor});
+      const width = ({u}) => widths[u],
+            height = ({u}) => heights[u],
+            positions = layout(g, {width, height, xMargin, yMargin, edgeMargin, ltor});
 
       const element = d3.select(this);
 
@@ -61,22 +75,26 @@ const renderer = ({vertexWidth, vertexHeight, vertexColor, vertexVisibility, xMa
             activeEdges = new Set();
 
       for (const u of g.vertices()) {
+        const d = g.vertex(u);
         if (vertices[u] === undefined) {
           vertices[u] = {
             key: u,
             x: 0,
             y: 0,
-            participants: g.vertex(u).participants,
-            data: g.vertex(u)
+            participants: d.participants,
+            data: d
           };
         }
+        vertices[u].text = texts[u];
         vertices[u].px = vertices[u].x;
         vertices[u].py = vertices[u].y;
         vertices[u].x = positions.vertices[u].x;
         vertices[u].y = positions.vertices[u].y;
-        vertices[u].dummy = !!g.vertex(u).dummy;
+        vertices[u].width = positions.vertices[u].width;
+        vertices[u].height = positions.vertices[u].height;
         activeVertices.add(u.toString());
       }
+
       for (const [u, v] of g.edges()) {
         const key = `${u}:${v}`;
         if (edges[key] === undefined) {
@@ -109,7 +127,7 @@ const renderer = ({vertexWidth, vertexHeight, vertexColor, vertexVisibility, xMa
     selection.selectAll('g.edges')
       .call(edgesRenderer({ltor}));
     selection.selectAll('g.vertices')
-      .call(verticesRenderer({vertexWidth, vertexHeight, vertexColor}));
+      .call(verticesRenderer({vertexColor}));
   };
 };
 

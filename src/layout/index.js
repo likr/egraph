@@ -16,6 +16,7 @@ const initGraph = (gOrig, {ltor, width, height, xMargin, yMargin}) => {
     g.addVertex(u, {
       width: ltor ? h + yMargin : w + xMargin,
       height: ltor ? w + xMargin : h + yMargin,
+      origWidth: ltor ? h : w,
       origHeight: ltor ? w : h
     });
   }
@@ -62,6 +63,8 @@ const buildResult = (g, layers, ltor) => {
         result.vertices[u] = {
           x: ltor ? uNode.y : uNode.x,
           y: ltor ? uNode.x : uNode.y,
+          width: ltor ? uNode.origHeight : uNode.origWidth,
+          height: ltor ? uNode.origWidth : uNode.origHeight,
           layer: uNode.layer,
           order: uNode.order
         };

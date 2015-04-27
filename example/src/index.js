@@ -22,6 +22,13 @@ class Filter {
   }
 }
 
+const cutoff = (s, length) => {
+  if (s.length <= length) {
+    return s;
+  }
+  return s.substr(0, length - 1) + '...';
+};
+
 d3.json('data/graph5.json', (data) => {
   const g = graph();
   for (const node of data.nodes) {
@@ -36,11 +43,10 @@ d3.json('data/graph5.json', (data) => {
   const filter = new Filter(katz(g));
 
   const r = renderer({
-    vertexWidth: ({d}) => Math.min(d.text.length, 20) * 8,
-    vertexHeight: () => 12,
     vertexColor: ({d}) => d.color || '#ccc',
+    vertexText: ({d}) => cutoff(d.text, 10),
     vertexVisibility: ({u}) => filter.call(u),
-    xMargin: 30,
+    xMargin: 200,
     yMargin: 3,
     edgeMargin: 3,
     ltor: true
@@ -49,8 +55,8 @@ d3.json('data/graph5.json', (data) => {
   const selection = d3.select('#screen')
     .attr({
       transform: 'scale(0.3)',
-      width: 10000,
-      height: 10000
+      width: 3000,
+      height: 2000
     });
   selection
     .datum(g)
