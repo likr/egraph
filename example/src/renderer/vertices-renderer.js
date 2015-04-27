@@ -8,7 +8,7 @@ const verticesRenderer = ({vertexWidth, vertexHeight, vertexColor}) => {
     selection.each(function (data) {
       const element = d3.select(this);
       const bindSelection = element.selectAll('g.vertex')
-        .data(Object.keys(data).map(key => data[key]).filter(d => d.active), (d) => d.key);
+        .data(Object.keys(data).map(key => data[key]), (d) => d.key);
 
       bindSelection.enter()
         .append('g')
