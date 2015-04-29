@@ -1,8 +1,8 @@
 'use strict';
 
 const d3 = require('d3'),
-      graph = require('../../../lib/graph'),
-      layout = require('../../../lib/layout'),
+      graph = require('../../../src/graph'),
+      layout = require('../../../src/layout'),
       verticesRenderer = require('./vertices-renderer'),
       edgesRenderer = require('./edges-renderer');
 
@@ -17,7 +17,7 @@ const union = (participants1, participants2) => {
   return result;
 };
 
-const renderer = ({vertexColor, vertexText, vertexVisibility, xMargin, yMargin, edgeMargin, ltor}) => {
+const renderer = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpacity, xMargin, yMargin, edgeMargin, ltor}) => {
   return (selection) => {
     selection.each(function (gOrig) {
       const g = graph();
@@ -138,7 +138,7 @@ const renderer = ({vertexColor, vertexText, vertexVisibility, xMargin, yMargin, 
     });
 
     selection.selectAll('g.edges')
-      .call(edgesRenderer({ltor}));
+      .call(edgesRenderer({ltor, edgeColor, edgeOpacity}));
     selection.selectAll('g.vertices')
       .call(verticesRenderer({vertexColor}));
   };

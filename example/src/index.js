@@ -1,8 +1,9 @@
 'use strict';
 
 const d3 = require('d3'),
-      graph = require('../../lib/graph'),
-      katz = require('../../lib/network/centrality/katz'),
+      graph = require('../../src/graph'),
+      katz = require('../../src/network/centrality/katz'),
+      newman = require('../../src/network/community/newman'),
       renderer = require('./renderer');
 
 class Filter {
@@ -41,11 +42,18 @@ d3.json('data/graph5.json', (data) => {
   }
 
   const filter = new Filter(katz(g));
+  const communities = newman(g);
+  for (const u of g.vertices()) {
+    g.vertex(u).community = communities[u];
+  }
+  const color = d3.scale.category20();
 
   const r = renderer({
-    vertexColor: ({d}) => d.color || '#ccc',
+    vertexColor: ({d}) => color(d.community),
     vertexText: ({d}) => cutoff(d.text, 10),
     vertexVisibility: ({u}) => filter.call(u),
+    edgeColor: ({ud, vd}) => ud.community === vd.community ? color(ud.community) : '#ccc',
+    edgeOpacity: () => 1,
     xMargin: 200,
     yMargin: 3,
     edgeMargin: 3,

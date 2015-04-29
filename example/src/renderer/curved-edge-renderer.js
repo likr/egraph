@@ -1,6 +1,7 @@
 'use strict';
 
 const d3 = require('d3'),
+      edgeFunction = require('./edge-function'),
       startFrom = require('./svg/path/start-from'),
       lineTo = require('./svg/path/line-to');
 
@@ -20,7 +21,7 @@ const svgPath = (points, ltor) => {
   return d;
 };
 
-const curvedEdgeRenderer = ({edgeColor, ltor}) => {
+const curvedEdgeRenderer = ({edgeColor, edgeOpacity, ltor}) => {
   return (selection) => {
     selection.each(function (data) {
       const element = d3.select(this);
@@ -29,9 +30,9 @@ const curvedEdgeRenderer = ({edgeColor, ltor}) => {
           .append('path')
           .attr({
             d: d => svgPath(d.ppoints, ltor),
-            stroke: (d, i) => edgeColor({d: d.data, u: d.key}, i),
-            fill: 'none',
-            opacity: 0.3
+            stroke: (d, i) => edgeFunction(edgeColor, d, i),
+            opacity: (d, i) => edgeFunction(edgeOpacity, d, i),
+            fill: 'none'
           });
       }
       if (data.ppoints.length < data.points.length) {
@@ -46,7 +47,8 @@ const curvedEdgeRenderer = ({edgeColor, ltor}) => {
     selection.select('path')
       .attr({
         d: d => svgPath(d.points, ltor),
-        stroke: (d, i) => edgeColor({d: d.data, u: d.key}, i)
+        stroke: (d, i) => edgeFunction(edgeColor, d, i),
+        opacity: (d, i) => edgeFunction(edgeOpacity, d, i)
       });
   };
 };
