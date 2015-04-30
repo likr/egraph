@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('expect.js'),
-    graph = require('../lib/graph'),
-    copy = require('../lib/graph/copy');
+    graph = require('../src/graph'),
+    copy = require('../src/graph/copy');
 
 describe('graph', () => {
   it('returns empty Graph', () => {

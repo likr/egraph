@@ -1,7 +1,7 @@
 'use strict';
 const expect = require('expect.js'),
-      graph = require('../../lib/graph'),
-      layout = require('../../lib/layout');
+      graph = require('../../src/graph'),
+      layout = require('../../src/layout');
 
 describe('layout(g, sizes, options)', () => {
   it('returns positions of vertices', () => {

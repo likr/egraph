@@ -1,8 +1,8 @@
 'use strict';
 var expect = require('expect.js'),
-    graph = require('../../lib/graph'),
-    cycleRemoval = require('../../lib/layout/cycle-removal'),
-    cycleEdges = require('../../lib/layout/cycle-removal/cycle-edges');
+    graph = require('../../src/graph'),
+    cycleRemoval = require('../../src/layout/cycle-removal'),
+    cycleEdges = require('../../src/layout/cycle-removal/cycle-edges');
 
 describe('cycleEdges(g)', () => {
   it('returns cycle edges of g', () => {

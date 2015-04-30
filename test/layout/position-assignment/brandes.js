@@ -1,10 +1,10 @@
 'use strict';
 
 var expect = require('expect.js'),
-    graph = require('../../../lib/graph'),
-    markConflicts = require('../../../lib/layout/position-assignment/brandes/mark-conflicts'),
-    verticalAlignment = require('../../../lib/layout/position-assignment/brandes/vertical-alignment'),
-    horizontalCompaction = require('../../../lib/layout/position-assignment/brandes/horizontal-compaction');
+    graph = require('../../../src/graph'),
+    markConflicts = require('../../../src/layout/position-assignment/brandes/mark-conflicts'),
+    verticalAlignment = require('../../../src/layout/position-assignment/brandes/vertical-alignment'),
+    horizontalCompaction = require('../../../src/layout/position-assignment/brandes/horizontal-compaction');
 
 describe('markConflicts(g, layers)', () => {
   it('set flags to edges which has type 1 or 2 conflict', () => {

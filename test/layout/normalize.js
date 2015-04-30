@@ -1,8 +1,8 @@
 'use strict';
 
 const expect = require('expect.js'),
-      graph = require('../../lib/graph'),
-      normalize = require('../../lib/layout/normalize');
+      graph = require('../../src/graph'),
+      normalize = require('../../src/layout/normalize');
 
 describe('normalize(g, edgeMargin)', () => {
   it('inserts dummy vertices and edges', () => {

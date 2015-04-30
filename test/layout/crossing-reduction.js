@@ -1,10 +1,10 @@
 'use strict';
 const expect = require('expect.js'),
-      graph = require('../../lib/graph'),
-      cross = require('../../lib/layout/crossing-reduction/cross'),
-      crossingMatrix = require('../../lib/layout/crossing-reduction/crossing-matrix'),
-      baryCenter = require('../../lib/layout/crossing-reduction/bary-center'),
-      crossingReduction = require('../../lib/layout/crossing-reduction');
+      graph = require('../../src/graph'),
+      cross = require('../../src/layout/crossing-reduction/cross'),
+      crossingMatrix = require('../../src/layout/crossing-reduction/crossing-matrix'),
+      baryCenter = require('../../src/layout/crossing-reduction/bary-center'),
+      crossingReduction = require('../../src/layout/crossing-reduction');
 
 describe('cross(g, h1, h2)', () => {
   it('returns the number of crossing', () => {
