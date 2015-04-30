@@ -30,8 +30,8 @@ const curvedEdgeRenderer = ({edgeColor, edgeOpacity, ltor}) => {
           .append('path')
           .attr({
             d: d => svgPath(d.ppoints, ltor),
-            stroke: (d, i) => edgeFunction(edgeColor, d, i),
-            opacity: (d, i) => edgeFunction(edgeOpacity, d, i),
+            stroke: edgeFunction(edgeColor),
+            opacity: edgeFunction(edgeOpacity),
             fill: 'none'
           });
       }
@@ -47,8 +47,8 @@ const curvedEdgeRenderer = ({edgeColor, edgeOpacity, ltor}) => {
     selection.select('path')
       .attr({
         d: d => svgPath(d.points, ltor),
-        stroke: (d, i) => edgeFunction(edgeColor, d, i),
-        opacity: (d, i) => edgeFunction(edgeOpacity, d, i)
+        stroke: edgeFunction(edgeColor),
+        opacity: edgeFunction(edgeOpacity)
       });
   };
 };

@@ -1,6 +1,7 @@
 'use strict';
 
 import d3 from 'd3';
+import vertexFunction from './vertex-function';
 
 const vertexRenderer = ({vertexColor}) => {
   return (selection) => {
@@ -36,7 +37,7 @@ const vertexRenderer = ({vertexColor}) => {
         y: d => d.y - d.height / 2,
         width: d => d.width,
         height: d => d.height,
-        fill: d => vertexColor({u: d.key, d: d.data})
+        fill: vertexFunction(vertexColor)
       });
     selection.select('text')
       .text(d => d.text)

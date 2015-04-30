@@ -3,9 +3,9 @@
     "es6": true,
     "node": true
   },
-  "esFeatures": {
+  "ecmaFeatures": {
     "modules": true
-  }
+  },
   "rules": {
     "quotes": [2, "single"]
   }
