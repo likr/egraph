@@ -30,7 +30,7 @@ const cutoff = (s, length) => {
   return s.substr(0, length - 1) + '...';
 };
 
-d3.json('data/graph5.json', (data) => {
+d3.json('data/graph.json', (data) => {
   const g = graph();
   for (const node of data.nodes) {
     g.addVertex(node);
@@ -50,7 +50,7 @@ d3.json('data/graph5.json', (data) => {
 
   const renderer = new Renderer()
     .vertexColor(({d}) => color(d.community))
-    .vertexText(({d}) => cutoff(d.text, 10))
+    .vertexText(({d}) => cutoff(d.text, 20))
     .vertexVisibility(({u}) => filter.call(u))
     .edgeColor(({ud, vd}) => ud.community === vd.community ? color(ud.community) : '#ccc')
     .edgeOpacity(() => 1)
@@ -69,7 +69,7 @@ d3.json('data/graph5.json', (data) => {
     .datum(g)
     .transition()
     .duration(1000)
-    .delay(1000)
+    .delay(500)
     .call(renderer.render());
 
   d3.select('#threshold').node().value = '0';
@@ -79,13 +79,12 @@ d3.json('data/graph5.json', (data) => {
       d3.select('#threshold-value').text(`${((1 - threshold) * 100).toFixed()}%`);
     })
     .on('change', function () {
-      const threshold = +this.value,
-            delay = threshold <= 0.2 ? 800 : 400;
+      const threshold = +this.value;
       filter.threshold = threshold;
       selection
         .transition()
         .duration(1000)
-        .delay(delay)
+        .delay(500)
         .call(renderer.render());
     });
 

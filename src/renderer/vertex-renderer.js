@@ -18,7 +18,8 @@ const vertexRenderer = ({vertexColor}) => {
             height: d => d.height,
             rx: 1,
             ry: 1,
-            stroke: 'black'
+            stroke: 'black',
+            fill: vertexFunction(vertexColor)
           });
         g.append('text')
           .attr({
