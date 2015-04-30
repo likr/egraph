@@ -1,8 +1,8 @@
 'use strict';
 
 const d3 = require('d3'),
-      graph = require('../../../src/graph'),
-      layout = require('../../../src/layout'),
+      graph = require('../graph'),
+      layout = require('../layout'),
       verticesRenderer = require('./vertices-renderer'),
       edgesRenderer = require('./edges-renderer');
 

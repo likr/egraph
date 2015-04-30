@@ -4,7 +4,7 @@ const d3 = require('d3'),
       graph = require('../../src/graph'),
       katz = require('../../src/network/centrality/katz'),
       newman = require('../../src/network/community/newman'),
-      renderer = require('./renderer');
+      renderer = require('../../src/renderer');
 
 class Filter {
   constructor(values) {
