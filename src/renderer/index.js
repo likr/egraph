@@ -17,7 +17,7 @@ const union = (participants1, participants2) => {
   return result;
 };
 
-const renderer = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpacity, xMargin, yMargin, edgeMargin, ltor}) => {
+const render = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpacity, xMargin, yMargin, edgeMargin, ltor}) => {
   return (selection) => {
     selection.each(function (gOrig) {
       const g = graph();
@@ -144,4 +144,48 @@ const renderer = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpa
   };
 };
 
-export default renderer;
+const defaultOptions = {
+  vertexColor: () => 'none',
+  vertexText: ({d}) => d.text,
+  vertexVisibility: () => true,
+  edgeColor: () => '#000',
+  edgeOpacity: () => 1,
+  xMargin: 200,
+  yMargin: 3,
+  edgeMargin: 3,
+  ltor: true
+};
+
+class Renderer {
+  constructor() {
+    const self = this,
+          options = {},
+          accessor = (name) => {
+            return () => {
+              return function (arg) {
+                if (arguments.length === 0) {
+                  return options[name];
+                }
+                options[name] = arg;
+                return self;
+              };
+            };
+          };
+    for (const key in defaultOptions) {
+      options[key] = defaultOptions[key];
+      Object.defineProperty(this, key, {
+        get: accessor(key)
+      });
+    }
+  }
+
+  render() {
+    const options = {};
+    for (const key in defaultOptions) {
+      options[key] = this[key]();
+    }
+    return render(options);
+  }
+}
+
+export default Renderer;

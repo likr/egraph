@@ -4,7 +4,7 @@ import d3 from 'd3';
 import graph from '../../src/graph';
 import katz from '../../src/network/centrality/katz';
 import newman from '../../src/network/community/newman';
-import renderer from '../../src/renderer';
+import Renderer from '../../src/renderer';
 
 class Filter {
   constructor(values) {
@@ -48,17 +48,16 @@ d3.json('data/graph5.json', (data) => {
   }
   const color = d3.scale.category20();
 
-  const r = renderer({
-    vertexColor: ({d}) => color(d.community),
-    vertexText: ({d}) => cutoff(d.text, 10),
-    vertexVisibility: ({u}) => filter.call(u),
-    edgeColor: ({ud, vd}) => ud.community === vd.community ? color(ud.community) : '#ccc',
-    edgeOpacity: () => 1,
-    xMargin: 200,
-    yMargin: 3,
-    edgeMargin: 3,
-    ltor: true
-  });
+  const renderer = new Renderer()
+    .vertexColor(({d}) => color(d.community))
+    .vertexText(({d}) => cutoff(d.text, 10))
+    .vertexVisibility(({u}) => filter.call(u))
+    .edgeColor(({ud, vd}) => ud.community === vd.community ? color(ud.community) : '#ccc')
+    .edgeOpacity(() => 1)
+    .xMargin(200)
+    .yMargin(3)
+    .edgeMargin(3)
+    .ltor(true);
 
   const wrapper = d3.select('#screen-wrapper').node(),
         selection = d3.select('#screen');
@@ -71,7 +70,7 @@ d3.json('data/graph5.json', (data) => {
     .transition()
     .duration(1000)
     .delay(1000)
-    .call(r);
+    .call(renderer.render());
 
   d3.select('#threshold').node().value = '0';
   d3.select('#threshold')
@@ -87,7 +86,7 @@ d3.json('data/graph5.json', (data) => {
         .transition()
         .duration(1000)
         .delay(delay)
-        .call(r);
+        .call(renderer.render());
     });
 
   d3.select(window)
