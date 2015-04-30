@@ -58,14 +58,6 @@ const render = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpaci
 
       let contentsSelection = element.selectAll('g.contents');
       if (contentsSelection.empty()) {
-        const zoom = d3.behavior.zoom()
-          .scaleExtent([0.1, 1])
-          .on('zoom', () => {
-            const e = d3.event,
-                  transform = `translate(${e.translate[0]},${e.translate[1]})scale(${e.scale})`;
-            contentsSelection.attr('transform', transform);
-          });
-        element.call(zoom);
         contentsSelection = element.append('g')
           .classed('contents', true);
       }
