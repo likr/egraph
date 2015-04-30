@@ -65,4 +65,4 @@ const newman = (g) => {
   return result;
 };
 
-module.exports = newman;
+export default newman;

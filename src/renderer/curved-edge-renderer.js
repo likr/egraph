@@ -1,9 +1,9 @@
 'use strict';
 
-const d3 = require('d3'),
-      edgeFunction = require('./edge-function'),
-      startFrom = require('./svg/path/start-from'),
-      lineTo = require('./svg/path/line-to');
+import d3 from 'd3';
+import edgeFunction from './edge-function';
+import startFrom from './svg/path/start-from';
+import lineTo from './svg/path/line-to';
 
 const curveTo = ([x1, y1], [x2, y2], ltor) => {
   const dx = x2 - x1,
@@ -53,4 +53,4 @@ const curvedEdgeRenderer = ({edgeColor, edgeOpacity, ltor}) => {
   };
 };
 
-module.exports = curvedEdgeRenderer;
+export default curvedEdgeRenderer;

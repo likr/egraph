@@ -10,4 +10,4 @@ const median = (g, v, inverse=false) => {
   };
 };
 
-module.exports = median;
+export default median;

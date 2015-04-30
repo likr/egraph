@@ -1,5 +1,6 @@
 'use strict';
-module.exports = function normalize(g, layers, edgeMargin) {
+
+const normalize = function (g, layers, edgeMargin) {
   var i, w1, w2;
   for (let [u, v] of g.edges()) {
     if (g.vertex(v).layer - g.vertex(u).layer > 1) {
@@ -24,3 +25,5 @@ module.exports = function normalize(g, layers, edgeMargin) {
     }
   }
 };
+
+export default normalize;

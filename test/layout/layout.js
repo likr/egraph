@@ -1,7 +1,8 @@
 'use strict';
-const expect = require('expect.js'),
-      graph = require('../../src/graph'),
-      layout = require('../../src/layout');
+
+import expect from 'expect.js';
+import graph from '../../src/graph';
+import layout from '../../src/layout';
 
 describe('layout(g, sizes, options)', () => {
   it('returns positions of vertices', () => {

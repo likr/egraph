@@ -11,4 +11,4 @@ const edgeFunction = (f, d, i) => {
   return f(arg, i);
 };
 
-module.exports = edgeFunction;
+export default edgeFunction;

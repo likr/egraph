@@ -1,6 +1,6 @@
 'use strict';
 
-const layerMatrix = require('../misc/layer-matrix');
+import layerMatrix from '../misc/layer-matrix';
 
 const crossingMatrix = (g, h1, h2) => {
   const n = h1.length,
@@ -23,4 +23,4 @@ const crossingMatrix = (g, h1, h2) => {
   return b;
 };
 
-module.exports = crossingMatrix;
+export default crossingMatrix;

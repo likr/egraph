@@ -1,10 +1,10 @@
 'use strict';
 
-const d3 = require('d3'),
-      graph = require('../graph'),
-      layout = require('../layout'),
-      verticesRenderer = require('./vertices-renderer'),
-      edgesRenderer = require('./edges-renderer');
+import d3 from 'd3';
+import graph from '../graph';
+import layout from '../layout';
+import verticesRenderer from './vertices-renderer';
+import edgesRenderer from './edges-renderer';
 
 const union = (participants1, participants2) => {
   const set = new Set(participants2),
@@ -144,4 +144,4 @@ const renderer = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpa
   };
 };
 
-module.exports = renderer;
+export default renderer;

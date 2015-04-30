@@ -1,6 +1,6 @@
 'use strict';
 
-const longestPath = require('./longest-path');
+import longestPath from './longest-path';
 
 const quadHeuristic = (g) => {
   longestPath(g);
@@ -56,4 +56,4 @@ const quadHeuristic = (g) => {
   }
 };
 
-module.exports = quadHeuristic;
+export default quadHeuristic;

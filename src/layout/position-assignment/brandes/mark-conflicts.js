@@ -1,9 +1,7 @@
 'use strict';
 
-
-
-const layerEdges = require('../../misc/layer-edges'),
-      crossingEdges = require('../../misc/crossing-edges');
+import layerEdges from '../../misc/layer-edges';
+import crossingEdges from '../../misc/crossing-edges';
 
 const markConflicts = (g, layers) => {
   const h = layers.length - 2;
@@ -25,4 +23,4 @@ const markConflicts = (g, layers) => {
   }
 };
 
-module.exports = markConflicts;
+export default markConflicts;

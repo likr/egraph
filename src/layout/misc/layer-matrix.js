@@ -18,4 +18,4 @@ const layerMatrix = (g, h1, h2) => {
   return a;
 };
 
-module.exports = layerMatrix;
+export default layerMatrix;

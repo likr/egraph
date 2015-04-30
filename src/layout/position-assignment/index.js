@@ -1,6 +1,6 @@
 'use strict';
 
-const brandes = require('./brandes');
+import brandes from './brandes';
 
 const normalize = (g) => {
   let xMin = Infinity,
@@ -35,4 +35,4 @@ const positionAssignment = (g, layers) => {
   normalize(g);
 };
 
-module.exports = positionAssignment;
+export default positionAssignment;

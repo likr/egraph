@@ -1,8 +1,8 @@
 'use strict';
 
-const markConflicts = require('./mark-conflicts'),
-      verticalAlignment = require('./vertical-alignment'),
-      horizontalCompaction = require('./horizontal-compaction');
+import markConflicts from './mark-conflicts';
+import verticalAlignment from './vertical-alignment';
+import horizontalCompaction from './horizontal-compaction';
 
 const sort = (xs) => {
   xs.sort((x1, x2) => x1 - x2);
@@ -71,4 +71,4 @@ const brandes = (g, layers) => {
   }
 };
 
-module.exports = brandes;
+export default brandes;

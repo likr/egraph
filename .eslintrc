@@ -3,6 +3,9 @@
     "es6": true,
     "node": true
   },
+  "esFeatures": {
+    "modules": true
+  }
   "rules": {
     "quotes": [2, "single"]
   }

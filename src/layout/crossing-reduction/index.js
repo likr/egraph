@@ -1,7 +1,7 @@
 'use strict';
 
-const cross = require('./cross'),
-      baryCenter = require('./bary-center');
+import cross from './cross';
+import baryCenter from './bary-center';
 
 const crossAll = (g, layers) => {
   let count = 0;
@@ -36,4 +36,4 @@ const crossingReduction = (g, layers) => {
   }
 };
 
-module.exports = crossingReduction;
+export default crossingReduction;

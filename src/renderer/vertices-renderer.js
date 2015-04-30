@@ -1,7 +1,7 @@
 'use strict';
 
-const d3 = require('d3'),
-      vertexRenderer = require('./vertex-renderer');
+import d3 from 'd3';
+import vertexRenderer from './vertex-renderer';
 
 const verticesRenderer = ({vertexColor}) => {
   return (selection) => {
@@ -23,4 +23,4 @@ const verticesRenderer = ({vertexColor}) => {
   };
 };
 
-module.exports = verticesRenderer;
+export default verticesRenderer;

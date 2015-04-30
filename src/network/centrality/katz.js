@@ -53,4 +53,4 @@ const katz = (g) => {
   return x;
 };
 
-module.exports = katz;
+export default katz;

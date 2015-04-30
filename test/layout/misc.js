@@ -1,7 +1,8 @@
 'use strict';
-var expect = require('expect.js'),
-    graph = require('../../src/graph'),
-    median = require('../../src/layout/misc/median');
+
+import expect from 'expect.js';
+import graph from '../../src/graph';
+import median from '../../src/layout/misc/median';
 
 describe('median(g, v)', () => {
   it('returns left median and right median of in vertices, which has even length, of v ', () => {

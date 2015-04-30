@@ -1,9 +1,9 @@
 'use strict';
 
-const expect = require('expect.js'),
-      graph = require('../../src/graph'),
-      layerAssignment = require('../../src/layout/layer-assignment'),
-      longestPath = require('../../src/layout/layer-assignment/longest-path');
+import expect from 'expect.js';
+import graph from '../../src/graph';
+import layerAssignment from '../../src/layout/layer-assignment';
+import longestPath from '../../src/layout/layer-assignment/longest-path';
 
 describe('layerAssignment(g)', () => {
   it('returns layers', () => {

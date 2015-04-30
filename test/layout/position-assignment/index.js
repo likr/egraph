@@ -1,8 +1,8 @@
 'use strict';
 
-var expect = require('expect.js'),
-    graph = require('../../../src/graph'),
-    priority = require('../../../src/layout/position-assignment/priority');
+import expect from 'expect.js';
+import graph from '../../../src/graph';
+import priority from '../../../src/layout/position-assignment/priority';
 
 describe('priority(g, h1, h2, positions, sizes)', () => {
   it('returns x2', () => {

@@ -1,7 +1,7 @@
 'use strict';
 
-const d3 = require('d3'),
-      edgeRenderer = require('./curved-edge-renderer.js');
+import d3 from 'd3';
+import edgeRenderer from './curved-edge-renderer.js';
 
 const multipleEdgeRenderer = ({ltor}) => {
   const color = d3.scale.category20(),
@@ -33,4 +33,4 @@ const multipleEdgeRenderer = ({ltor}) => {
   };
 };
 
-module.exports = multipleEdgeRenderer;
+export default multipleEdgeRenderer;

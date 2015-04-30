@@ -1,8 +1,8 @@
 'use strict';
 
-const d3 = require('d3'),
-      startFrom = require('./svg/path/start-from'),
-      lineTo = require('./svg/path/line-to');
+import d3 from 'd3';
+import startFrom from './svg/path/start-from';
+import lineTo from './svg/path/line-to';
 
 const svgPath = (points) => {
   let d = `${startFrom(points[0])}`;
@@ -42,4 +42,4 @@ const straightEdgeRenderer = () => {
   };
 };
 
-module.exports = straightEdgeRenderer;
+export default straightEdgeRenderer;

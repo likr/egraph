@@ -1,10 +1,10 @@
 'use strict';
 
-const d3 = require('d3'),
-      graph = require('../../src/graph'),
-      katz = require('../../src/network/centrality/katz'),
-      newman = require('../../src/network/community/newman'),
-      renderer = require('../../src/renderer');
+import d3 from 'd3';
+import graph from '../../src/graph';
+import katz from '../../src/network/centrality/katz';
+import newman from '../../src/network/community/newman';
+import renderer from '../../src/renderer';
 
 class Filter {
   constructor(values) {

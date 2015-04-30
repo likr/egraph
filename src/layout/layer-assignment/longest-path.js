@@ -27,4 +27,4 @@ const longestPath = (g) => {
   }
 };
 
-module.exports = longestPath;
+export default longestPath;

@@ -1,7 +1,7 @@
 'use strict';
 
-const d3 = require('d3'),
-      edgeRenderer = require('./curved-edge-renderer');
+import d3 from 'd3';
+import edgeRenderer from './curved-edge-renderer';
 
 const edgesRenderer = ({edgeColor, edgeOpacity, ltor}) => {
   return (selection) => {
@@ -23,4 +23,4 @@ const edgesRenderer = ({edgeColor, edgeOpacity, ltor}) => {
   };
 };
 
-module.exports = edgesRenderer;
+export default edgesRenderer;

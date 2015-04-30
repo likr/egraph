@@ -1,6 +1,6 @@
 'use strict';
 
-const graph = require('./');
+import graph from './';
 
 const copy = (g) => {
   const newGraph = graph();
@@ -13,4 +13,4 @@ const copy = (g) => {
   return newGraph;
 };
 
-module.exports = copy;
+export default copy;

@@ -1,6 +1,6 @@
 'use strict';
 
-const d3 = require('d3');
+import d3 from 'd3';
 
 const vertexRenderer = ({vertexColor}) => {
   return (selection) => {
@@ -47,4 +47,4 @@ const vertexRenderer = ({vertexColor}) => {
   };
 };
 
-module.exports = vertexRenderer;
+export default vertexRenderer;

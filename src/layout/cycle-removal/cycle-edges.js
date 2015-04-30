@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function cycleEdges(g) {
+const cycleEdges = function (g) {
   var stack = {},
       visited = {},
       result = [];
@@ -27,3 +27,5 @@ module.exports = function cycleEdges(g) {
 
   return result;
 };
+
+export default cycleEdges;

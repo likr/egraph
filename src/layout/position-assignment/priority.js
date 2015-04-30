@@ -102,4 +102,4 @@ const priority = (g, h1, h2, positions, sizes, inverse=false) => {
   }
 };
 
-module.exports = priority;
+export default priority;

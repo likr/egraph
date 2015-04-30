@@ -1,6 +1,6 @@
 'use strict';
 
-const quadHeuristic = require('./quad-heuristic');
+import quadHeuristic from './quad-heuristic';
 
 const group = (g) => {
   const result = [];
@@ -28,4 +28,4 @@ const layerAssignment = (g) => {
   return group(g);
 };
 
-module.exports = layerAssignment;
+export default layerAssignment;

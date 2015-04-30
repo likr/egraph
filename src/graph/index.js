@@ -1,4 +1,4 @@
-module.exports = function graph() {
+const graph = function () {
   'use strict';
 
   var vertices = {},
@@ -126,3 +126,5 @@ module.exports = function graph() {
 
   return new Graph();
 };
+
+export default graph;

@@ -1,11 +1,11 @@
 'use strict';
 
-const graph = require('../graph'),
-      cycleRemoval = require('./cycle-removal'),
-      layerAssignment = require('./layer-assignment'),
-      normalize = require('./normalize'),
-      crossingReduction = require('./crossing-reduction'),
-      positionAssignment = require('./position-assignment');
+import graph from '../graph';
+import cycleRemoval from './cycle-removal';
+import layerAssignment from './layer-assignment';
+import normalize from './normalize';
+import crossingReduction from './crossing-reduction';
+import positionAssignment from './position-assignment';
 
 const initGraph = (gOrig, {ltor, width, height, xMargin, yMargin}) => {
   const g = graph();
@@ -122,4 +122,4 @@ const layout = (gOrig, options) => {
   return buildResult(g, layers, ltor);
 };
 
-module.exports = layout;
+export default layout;
