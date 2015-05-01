@@ -5,19 +5,9 @@ import graph from '../graph';
 import layout from '../layout';
 import verticesRenderer from './vertices-renderer';
 import edgesRenderer from './edges-renderer';
+import defineAccessors from '../utils/define-accessors';
 
-const union = (participants1, participants2) => {
-  const set = new Set(participants2),
-        result = [];
-  for (const participant of participants1) {
-    if (set.has(participant)) {
-      result.push(participant);
-    }
-  }
-  return result;
-};
-
-const render = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpacity, xMargin, yMargin, edgeMargin, ltor}) => {
+const render = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpacity, layerMargin, vertexMargin, edgeMargin, ltor}) => {
   return (selection) => {
     selection.each(function (gOrig) {
       const g = graph();
@@ -52,7 +42,7 @@ const render = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpaci
 
       const width = ({u}) => widths[u],
             height = ({u}) => heights[u],
-            positions = layout(g, {width, height, xMargin, yMargin, edgeMargin, ltor});
+            positions = layout(g, {width, height, layerMargin, vertexMargin, edgeMargin, ltor});
 
       const element = d3.select(this);
 
@@ -86,7 +76,6 @@ const render = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpaci
             key: u,
             x: 0,
             y: 0,
-            participants: d.participants,
             data: d
           };
         }
@@ -108,7 +97,6 @@ const render = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpaci
             source: vertices[u],
             target: vertices[v],
             points: [[vertices[u].px, vertices[u].py], [vertices[u].px, vertices[u].py], [vertices[v].px, vertices[v].py], [vertices[v].px, vertices[v].py]],
-            participants: union(vertices[u].participants, vertices[v].participants),
             data: g.edge(u, v)
           };
         }
@@ -142,33 +130,15 @@ const defaultOptions = {
   vertexVisibility: () => true,
   edgeColor: () => '#000',
   edgeOpacity: () => 1,
-  xMargin: 200,
-  yMargin: 3,
+  layerMargin: 200,
+  vertexMargin: 3,
   edgeMargin: 3,
   ltor: true
 };
 
 class Renderer {
   constructor() {
-    const self = this,
-          options = {},
-          accessor = (name) => {
-            return () => {
-              return function (arg) {
-                if (arguments.length === 0) {
-                  return options[name];
-                }
-                options[name] = arg;
-                return self;
-              };
-            };
-          };
-    for (const key in defaultOptions) {
-      options[key] = defaultOptions[key];
-      Object.defineProperty(this, key, {
-        get: accessor(key)
-      });
-    }
+    defineAccessors(this, {}, defaultOptions);
   }
 
   render() {

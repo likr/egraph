@@ -7,15 +7,15 @@ import normalize from './normalize';
 import crossingReduction from './crossing-reduction';
 import positionAssignment from './position-assignment';
 
-const initGraph = (gOrig, {ltor, width, height, xMargin, yMargin}) => {
+const initGraph = (gOrig, {ltor, width, height, layerMargin, vertexMargin}) => {
   const g = graph();
   for (const u of gOrig.vertices()) {
     const uNode = gOrig.vertex(u),
           w = width({u, d: uNode}),
           h = height({u, d: uNode});
     g.addVertex(u, {
-      width: ltor ? h + yMargin : w + xMargin,
-      height: ltor ? w + xMargin : h + yMargin,
+      width: ltor ? h + vertexMargin : w + layerMargin,
+      height: ltor ? w + layerMargin : h + vertexMargin,
       origWidth: ltor ? h : w,
       origHeight: ltor ? w : h
     });
