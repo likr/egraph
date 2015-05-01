@@ -4,9 +4,9 @@ import d3 from 'd3';
 import graph from '../graph';
 import Layouter from '../layout';
 import verticesRenderer from './vertices-renderer';
-import VertexRenderer from './vertex-renderer';
 import edgesRenderer from './edges-renderer';
-import CurvedEdgeRenderer from './curved-edge-renderer';
+import TextVertexRenderer from './vertex-renderer/text-vertex-renderer';
+import CurvedEdgeRenderer from './edge-renderer/curved-edge-renderer';
 import defineAccessors from '../utils/define-accessors';
 
 const render = ({edgeWidth, vertexScale, vertexText, vertexVisibility, layouter, vertexRenderer, edgeRenderer}) => {
@@ -105,7 +105,7 @@ const render = ({edgeWidth, vertexScale, vertexText, vertexVisibility, layouter,
     });
 
     selection.selectAll('g.edges')
-      .call(edgesRenderer(edgeRenderer, layouter.ltor()));
+      .call(edgesRenderer(edgeRenderer));
     selection.selectAll('g.vertices')
       .call(verticesRenderer(vertexRenderer));
   };
@@ -119,7 +119,7 @@ class Renderer {
         .layerMargin(200)
         .vertexMargin(3)
         .edgeMargin(3),
-      vertexRenderer: new VertexRenderer(),
+      vertexRenderer: new TextVertexRenderer(),
       edgeRenderer: new CurvedEdgeRenderer()
     });
   }

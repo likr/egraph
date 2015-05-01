@@ -1,8 +1,10 @@
 'use strict';
 
 import d3 from 'd3';
-import startFrom from './svg/path/start-from';
-import lineTo from './svg/path/line-to';
+import defineAccessors from '../../utils/define-accessors';
+import edgeFunction from '../edge-function';
+import startFrom from '../svg/path/start-from';
+import lineTo from '../svg/path/line-to';
 
 const svgPath = (points) => {
   let d = `${startFrom(points[0])}`;
@@ -12,7 +14,7 @@ const svgPath = (points) => {
   return d;
 };
 
-const straightEdgeRenderer = () => {
+const render = ({edgeColor, edgeOpacity}) => {
   return (selection) => {
     selection.each(function (data) {
       const element = d3.select(this);
@@ -21,9 +23,9 @@ const straightEdgeRenderer = () => {
           .append('path')
           .attr({
             d: d => svgPath(d.ppoints),
-            stroke: 'black',
-            fill: 'none',
-            opacity: 0.3
+            stroke: edgeFunction(edgeColor),
+            opacity: edgeFunction(edgeOpacity),
+            fill: 'none'
           });
       }
       if (data.ppoints.length < data.points.length) {
@@ -37,9 +39,27 @@ const straightEdgeRenderer = () => {
 
     selection.selectAll('path')
       .attr({
-        d: d => svgPath(d.points)
+        d: d => svgPath(d.points),
+        stroke: edgeFunction(edgeColor),
+        opacity: edgeFunction(edgeOpacity)
       });
   };
 };
 
-export default straightEdgeRenderer;
+class StraightEdgeRenderer {
+  constructor() {
+    defineAccessors(this, {}, {
+      edgeColor: () => '#000',
+      edgeOpacity: () => 1
+    });
+  }
+
+  render() {
+    return render({
+      edgeColor: this.edgeColor(),
+      edgeOpacity: this.edgeOpacity()
+    });
+  }
+}
+
+export default StraightEdgeRenderer;

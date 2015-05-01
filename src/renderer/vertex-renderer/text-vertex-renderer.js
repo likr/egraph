@@ -1,8 +1,8 @@
 'use strict';
 
 import d3 from 'd3';
-import defineAccessors from '../utils/define-accessors';
-import vertexFunction from './vertex-function';
+import defineAccessors from '../../utils/define-accessors';
+import vertexFunction from '../vertex-function';
 
 const render = ({vertexColor, vertexScale, vertexText}) => {
   return (selection) => {
@@ -67,7 +67,7 @@ const calcSize = (g, vertexScale, vertexText) => {
   return sizes;
 };
 
-class VertexRenderer {
+class TextVertexRenderer {
   constructor() {
     defineAccessors(this, {}, {
       vertexColor: () => 'none',
@@ -89,4 +89,4 @@ class VertexRenderer {
   }
 }
 
-export default VertexRenderer;
+export default TextVertexRenderer;

@@ -2,7 +2,7 @@
 
 import d3 from 'd3';
 
-const edgesRenderer = (edgeRenderer, ltor) => {
+const edgesRenderer = (edgeRenderer) => {
   return (selection) => {
     selection.each(function (data) {
       const element = d3.select(this);
@@ -18,7 +18,7 @@ const edgesRenderer = (edgeRenderer, ltor) => {
     });
 
     selection.selectAll('g.edge')
-      .call(edgeRenderer.render(ltor));
+      .call(edgeRenderer.render());
   };
 };
 

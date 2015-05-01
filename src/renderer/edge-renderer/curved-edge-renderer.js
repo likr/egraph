@@ -1,10 +1,10 @@
 'use strict';
 
 import d3 from 'd3';
-import defineAccessors from '../utils/define-accessors';
-import edgeFunction from './edge-function';
-import startFrom from './svg/path/start-from';
-import lineTo from './svg/path/line-to';
+import defineAccessors from '../../utils/define-accessors';
+import edgeFunction from '../edge-function';
+import startFrom from '../svg/path/start-from';
+import lineTo from '../svg/path/line-to';
 
 const curveTo = ([x1, y1], [x2, y2], ltor) => {
   const dx = x2 - x1,
@@ -58,15 +58,16 @@ class CurvedEdgeRenderer {
   constructor() {
     defineAccessors(this, {}, {
       edgeColor: () => '#000',
-      edgeOpacity: () => 1
+      edgeOpacity: () => 1,
+      ltor: () => true
     });
   }
 
-  render(ltor) {
+  render() {
     return render({
       edgeColor: this.edgeColor(),
       edgeOpacity: this.edgeOpacity(),
-      ltor
+      ltor: this.ltor()
     });
   }
 }
