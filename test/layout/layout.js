@@ -2,7 +2,7 @@
 
 import expect from 'expect.js';
 import graph from '../../src/graph';
-import layout from '../../src/layout';
+import Layouter from '../../src/layout';
 
 describe('layout(g, sizes, options)', () => {
   it('returns positions of vertices', () => {
@@ -30,13 +30,7 @@ describe('layout(g, sizes, options)', () => {
     g.addEdge(c1, d3);
     g.addEdge(c2, d1);
     g.addEdge(c2, d2);
-    const result = layout(g, {
-      width: () => 10,
-      height: () => 10,
-      xMargin: 10,
-      yMargin: 10,
-      edgeMargin: 5
-    });
+    const result = new Layouter().layout(g);
     expect(result).to.have.property('vertices');
     expect(result).to.have.property('edges');
   });

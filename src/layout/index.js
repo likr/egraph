@@ -1,6 +1,7 @@
 'use strict';
 
 import graph from '../graph';
+import defineAccessors from '../utils/define-accessors';
 import cycleRemoval from './cycle-removal';
 import layerAssignment from './layer-assignment';
 import normalize from './normalize';
@@ -111,15 +112,60 @@ const buildResult = (g, layers, ltor) => {
   return result;
 };
 
-const layout = (gOrig, options) => {
-  const {edgeMargin, ltor} = options;
-  const g = initGraph(gOrig, options);
-  cycleRemoval(g);
-  const layers = layerAssignment(g);
-  normalize(g, layers, edgeMargin);
-  crossingReduction(g, layers);
-  positionAssignment(g, layers);
-  return buildResult(g, layers, ltor);
+const groupLayers = (g, layers) => {
+  const result = [];
+  for (const u of g.vertices()) {
+    const layer = layers[u];
+    if (result[layer] === undefined) {
+      result[layer] = [];
+    }
+    result[layer].push(u);
+  }
+  return result;
 };
 
-export default layout;
+const defaultOptions = {
+  width: ({d}) => d.width,
+  height: ({d}) => d.height,
+  layerMargin: 10,
+  vertexMargin: 10,
+  edgeMargin: 10,
+  ltor: true,
+  cycleRemoval: cycleRemoval,
+  layerAssignment: layerAssignment.quadHeuristic,
+  crossingReduction: crossingReduction,
+  positionAssignment: positionAssignment
+};
+
+class Layouter {
+  constructor() {
+    defineAccessors(this, {}, defaultOptions);
+  }
+
+  layout(gOrig) {
+    const g = initGraph(gOrig, {
+      width: this.width(),
+      height: this.height(),
+      layerMargin: this.layerMargin(),
+      vertexMargin: this.vertexMargin(),
+      ltor: this.ltor()
+    });
+    this.cycleRemoval()(g);
+    const layerMap = this.layerAssignment()(g);
+    const layers = groupLayers(g, layerMap);
+    normalize(g, layers, layerMap, this.edgeMargin());
+    this.crossingReduction()(g, layers);
+    for (let i = 0; i < layers.length; ++i) {
+      const layer = layers[i];
+      for (let j = 0; j < layer.length; ++j) {
+        const u = layer[j];
+        g.vertex(u).layer = i;
+        g.vertex(u).order = j;
+      }
+    }
+    this.positionAssignment()(g, layers);
+    return buildResult(g, layers, this.ltor());
+  }
+}
+
+export default Layouter;

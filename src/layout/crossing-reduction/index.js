@@ -26,14 +26,6 @@ const crossingReduction = (g, layers) => {
     c0 = c1;
     c1 = crossAll(g, layers);
   }
-
-  for (let i = 0; i < layers.length; ++i) {
-    const layer = layers[i];
-    for (let j = 0; j < layer.length; ++j) {
-      const u = layer[j];
-      g.vertex(u).order = j;
-    }
-  }
 };
 
 export default crossingReduction;

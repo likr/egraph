@@ -2,12 +2,12 @@
 
 import d3 from 'd3';
 import graph from '../graph';
-import layout from '../layout';
+import Layouter from '../layout';
 import verticesRenderer from './vertices-renderer';
 import edgesRenderer from './edges-renderer';
 import defineAccessors from '../utils/define-accessors';
 
-const render = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpacity, layerMargin, vertexMargin, edgeMargin, ltor}) => {
+const render = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpacity, layouter}) => {
   return (selection) => {
     selection.each(function (gOrig) {
       const g = graph();
@@ -40,9 +40,10 @@ const render = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpaci
       }
       tmpSvg.remove();
 
-      const width = ({u}) => widths[u],
-            height = ({u}) => heights[u],
-            positions = layout(g, {width, height, layerMargin, vertexMargin, edgeMargin, ltor});
+      layouter
+        .width(({u}) => widths[u])
+        .height(({u}) => heights[u]);
+      const positions = layouter.layout(g);
 
       const element = d3.select(this);
 
@@ -118,7 +119,7 @@ const render = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpaci
     });
 
     selection.selectAll('g.edges')
-      .call(edgesRenderer({ltor, edgeColor, edgeOpacity}));
+      .call(edgesRenderer({ltor: layouter.ltor(), edgeColor, edgeOpacity}));
     selection.selectAll('g.vertices')
       .call(verticesRenderer({vertexColor}));
   };
@@ -130,10 +131,11 @@ const defaultOptions = {
   vertexVisibility: () => true,
   edgeColor: () => '#000',
   edgeOpacity: () => 1,
-  layerMargin: 200,
-  vertexMargin: 3,
-  edgeMargin: 3,
-  ltor: true
+  layouter: new Layouter()
+    .layerMargin(200)
+    .vertexMargin(3)
+    .edgeMargin(3)
+    .ltor(true)
 };
 
 class Renderer {

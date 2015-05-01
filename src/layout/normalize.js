@@ -1,11 +1,11 @@
 'use strict';
 
-const normalize = function (g, layers, edgeMargin) {
+const normalize = function (g, layers, layerMap, edgeMargin) {
   var i, w1, w2;
   for (let [u, v] of g.edges()) {
-    if (g.vertex(v).layer - g.vertex(u).layer > 1) {
+    if (layerMap[v] - layerMap[u] > 1) {
       w1 = u;
-      for (i = g.vertex(u).layer + 1; i < g.vertex(v).layer; ++i) {
+      for (i = layerMap[u] + 1; i < layerMap[v]; ++i) {
         w2 = g.addVertex({
           dummy: true,
           width: edgeMargin,

@@ -1,11 +1,12 @@
 'use strict';
 
 const longestPath = (g) => {
-  const visited = {};
+  const visited = {},
+        layers = {};
 
   const dfs = (u) => {
     if (visited[u]) {
-      return g.vertex(u).layer;
+      return layers[u];
     }
     visited[u] = true;
 
@@ -16,7 +17,7 @@ const longestPath = (g) => {
     if (layer === Infinity) {
       layer = 0;
     }
-    g.vertex(u).layer = layer;
+    layers[u] = layer;
     return layer;
   };
 
@@ -25,6 +26,16 @@ const longestPath = (g) => {
       dfs(u);
     }
   }
+
+  let minLayer = Infinity;
+  for (const u of g.vertices()) {
+    minLayer = Math.min(minLayer, layers[u]);
+  }
+  for (const u of g.vertices()) {
+    layers[u] -= minLayer;
+  }
+
+  return layers;
 };
 
 export default longestPath;

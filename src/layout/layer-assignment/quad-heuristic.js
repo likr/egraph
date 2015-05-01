@@ -3,19 +3,19 @@
 import longestPath from './longest-path';
 
 const quadHeuristic = (g) => {
-  longestPath(g);
+  const layers = longestPath(g);
 
   let minLayer = Infinity,
       maxLayer = -Infinity;
   for (const u of g.vertices()) {
-    minLayer = Math.min(minLayer, g.vertex(u).layer);
-    maxLayer = Math.max(maxLayer, g.vertex(u).layer);
+    minLayer = Math.min(minLayer, layers[u]);
+    maxLayer = Math.max(maxLayer, layers[u]);
   }
   for (const u of g.vertices()) {
     if (g.inDegree(u) === 0) {
-      g.vertex(u).layer = 0;
+      layers[u] = 0;
     } else {
-      g.vertex(u).layer -= minLayer;
+      layers[u] -= minLayer;
     }
   }
 
@@ -28,7 +28,7 @@ const quadHeuristic = (g) => {
       weights[u] = 0;
     }
     for (const [u, v] of g.edges()) {
-      const l = g.vertex(v).layer - g.vertex(u).layer;
+      const l = layers[v] - layers[u];
       weights[u] += l;
       weights[v] += l;
     }
@@ -40,20 +40,22 @@ const quadHeuristic = (g) => {
           leftMax = -Infinity,
           rightMin = Infinity;
       for (const v of g.inVertices(u)) {
-        const layer = g.vertex(v).layer;
+        const layer = layers[v];
         leftMax = Math.max(leftMax, layer);
         sum += layer;
         count += 1;
       }
       for (const v of g.outVertices(u)) {
-        const layer = g.vertex(v).layer;
+        const layer = layers[v];
         rightMin = Math.min(rightMin, layer);
         sum += layer;
         count += 1;
       }
-      g.vertex(u).layer = Math.min(rightMin - 1, Math.max(leftMax + 1, Math.round(sum / count)));
+      layers[u] = Math.min(rightMin - 1, Math.max(leftMax + 1, Math.round(sum / count)));
     }
   }
+
+  return layers;
 };
 
 export default quadHeuristic;

@@ -71,7 +71,8 @@ d3.json('data/graph.json', (data) => {
     .vertexText(({d}) => cutoff(d.text, 20))
     .vertexVisibility(({u}) => filter.call(u))
     .edgeColor(({ud, vd}) => ud.community === vd.community ? color(ud.community) : '#ccc')
-    .edgeOpacity(() => 1)
+    .edgeOpacity(() => 1);
+  renderer.layouter()
     .layerMargin(200)
     .vertexMargin(3)
     .edgeMargin(3)
