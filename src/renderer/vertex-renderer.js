@@ -1,9 +1,10 @@
 'use strict';
 
 import d3 from 'd3';
+import defineAccessors from '../utils/define-accessors';
 import vertexFunction from './vertex-function';
 
-const vertexRenderer = ({vertexColor}) => {
+const render = ({vertexColor}) => {
   return (selection) => {
     selection.each(function (data) {
       const element = d3.select(this);
@@ -49,4 +50,18 @@ const vertexRenderer = ({vertexColor}) => {
   };
 };
 
-export default vertexRenderer;
+class VertexRenderer {
+  constructor() {
+    defineAccessors(this, {}, {
+      vertexColor: () => 'none'
+    });
+  }
+
+  render() {
+    return render({
+      vertexColor: this.vertexColor()
+    });
+  }
+}
+
+export default VertexRenderer;

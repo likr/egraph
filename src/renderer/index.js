@@ -4,10 +4,12 @@ import d3 from 'd3';
 import graph from '../graph';
 import Layouter from '../layout';
 import verticesRenderer from './vertices-renderer';
+import VertexRenderer from './vertex-renderer';
 import edgesRenderer from './edges-renderer';
+import CurvedEdgeRenderer from './curved-edge-renderer';
 import defineAccessors from '../utils/define-accessors';
 
-const render = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpacity, layouter}) => {
+const render = ({vertexText, vertexVisibility, layouter, vertexRenderer, edgeRenderer}) => {
   return (selection) => {
     selection.each(function (gOrig) {
       const g = graph();
@@ -119,23 +121,22 @@ const render = ({vertexColor, vertexText, vertexVisibility, edgeColor, edgeOpaci
     });
 
     selection.selectAll('g.edges')
-      .call(edgesRenderer({ltor: layouter.ltor(), edgeColor, edgeOpacity}));
+      .call(edgesRenderer(edgeRenderer, layouter.ltor()));
     selection.selectAll('g.vertices')
-      .call(verticesRenderer({vertexColor}));
+      .call(verticesRenderer(vertexRenderer));
   };
 };
 
 const defaultOptions = {
-  vertexColor: () => 'none',
   vertexText: ({d}) => d.text,
   vertexVisibility: () => true,
-  edgeColor: () => '#000',
-  edgeOpacity: () => 1,
   layouter: new Layouter()
     .layerMargin(200)
     .vertexMargin(3)
     .edgeMargin(3)
-    .ltor(true)
+    .ltor(true),
+  vertexRenderer: new VertexRenderer(),
+  edgeRenderer: new CurvedEdgeRenderer()
 };
 
 class Renderer {

@@ -1,6 +1,7 @@
 'use strict';
 
 import d3 from 'd3';
+import defineAccessors from '../utils/define-accessors';
 import edgeFunction from './edge-function';
 import startFrom from './svg/path/start-from';
 import lineTo from './svg/path/line-to';
@@ -21,7 +22,7 @@ const svgPath = (points, ltor) => {
   return d;
 };
 
-const curvedEdgeRenderer = ({edgeColor, edgeOpacity, ltor}) => {
+const render = ({edgeColor, edgeOpacity, ltor}) => {
   return (selection) => {
     selection.each(function (data) {
       const element = d3.select(this);
@@ -53,4 +54,21 @@ const curvedEdgeRenderer = ({edgeColor, edgeOpacity, ltor}) => {
   };
 };
 
-export default curvedEdgeRenderer;
+class CurvedEdgeRenderer {
+  constructor() {
+    defineAccessors(this, {}, {
+      edgeColor: () => '#000',
+      edgeOpacity: () => 1
+    });
+  }
+
+  render(ltor) {
+    return render({
+      edgeColor: this.edgeColor(),
+      edgeOpacity: this.edgeOpacity(),
+      ltor
+    });
+  }
+}
+
+export default CurvedEdgeRenderer;

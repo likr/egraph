@@ -1,9 +1,8 @@
 'use strict';
 
 import d3 from 'd3';
-import edgeRenderer from './curved-edge-renderer';
 
-const edgesRenderer = ({edgeColor, edgeOpacity, ltor}) => {
+const edgesRenderer = (edgeRenderer, ltor) => {
   return (selection) => {
     selection.each(function (data) {
       const element = d3.select(this);
@@ -19,7 +18,7 @@ const edgesRenderer = ({edgeColor, edgeOpacity, ltor}) => {
     });
 
     selection.selectAll('g.edge')
-      .call(edgeRenderer({edgeColor, edgeOpacity, ltor}));
+      .call(edgeRenderer.render(ltor));
   };
 };
 

@@ -67,16 +67,18 @@ d3.json('data/graph.json', (data) => {
   }
 
   const renderer = new Renderer()
-    .vertexColor(({d}) => color(d.community))
     .vertexText(({d}) => cutoff(d.text, 20))
-    .vertexVisibility(({u}) => filter.call(u))
-    .edgeColor(({ud, vd}) => ud.community === vd.community ? color(ud.community) : '#ccc')
-    .edgeOpacity(() => 1);
+    .vertexVisibility(({u}) => filter.call(u));
   renderer.layouter()
     .layerMargin(200)
     .vertexMargin(3)
     .edgeMargin(3)
     .ltor(true);
+  renderer.vertexRenderer()
+    .vertexColor(({d}) => color(d.community));
+  renderer.edgeRenderer()
+    .edgeColor(({ud, vd}) => ud.community === vd.community ? color(ud.community) : '#ccc')
+    .edgeOpacity(() => 1);
 
   const zoom = d3.behavior.zoom()
     .translate([params.x, params.y])

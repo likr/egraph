@@ -1,9 +1,8 @@
 'use strict';
 
 import d3 from 'd3';
-import vertexRenderer from './vertex-renderer';
 
-const verticesRenderer = ({vertexColor}) => {
+const verticesRenderer = (vertexRenderer) => {
   return (selection) => {
     selection.each(function (data) {
       const element = d3.select(this);
@@ -19,7 +18,7 @@ const verticesRenderer = ({vertexColor}) => {
     });
 
     selection.selectAll('g.vertex')
-      .call(vertexRenderer({vertexColor}));
+      .call(vertexRenderer.render());
   };
 };
 
