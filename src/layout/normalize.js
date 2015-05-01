@@ -3,12 +3,13 @@
 const normalize = function (g, layers, layerMap, edgeMargin) {
   var i, w1, w2;
   for (let [u, v] of g.edges()) {
+    const d = g.edge(u, v);
     if (layerMap[v] - layerMap[u] > 1) {
       w1 = u;
       for (i = layerMap[u] + 1; i < layerMap[v]; ++i) {
         w2 = g.addVertex({
           dummy: true,
-          width: edgeMargin,
+          width: d.width + edgeMargin,
           height: 0,
           layer: i
         });

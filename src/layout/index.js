@@ -8,12 +8,12 @@ import normalize from './normalize';
 import crossingReduction from './crossing-reduction';
 import positionAssignment from './position-assignment';
 
-const initGraph = (gOrig, {ltor, width, height, layerMargin, vertexMargin}) => {
+const initGraph = (gOrig, {ltor, vertexWidth, vertexHeight, edgeWidth, layerMargin, vertexMargin}) => {
   const g = graph();
   for (const u of gOrig.vertices()) {
     const uNode = gOrig.vertex(u),
-          w = width({u, d: uNode}),
-          h = height({u, d: uNode});
+          w = vertexWidth({u, d: uNode}),
+          h = vertexHeight({u, d: uNode});
     g.addVertex(u, {
       width: ltor ? h + vertexMargin : w + layerMargin,
       height: ltor ? w + layerMargin : h + vertexMargin,
@@ -22,7 +22,15 @@ const initGraph = (gOrig, {ltor, width, height, layerMargin, vertexMargin}) => {
     });
   }
   for (const [u, v] of gOrig.edges()) {
-    g.addEdge(u, v);
+    g.addEdge(u, v, {
+      width: edgeWidth({
+        u,
+        v,
+        ud: g.vertex(u),
+        vd: g.vertex(v),
+        d: g.edge(u, v)
+      })
+    });
   }
   return g;
 };
@@ -125,8 +133,9 @@ const groupLayers = (g, layers) => {
 };
 
 const defaultOptions = {
-  width: ({d}) => d.width,
-  height: ({d}) => d.height,
+  vertexWidth: ({d}) => d.width,
+  vertexHeight: ({d}) => d.height,
+  edgeWidth: () => 1,
   layerMargin: 10,
   vertexMargin: 10,
   edgeMargin: 10,
@@ -144,8 +153,9 @@ class Layouter {
 
   layout(gOrig) {
     const g = initGraph(gOrig, {
-      width: this.width(),
-      height: this.height(),
+      vertexWidth: this.vertexWidth(),
+      vertexHeight: this.vertexHeight(),
+      edgeWidth: this.edgeWidth(),
       layerMargin: this.layerMargin(),
       vertexMargin: this.vertexMargin(),
       ltor: this.ltor()

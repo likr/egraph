@@ -22,7 +22,7 @@ const updateHash = (args) => {
 };
 
 class Filter {
-  constructor(values) {
+  setValues(values) {
     const vertices = Object.keys(values);
     this.threshold = 0;
     this.length = vertices.length;
@@ -31,6 +31,7 @@ class Filter {
     for (let i = 0; i < this.length; ++i) {
       this.order[vertices[i]] = i + 1;
     }
+    return this;
   }
 
   call(u) {
@@ -45,6 +46,27 @@ const cutoff = (s, length) => {
   return s.substr(0, length - 1) + '...';
 };
 
+const color = d3.scale.category20();
+const vertexScale = d3.scale.linear()
+  .range([1, 2]);
+const filter = new Filter();
+
+const renderer = new Renderer()
+  .vertexVisibility(({u}) => filter.call(u));
+renderer.layouter()
+  .edgeWidth(() => 2)
+  .layerMargin(200)
+  .vertexMargin(3)
+  .edgeMargin(3)
+  .ltor(true);
+renderer.vertexRenderer()
+  .vertexColor(({d}) => color(d.community))
+  .vertexScale(({d}) => vertexScale(d.centrality))
+  .vertexText(({d}) => cutoff(d.text, 20));
+renderer.edgeRenderer()
+  .edgeColor(({ud, vd}) => ud.community === vd.community ? color(ud.community) : '#ccc')
+  .edgeOpacity(() => 1);
+
 d3.json('data/graph.json', (data) => {
   const params = parseHash();
 
@@ -58,27 +80,23 @@ d3.json('data/graph.json', (data) => {
     }
   }
 
-  const filter = new Filter(katz(g));
-  const color = d3.scale.category20();
+  const centralities = katz(g);
   const communities = newman(g);
   for (const u of g.vertices()) {
+    const d = g.vertex(u);
     color(communities[u]);
-    g.vertex(u).community = communities[u];
+    d.community = communities[u];
+    d.centrality = centralities[u];
   }
+  filter.setValues(centralities);
+  vertexScale.domain(d3.extent(g.vertices(), u => centralities[u]));
 
-  const renderer = new Renderer()
-    .vertexText(({d}) => cutoff(d.text, 20))
-    .vertexVisibility(({u}) => filter.call(u));
-  renderer.layouter()
-    .layerMargin(200)
-    .vertexMargin(3)
-    .edgeMargin(3)
-    .ltor(true);
-  renderer.vertexRenderer()
-    .vertexColor(({d}) => color(d.community));
-  renderer.edgeRenderer()
-    .edgeColor(({ud, vd}) => ud.community === vd.community ? color(ud.community) : '#ccc')
-    .edgeOpacity(() => 1);
+  const sizes = renderer.vertexRenderer().calcSize(g);
+  for (const u of g.vertices()) {
+    const d = g.vertex(u);
+    d.width = sizes[u].width;
+    d.height = sizes[u].height;
+  }
 
   const zoom = d3.behavior.zoom()
     .translate([params.x, params.y])

@@ -9,23 +9,12 @@ import edgesRenderer from './edges-renderer';
 import CurvedEdgeRenderer from './curved-edge-renderer';
 import defineAccessors from '../utils/define-accessors';
 
-const render = ({vertexText, vertexVisibility, layouter, vertexRenderer, edgeRenderer}) => {
+const render = ({edgeWidth, vertexScale, vertexText, vertexVisibility, layouter, vertexRenderer, edgeRenderer}) => {
   return (selection) => {
     selection.each(function (gOrig) {
       const g = graph();
-      const texts = {},
-            widths = {},
-            heights = {},
-            tmpSvg = d3.select('body').append('svg'),
-            text = tmpSvg.append('text');
       for (const u of gOrig.vertices()) {
-        const d = gOrig.vertex(u),
-              s = vertexText({u, d}),
-              bbox = text.text(s).node().getBBox();
-        g.addVertex(u, d);
-        texts[u] = s;
-        widths[u] = bbox.width;
-        heights[u] = bbox.height;
+        g.addVertex(u, gOrig.vertex(u));
       }
       for (const [u, v] of gOrig.edges()) {
         g.addEdge(u, v, gOrig.edge(u, v));
@@ -40,11 +29,7 @@ const render = ({vertexText, vertexVisibility, layouter, vertexRenderer, edgeRen
           g.removeVertex(u);
         }
       }
-      tmpSvg.remove();
 
-      layouter
-        .width(({u}) => widths[u])
-        .height(({u}) => heights[u]);
       const positions = layouter.layout(g);
 
       const element = d3.select(this);
@@ -82,7 +67,6 @@ const render = ({vertexText, vertexVisibility, layouter, vertexRenderer, edgeRen
             data: d
           };
         }
-        vertices[u].text = texts[u];
         vertices[u].px = vertices[u].x;
         vertices[u].py = vertices[u].y;
         vertices[u].x = positions.vertices[u].x;
@@ -127,29 +111,26 @@ const render = ({vertexText, vertexVisibility, layouter, vertexRenderer, edgeRen
   };
 };
 
-const defaultOptions = {
-  vertexText: ({d}) => d.text,
-  vertexVisibility: () => true,
-  layouter: new Layouter()
-    .layerMargin(200)
-    .vertexMargin(3)
-    .edgeMargin(3)
-    .ltor(true),
-  vertexRenderer: new VertexRenderer(),
-  edgeRenderer: new CurvedEdgeRenderer()
-};
-
 class Renderer {
   constructor() {
-    defineAccessors(this, {}, defaultOptions);
+    defineAccessors(this, {}, {
+      vertexVisibility: () => true,
+      layouter: new Layouter()
+        .layerMargin(200)
+        .vertexMargin(3)
+        .edgeMargin(3),
+      vertexRenderer: new VertexRenderer(),
+      edgeRenderer: new CurvedEdgeRenderer()
+    });
   }
 
   render() {
-    const options = {};
-    for (const key in defaultOptions) {
-      options[key] = this[key]();
-    }
-    return render(options);
+    return render({
+      vertexVisibility: this.vertexVisibility(),
+      layouter: this.layouter(),
+      vertexRenderer: this.vertexRenderer(),
+      edgeRenderer: this.edgeRenderer()
+    });
   }
 }
 
