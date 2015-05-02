@@ -94,6 +94,7 @@ const render = ({vertexVisibility, edgeVisibility, layouter, vertexRenderer, edg
         }
         edges[key].ppoints = edges[key].points;
         edges[key].points = positions.edges[u][v].points;
+        edges[key].width = positions.edges[u][v].width;
         activeEdges.add(key);
       }
 

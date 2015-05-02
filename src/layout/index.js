@@ -110,7 +110,8 @@ const buildResult = (g, layers, ltor) => {
           }
           simplify(points, ltor);
           result.edges[u][w] = {
-            points: points
+            points: points,
+            width: g.edge(u, v).width
           };
         }
       }

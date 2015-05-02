@@ -14,6 +14,7 @@ const normalize = function (g, layers, layerMap, edgeMargin) {
           layer: i
         });
         g.addEdge(w1, w2, {
+          width: d.width,
           dummy: true
         });
         layers[i].push(w2);

@@ -32,6 +32,7 @@ const render = ({edgeColor, edgeOpacity, ltor}) => {
           .attr({
             d: d => svgPath(d.ppoints, ltor),
             stroke: edgeFunction(edgeColor),
+            'stroke-width': d => d.width,
             opacity: edgeFunction(edgeOpacity),
             fill: 'none'
           });
@@ -49,6 +50,7 @@ const render = ({edgeColor, edgeOpacity, ltor}) => {
       .attr({
         d: d => svgPath(d.points, ltor),
         stroke: edgeFunction(edgeColor),
+        'stroke-width': d => d.width,
         opacity: edgeFunction(edgeOpacity)
       });
   };
