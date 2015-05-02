@@ -71,13 +71,11 @@ d3.json('data/graph.json', (data) => {
   const params = parseHash();
 
   const g = graph();
-  for (const node of data.nodes) {
-    g.addVertex(node);
+  for (const {u, d} of data.vertices) {
+    g.addVertex(u, d);
   }
-  for (const link of data.links) {
-    if (link.source !== link.target) {
-      g.addEdge(link.source, link.target);
-    }
+  for (const {u, v, d} of data.edges) {
+    g.addEdge(u, v, d);
   }
 
   const centralities = katz(g);
