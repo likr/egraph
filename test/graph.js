@@ -217,6 +217,19 @@ describe('Graph', () => {
       expect(count).to.be(g.inDegree(w));
     });
   });
+
+  describe('toString()', () => {
+    it('returns string representation of the graph', () => {
+      const g = graph();
+      const u = g.addVertex();
+      const v = g.addVertex();
+      const w = g.addVertex();
+      g.addEdge(u, v);
+      g.addEdge(u, w);
+      g.addEdge(v, w);
+      expect(g.toString()).to.be('{"vertices":[{"u":0,"d":{}},{"u":1,"d":{}},{"u":2,"d":{}}],"edges":[{"u":0,"v":1,"d":{}},{"u":0,"v":2,"d":{}},{"u":1,"v":2,"d":{}}]}');
+    });
+  });
 });
 
 describe('copy', () => {

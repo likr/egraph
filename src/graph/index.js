@@ -1,5 +1,6 @@
+'use strict';
+
 const graph = function () {
-  'use strict';
 
   var vertices = {},
       numVertices = 0,
@@ -32,12 +33,14 @@ const graph = function () {
       return Object.keys(vertices).map(u => +u);
     }
 
-    *edges() {
+    edges() {
+      const edges = [];
       for (let u in vertices) {
         for (let v in vertices[u].outVertices) {
-          yield [+u, +v];
+          edges.push([+u, +v]);
         }
       }
+      return edges;
     }
 
     outVertices(u) {
@@ -121,6 +124,14 @@ const graph = function () {
       delete vertices[u].outVertices[v];
       delete vertices[v].inVertices[u];
       numEdges--;
+    }
+
+    toString() {
+      const obj = {
+        vertices: this.vertices().map(u => ({u, d: this.vertex(u)})),
+        edges: this.edges().map(([u, v]) => ({u, v, d: this.edge(u, v)}))
+      };
+      return JSON.stringify(obj);
     }
   }
 
