@@ -9,7 +9,7 @@ import TextVertexRenderer from './vertex-renderer/text-vertex-renderer';
 import CurvedEdgeRenderer from './edge-renderer/curved-edge-renderer';
 import defineAccessors from '../utils/define-accessors';
 
-const render = ({edgeWidth, vertexScale, vertexText, vertexVisibility, layouter, vertexRenderer, edgeRenderer}) => {
+const render = ({vertexVisibility, edgeVisibility, layouter, vertexRenderer, edgeRenderer}) => {
   return (selection) => {
     selection.each(function (gOrig) {
       const g = graph();
@@ -17,7 +17,12 @@ const render = ({edgeWidth, vertexScale, vertexText, vertexVisibility, layouter,
         g.addVertex(u, gOrig.vertex(u));
       }
       for (const [u, v] of gOrig.edges()) {
-        g.addEdge(u, v, gOrig.edge(u, v));
+        const ud = gOrig.vertex(u),
+              vd = gOrig.vertex(v),
+              d = gOrig.edge(u, v);
+        if (edgeVisibility({u, v, ud, vd, d})) {
+          g.addEdge(u, v, gOrig.edge(u, v));
+        }
       }
       for (const u of g.vertices()) {
         if (!vertexVisibility({u, d: g.vertex(u)})) {
@@ -115,6 +120,7 @@ class Renderer {
   constructor() {
     defineAccessors(this, {}, {
       vertexVisibility: () => true,
+      edgeVisibility: () => true,
       layouter: new Layouter()
         .layerMargin(200)
         .vertexMargin(3)
@@ -127,6 +133,7 @@ class Renderer {
   render() {
     return render({
       vertexVisibility: this.vertexVisibility(),
+      edgeVisibility: this.edgeVisibility(),
       layouter: this.layouter(),
       vertexRenderer: this.vertexRenderer(),
       edgeRenderer: this.edgeRenderer()
