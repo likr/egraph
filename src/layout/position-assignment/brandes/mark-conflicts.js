@@ -1,21 +1,40 @@
 'use strict';
 
 import layerEdges from '../../misc/layer-edges';
-import crossingEdges from '../../misc/crossing-edges';
+
+const split = (x, f) => {
+  const y = [],
+        z = [];
+  for (const xi of x) {
+    if (f(xi)) {
+      y.push(xi);
+    } else {
+      z.push(xi);
+    }
+  }
+  return [y, z];
+};
 
 const markConflicts = (g, layers) => {
-  const h = layers.length - 2;
+  const h = layers.length - 2,
+        dummy = {},
+        order = {},
+        isInner = ([u, v]) => dummy[u] && dummy[v];
+
+  for (const u of g.vertices()) {
+    const d = g.vertex(u);
+    dummy[u] = !!d.dummy;
+    order[u] = d.order;
+  }
 
   for (let i = 1; i < h; ++i) {
-    for (const [u1, v1] of layerEdges(g, layers[i], layers[i + 1])) {
-      const dummy1 = g.vertex(u1).dummy && g.vertex(v1).dummy;
-      for (const [u2, v2] of crossingEdges(g, layers[i], layers[i + 1], u1, v1)) {
-        const dummy2 = g.vertex(u2).dummy && g.vertex(v2).dummy;
-        if (!dummy1 && dummy2) {
-          // edge 1 has a type 1 conflict
-          g.edge(u1, v1).type1Conflict = true;
-        } else if (dummy1 && !dummy2) {
-          // edge 2 has a type 1 conflict
+    const h1 = layers[i],
+          h2 = layers[i + 1],
+          edges = layerEdges(g, h1, h2);
+    const [innerSegments, outerSegments] = split(edges, isInner);
+    for (const [u1, v1] of innerSegments) {
+      for (const [u2, v2] of outerSegments) {
+        if ((order[u1] < order[u2] && order[v1] > order[v2]) || (order[u1] > order[u2] && order[v1] < order[v2])) {
           g.edge(u2, v2).type1Conflict = true;
         }
       }
