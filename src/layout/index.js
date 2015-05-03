@@ -142,7 +142,7 @@ const defaultOptions = {
   edgeMargin: 10,
   ltor: true,
   cycleRemoval: cycleRemoval,
-  layerAssignment: layerAssignment.quadHeuristic,
+  layerAssignment: new layerAssignment.QuadHeuristic(),
   crossingReduction: crossingReduction,
   positionAssignment: positionAssignment
 };
@@ -162,7 +162,7 @@ class Layouter {
       ltor: this.ltor()
     });
     this.cycleRemoval()(g);
-    const layerMap = this.layerAssignment()(g);
+    const layerMap = this.layerAssignment().call(g);
     const layers = groupLayers(g, layerMap);
     normalize(g, layers, layerMap, this.edgeMargin());
     this.crossingReduction()(g, layers);

@@ -16,7 +16,7 @@ describe('longestPath(g)', () => {
     g.addEdge(b, c);
     g.addEdge(d, c);
     g.addEdge(d, e);
-    expect(layerAssignment.longestPath(g)).to.be.eql({
+    expect(new layerAssignment.LongestPath().call(g)).to.be.eql({
       [a]: 0,
       [b]: 1,
       [c]: 2,

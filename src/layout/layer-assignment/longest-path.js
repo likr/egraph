@@ -38,4 +38,10 @@ const longestPath = (g) => {
   return layers;
 };
 
-export default longestPath;
+class LongestPath {
+  call(g) {
+    return longestPath(g);
+  }
+}
+
+export default LongestPath;

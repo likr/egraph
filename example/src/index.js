@@ -59,6 +59,9 @@ renderer.layouter()
   .vertexMargin(3)
   .edgeMargin(3)
   .ltor(true);
+renderer.layouter()
+  .layerAssignment()
+  .repeat(5);
 renderer.vertexRenderer()
   .vertexColor(({d}) => color(d.community))
   .vertexScale(({d}) => vertexScale(d.centrality))

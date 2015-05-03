@@ -1,9 +1,10 @@
 'use strict';
 
-import longestPath from './longest-path';
+import LongestPath from './longest-path';
+import defineAccessors from '../../utils/define-accessors';
 
-const quadHeuristic = (g) => {
-  const layers = longestPath(g);
+const quadHeuristic = (g, repeat) => {
+  const layers = new LongestPath().call(g);
 
   let minLayer = Infinity,
       maxLayer = -Infinity;
@@ -19,8 +20,7 @@ const quadHeuristic = (g) => {
     }
   }
 
-  const repeat = 4,
-        vertices = g.vertices().filter(u => g.inDegree(u) > 0 && g.outDegree(u) > 0),
+  const vertices = g.vertices().filter(u => g.inDegree(u) > 0 && g.outDegree(u) > 0),
         weights = {},
         cmp = (u, v) => weights[v] - weights[u];
   for (let loop = 0; loop < repeat; ++loop) {
@@ -58,4 +58,16 @@ const quadHeuristic = (g) => {
   return layers;
 };
 
-export default quadHeuristic;
+class QuadHeuristic {
+  constructor() {
+    defineAccessors(this, {}, {
+      repeat: 4
+    });
+  }
+
+  call(g) {
+    return quadHeuristic(g, this.repeat());
+  }
+}
+
+export default QuadHeuristic;

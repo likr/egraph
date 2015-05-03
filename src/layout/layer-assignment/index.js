@@ -1,6 +1,6 @@
 'use strict';
 
-import longestPath from './longest-path';
-import quadHeuristic from './quad-heuristic';
+import LongestPath from './longest-path';
+import QuadHeuristic from './quad-heuristic';
 
-export default {longestPath, quadHeuristic};
+export default {LongestPath, QuadHeuristic};
