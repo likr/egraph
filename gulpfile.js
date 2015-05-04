@@ -25,6 +25,10 @@ gulp.task('example', function() {
   return browserify({entries: ['./example/src/index.js']})
     .transform(babelify.configure({optional: ['runtime']}))
     .bundle()
+    .on('error', function (err) {
+      console.log(err.message);
+      this.emit('end');
+    })
     .pipe(source('app.js'))
     .pipe(gulp.dest('example'));
 });
