@@ -1,5 +1,9 @@
 'use strict';
 
+import ImaiTreeLayouter from './imai-tree';
 import SugiyamaLayouter from './sugiyama';
 
-export default {SugiyamaLayouter};
+export default {
+  ImaiTreeLayouter,
+  SugiyamaLayouter
+};
