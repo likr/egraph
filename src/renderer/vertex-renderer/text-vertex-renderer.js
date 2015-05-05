@@ -1,7 +1,7 @@
 'use strict';
 
 import d3 from 'd3';
-import defineAccessors from '../../utils/define-accessors';
+import accessor from '../../utils/accessor';
 import vertexFunction from '../vertex-function';
 
 const render = ({vertexColor, vertexScale, vertexText}) => {
@@ -67,9 +67,11 @@ const calcSize = (g, vertexScale, vertexText) => {
   return sizes;
 };
 
+const privates = new WeakMap();
+
 class TextVertexRenderer {
   constructor() {
-    defineAccessors(this, {}, {
+    privates.set(this, {
       vertexColor: () => 'none',
       vertexScale: () => 1,
       vertexText: ({d}) => d.text
@@ -86,6 +88,18 @@ class TextVertexRenderer {
 
   calcSize(g) {
     return calcSize(g, this.vertexScale(), this.vertexText());
+  }
+
+  vertexColor(arg) {
+    return accessor(this, privates, 'vertexColor', arguments);
+  }
+
+  vertexScale(arg) {
+    return accessor(this, privates, 'vertexScale', arguments);
+  }
+
+  vertexText(arg) {
+    return accessor(this, privates, 'vertexText', arguments);
   }
 }
 

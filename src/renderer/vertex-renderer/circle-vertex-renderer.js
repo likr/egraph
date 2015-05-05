@@ -1,7 +1,7 @@
 'use strict';
 
 import d3 from 'd3';
-import defineAccessors from '../../utils/define-accessors';
+import accessor from '../../utils/accessor';
 import vertexFunction from '../vertex-function';
 
 const render = ({vertexColor, r}) => {
@@ -30,9 +30,11 @@ const render = ({vertexColor, r}) => {
   };
 };
 
+const privates = new WeakMap();
+
 class CircleVertexRenderer {
   constructor() {
-    defineAccessors(this, {}, {
+    privates.set(this, {
       vertexColor: () => 'none',
       r: 5
     });
@@ -43,6 +45,14 @@ class CircleVertexRenderer {
       vertexColor: this.vertexColor(),
       r: this.r()
     });
+  }
+
+  vertexColor(arg) {
+    return accessor(this, privates, 'vertexColor', arguments);
+  }
+
+  r(arg) {
+    return accessor(this, privates, 'r', arguments);
   }
 }
 
