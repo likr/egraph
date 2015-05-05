@@ -39,6 +39,8 @@ gulp.task('build', ['babel']);
 
 gulp.task('test', ['mocha']);
 
+gulp.task('release', ['babel'], shell.task(['npm publish']));
+
 gulp.task('watch', function() {
   gulp.watch('src/**/*.js', ['mocha', 'example']);
   gulp.watch(['test/**/*.js'], ['mocha']);
