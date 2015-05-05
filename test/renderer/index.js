@@ -2,7 +2,7 @@
 
 import expect from 'expect.js';
 import Renderer from '../../src/renderer';
-import Layouter from '../../src/layout';
+import layouter from '../../src/layouter';
 import VertexRenderer from '../../src/renderer/vertex-renderer/circle-vertex-renderer';
 import EdgeRenderer from '../../src/renderer/edge-renderer/straight-edge-renderer';
 
@@ -49,9 +49,9 @@ describe('Renderer', () => {
   describe('layouter(layouter)', () => {
     it('sets layouter and returns self', () => {
       const renderer = new Renderer(),
-            layouter = new Layouter();
-      expect(renderer.layouter(layouter)).to.be(renderer);
-      expect(renderer.layouter()).to.be(layouter);
+            sugiyamaLayouter = new layouter.SugiyamaLayouter();
+      expect(renderer.layouter(sugiyamaLayouter)).to.be(renderer);
+      expect(renderer.layouter()).to.be(sugiyamaLayouter);
     });
   });
 

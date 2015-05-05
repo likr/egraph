@@ -1,8 +1,8 @@
 'use strict';
 
 import expect from 'expect.js';
-import Graph from '../../../src/graph';
-import priority from '../../../src/layout/position-assignment/priority';
+import Graph from '../../../../src/graph';
+import priority from '../../../../src/layouter/sugiyama/position-assignment/priority';
 
 describe('priority(g, h1, h2, positions, sizes)', () => {
   it('returns x2', () => {

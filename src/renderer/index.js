@@ -2,7 +2,7 @@
 
 import d3 from 'd3';
 import Graph from '../graph';
-import Layouter from '../layout';
+import layouter from '../layouter';
 import verticesRenderer from './vertices-renderer';
 import edgesRenderer from './edges-renderer';
 import TextVertexRenderer from './vertex-renderer/text-vertex-renderer';
@@ -124,7 +124,7 @@ class Renderer {
     privates.set(this, {
       vertexVisibility: () => true,
       edgeVisibility: () => true,
-      layouter: new Layouter()
+      layouter: new layouter.SugiyamaLayouter()
         .layerMargin(200)
         .vertexMargin(3)
         .edgeMargin(3),

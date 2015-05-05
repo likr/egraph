@@ -1,8 +1,8 @@
 'use strict';
 
 import expect from 'expect.js';
-import Graph from '../../src/graph';
-import Layouter from '../../src/layout';
+import Graph from '../../../src/graph';
+import Sugiyama from '../../../src/layouter/sugiyama';
 
 describe('layout(g, sizes, options)', () => {
   it('returns positions of vertices', () => {
@@ -30,7 +30,7 @@ describe('layout(g, sizes, options)', () => {
     graph.addEdge(c1, d3);
     graph.addEdge(c2, d1);
     graph.addEdge(c2, d2);
-    const result = new Layouter().layout(graph);
+    const result = new Sugiyama().layout(graph);
     expect(result).to.have.property('vertices');
     expect(result).to.have.property('edges');
   });

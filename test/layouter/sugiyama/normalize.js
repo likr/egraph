@@ -1,8 +1,8 @@
 'use strict';
 
 import expect from 'expect.js';
-import Graph from '../../src/graph';
-import normalize from '../../src/layout/normalize';
+import Graph from '../../../src/graph';
+import normalize from '../../../src/layouter/sugiyama/normalize';
 
 describe('normalize(g, layers, layerMap, edgeMargin)', () => {
   it('inserts dummy vertices and edges', () => {

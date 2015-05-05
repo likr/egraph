@@ -1,8 +1,8 @@
 'use strict';
 
 import expect from 'expect.js';
-import Graph from '../../../src/graph';
-import LongestPath from '../../../src/layout/layer-assignment/longest-path';
+import Graph from '../../../../src/graph';
+import LongestPath from '../../../../src/layouter/sugiyama/layer-assignment/longest-path';
 
 describe('LongestPath', () => {
   describe('call(graph)', () => {

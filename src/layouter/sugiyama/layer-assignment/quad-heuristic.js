@@ -1,6 +1,6 @@
 'use strict';
 
-import accessor from '../../utils/accessor';
+import accessor from '../../../utils/accessor';
 import LongestPath from './longest-path';
 
 const quadHeuristic = (g, repeat) => {

@@ -1,6 +1,6 @@
 'use strict';
 
-import accessor from '../../utils/accessor';
+import accessor from '../../../utils/accessor';
 import baryCenter from './bary-center';
 
 const privates = new WeakMap();

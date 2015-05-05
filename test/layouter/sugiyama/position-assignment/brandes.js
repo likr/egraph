@@ -1,10 +1,10 @@
 'use strict';
 
 import expect from 'expect.js';
-import Graph from '../../../src/graph';
-import markConflicts from '../../../src/layout/position-assignment/brandes/mark-conflicts';
-import verticalAlignment from '../../../src/layout/position-assignment/brandes/vertical-alignment';
-import horizontalCompaction from '../../../src/layout/position-assignment/brandes/horizontal-compaction';
+import Graph from '../../../../src/graph';
+import markConflicts from '../../../../src/layouter/sugiyama/position-assignment/brandes/mark-conflicts';
+import verticalAlignment from '../../../../src/layouter/sugiyama/position-assignment/brandes/vertical-alignment';
+import horizontalCompaction from '../../../../src/layouter/sugiyama/position-assignment/brandes/horizontal-compaction';
 
 describe('markConflicts(g, layers)', () => {
   it('set flags to edges which has type 1 or 2 conflict', () => {

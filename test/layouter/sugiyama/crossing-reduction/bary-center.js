@@ -1,8 +1,8 @@
 'use strict';
 
 import expect from 'expect.js';
-import Graph from '../../../src/graph';
-import baryCenter from '../../../src/layout/crossing-reduction/bary-center';
+import Graph from '../../../../src/graph';
+import baryCenter from '../../../../src/layouter/sugiyama/crossing-reduction/bary-center';
 
 describe('baryCenter(g, h1, h2)', () => {
   it('sorts h2', () => {

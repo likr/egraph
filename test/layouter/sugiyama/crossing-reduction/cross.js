@@ -1,8 +1,8 @@
 'use strict';
 
 import expect from 'expect.js';
-import Graph from '../../../src/graph';
-import cross from '../../../src/layout/crossing-reduction/cross';
+import Graph from '../../../../src/graph';
+import cross from '../../../../src/layouter/sugiyama/crossing-reduction/cross';
 
 describe('cross(g, h1, h2)', () => {
   it('returns the number of crossing', () => {

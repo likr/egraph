@@ -1,8 +1,8 @@
 'use strict';
 
 import expect from 'expect.js';
-import Graph from '../../../src/graph';
-import LayerSweep from '../../../src/layout/crossing-reduction/layer-sweep';
+import Graph from '../../../../src/graph';
+import LayerSweep from '../../../../src/layouter/sugiyama/crossing-reduction/layer-sweep';
 
 describe('LayerSweep', () => {
   describe('call(g, layers)', () => {

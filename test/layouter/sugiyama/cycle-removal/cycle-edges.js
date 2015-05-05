@@ -1,8 +1,8 @@
 'use strict';
 
 import expect from 'expect.js';
-import Graph from '../../../src/graph';
-import cycleEdges from '../../../src/layout/cycle-removal/cycle-edges';
+import Graph from '../../../../src/graph';
+import cycleEdges from '../../../../src/layouter/sugiyama/cycle-removal/cycle-edges';
 
 describe('cycleEdges(g)', () => {
   it('returns cycle edges of g', () => {

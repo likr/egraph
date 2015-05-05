@@ -1,8 +1,8 @@
 'use strict';
 
 import expect from 'expect.js';
-import Graph from '../../../src/graph';
-import crossingMatrix from '../../../src/layout/crossing-reduction/crossing-matrix';
+import Graph from '../../../../src/graph';
+import crossingMatrix from '../../../../src/layouter/sugiyama/crossing-reduction/crossing-matrix';
 
 describe('crossingMatrix(g, h1, h2)', () => {
   it('returns crossing matrix', () => {

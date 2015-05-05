@@ -1,8 +1,8 @@
 'use strict';
 
 import expect from 'expect.js';
-import Graph from '../../../src/graph';
-import QuadHeuristic from '../../../src/layout/layer-assignment/quad-heuristic';
+import Graph from '../../../../src/graph';
+import QuadHeuristic from '../../../../src/layouter/sugiyama/layer-assignment/quad-heuristic';
 
 describe('QuadHeuristic', () => {
   describe('call(graph)', () => {

@@ -1,8 +1,8 @@
 'use strict';
 
 import expect from 'expect.js';
-import Graph from '../../../src/graph';
-import CycleRemoval from '../../../src/layout/cycle-removal/cycle-removal';
+import Graph from '../../../../src/graph';
+import CycleRemoval from '../../../../src/layouter/sugiyama/cycle-removal/cycle-removal';
 
 describe('CycleRemoval', () => {
   describe('call(g)', () => {

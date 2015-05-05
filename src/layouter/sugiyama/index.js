@@ -1,7 +1,7 @@
 'use strict';
 
-import Graph from '../graph';
-import accessor from '../utils/accessor';
+import Graph from '../../graph';
+import accessor from '../../utils/accessor';
 import cycleRemoval from './cycle-removal';
 import layerAssignment from './layer-assignment';
 import normalize from './normalize';
@@ -135,7 +135,7 @@ const groupLayers = (g, layers) => {
 
 const privates = new WeakMap();
 
-class Layouter {
+class SugiyamaLayouter {
   constructor() {
     privates.set(this, {
       vertexWidth: ({d}) => d.width,
@@ -223,4 +223,4 @@ class Layouter {
   }
 }
 
-export default Layouter;
+export default SugiyamaLayouter;
