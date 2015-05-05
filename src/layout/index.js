@@ -1,7 +1,6 @@
 'use strict';
 
 import Graph from '../graph';
-import defineAccessors from '../utils/define-accessors';
 import cycleRemoval from './cycle-removal';
 import layerAssignment from './layer-assignment';
 import normalize from './normalize';
@@ -133,23 +132,25 @@ const groupLayers = (g, layers) => {
   return result;
 };
 
-const defaultOptions = {
-  vertexWidth: ({d}) => d.width,
-  vertexHeight: ({d}) => d.height,
-  edgeWidth: () => 1,
-  layerMargin: 10,
-  vertexMargin: 10,
-  edgeMargin: 10,
-  ltor: true,
-  cycleRemoval: cycleRemoval,
-  layerAssignment: new layerAssignment.QuadHeuristic(),
-  crossingReduction: crossingReduction,
-  positionAssignment: positionAssignment
-};
+const privates = new WeakMap();
+
+const p = (self) => privates.get(self);
 
 class Layouter {
   constructor() {
-    defineAccessors(this, {}, defaultOptions);
+    privates.set(this, {
+      vertexWidth: ({d}) => d.width,
+      vertexHeight: ({d}) => d.height,
+      edgeWidth: () => 1,
+      layerMargin: 10,
+      vertexMargin: 10,
+      edgeMargin: 10,
+      ltor: true,
+      cycleRemoval: cycleRemoval,
+      layerAssignment: new layerAssignment.QuadHeuristic(),
+      crossingReduction: crossingReduction,
+      positionAssignment: positionAssignment
+    });
   }
 
   layout(gOrig) {
@@ -176,6 +177,94 @@ class Layouter {
     }
     this.positionAssignment()(g, layers);
     return buildResult(g, layers, this.ltor());
+  }
+
+  vertexWidth(arg) {
+    if (arguments.length === 0) {
+      return p(this).vertexWidth;
+    }
+    p(this).vertexWidth = arg;
+    return this;
+  }
+
+  vertexHeight(arg) {
+    if (arguments.length === 0) {
+      return p(this).vertexHeight;
+    }
+    p(this).vertexHeight = arg;
+    return this;
+  }
+
+  edgeWidth(arg) {
+    if (arguments.length === 0) {
+      return p(this).edgeWidth;
+    }
+    p(this).edgeWidth = arg;
+    return this;
+  }
+
+  layerMargin(arg) {
+    if (arguments.length === 0) {
+      return p(this).layerMargin;
+    }
+    p(this).layerMargin = arg;
+    return this;
+  }
+
+  vertexMargin(arg) {
+    if (arguments.length === 0) {
+      return p(this).vertexMargin;
+    }
+    p(this).vertexMargin = arg;
+    return this;
+  }
+
+  edgeMargin(arg) {
+    if (arguments.length === 0) {
+      return p(this).edgeMargin;
+    }
+    p(this).edgeMargin = arg;
+    return this;
+  }
+
+  ltor(arg) {
+    if (arguments.length === 0) {
+      return p(this).ltor;
+    }
+    p(this).ltor = arg;
+    return this;
+  }
+
+  cycleRemoval(arg) {
+    if (arguments.length === 0) {
+      return p(this).cycleRemoval;
+    }
+    p(this).cycleRemoval = arg;
+    return this;
+  }
+
+  layerAssignment(arg) {
+    if (arguments.length === 0) {
+      return p(this).layerAssignment;
+    }
+    p(this).layerAssignment = arg;
+    return this;
+  }
+
+  crossingReduction(arg) {
+    if (arguments.length === 0) {
+      return p(this).crossingReduction;
+    }
+    p(this).crossingReduction = arg;
+    return this;
+  }
+
+  positionAssignment(arg) {
+    if (arguments.length === 0) {
+      return p(this).positionAssignment;
+    }
+    p(this).positionAssignment = arg;
+    return this;
   }
 }
 
