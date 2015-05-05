@@ -1,7 +1,7 @@
 'use strict';
 
+import accessor from '../../utils/accessor';
 import LongestPath from './longest-path';
-import defineAccessors from '../../utils/define-accessors';
 
 const quadHeuristic = (g, repeat) => {
   const layers = new LongestPath().call(g);
@@ -58,15 +58,21 @@ const quadHeuristic = (g, repeat) => {
   return layers;
 };
 
+const privates = new WeakMap();
+
 class QuadHeuristic {
   constructor() {
-    defineAccessors(this, {}, {
+    privates.set(this, {
       repeat: 4
     });
   }
 
   call(g) {
     return quadHeuristic(g, this.repeat());
+  }
+
+  repeat(arg) {
+    return accessor(this, privates, 'repeat', arguments);
   }
 }
 
