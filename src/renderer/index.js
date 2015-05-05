@@ -7,7 +7,7 @@ import verticesRenderer from './vertices-renderer';
 import edgesRenderer from './edges-renderer';
 import TextVertexRenderer from './vertex-renderer/text-vertex-renderer';
 import CurvedEdgeRenderer from './edge-renderer/curved-edge-renderer';
-import defineAccessors from '../utils/define-accessors';
+import accessor from '../utils/accessor';
 
 const render = ({vertexVisibility, edgeVisibility, layouter, vertexRenderer, edgeRenderer}) => {
   return (selection) => {
@@ -117,9 +117,11 @@ const render = ({vertexVisibility, edgeVisibility, layouter, vertexRenderer, edg
   };
 };
 
+const privates = new WeakMap();
+
 class Renderer {
   constructor() {
-    defineAccessors(this, {}, {
+    privates.set(this, {
       vertexVisibility: () => true,
       edgeVisibility: () => true,
       layouter: new Layouter()
@@ -139,6 +141,26 @@ class Renderer {
       vertexRenderer: this.vertexRenderer(),
       edgeRenderer: this.edgeRenderer()
     });
+  }
+
+  vertexVisibility(arg) {
+    return accessor(this, privates, 'vertexVisibility', arguments);
+  }
+
+  edgeVisibility(arg) {
+    return accessor(this, privates, 'edgeVisibility', arguments);
+  }
+
+  layouter(arg) {
+    return accessor(this, privates, 'layouter', arguments);
+  }
+
+  vertexRenderer(arg) {
+    return accessor(this, privates, 'vertexRenderer', arguments);
+  }
+
+  edgeRenderer(arg) {
+    return accessor(this, privates, 'edgeRenderer', arguments);
   }
 }
 
