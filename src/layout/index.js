@@ -148,7 +148,7 @@ class Layouter {
       cycleRemoval: new cycleRemoval.CycleRemoval(),
       layerAssignment: new layerAssignment.QuadHeuristic(),
       crossingReduction: new crossingReduction.LayerSweep(),
-      positionAssignment: positionAssignment
+      positionAssignment: new positionAssignment.Brandes()
     });
   }
 
@@ -174,7 +174,7 @@ class Layouter {
         g.vertex(u).order = j;
       }
     }
-    this.positionAssignment()(g, layers);
+    this.positionAssignment().call(g, layers);
     return buildResult(g, layers, this.ltor());
   }
 
