@@ -1,7 +1,7 @@
 'use strict';
 
 import d3 from 'd3';
-import defineAccessors from '../../utils/define-accessors';
+import accessor from '../../utils/accessor';
 import edgeFunction from '../edge-function';
 import startFrom from '../svg/path/start-from';
 import lineTo from '../svg/path/line-to';
@@ -56,12 +56,14 @@ const render = ({edgeColor, edgeOpacity, ltor}) => {
   };
 };
 
+const privates = new WeakMap();
+
 class CurvedEdgeRenderer {
   constructor() {
-    defineAccessors(this, {}, {
+    privates.set(this, {
       edgeColor: () => '#000',
       edgeOpacity: () => 1,
-      ltor: () => true
+      ltor: true
     });
   }
 
@@ -71,6 +73,18 @@ class CurvedEdgeRenderer {
       edgeOpacity: this.edgeOpacity(),
       ltor: this.ltor()
     });
+  }
+
+  edgeColor(arg) {
+    return accessor(this, privates, 'edgeColor', arguments);
+  }
+
+  edgeOpacity(arg) {
+    return accessor(this, privates, 'edgeOpacity', arguments);
+  }
+
+  ltor(arg) {
+    return accessor(this, privates, 'ltor', arguments);
   }
 }
 
