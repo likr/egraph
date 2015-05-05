@@ -147,7 +147,7 @@ class Layouter {
       ltor: true,
       cycleRemoval: new cycleRemoval.CycleRemoval(),
       layerAssignment: new layerAssignment.QuadHeuristic(),
-      crossingReduction: crossingReduction,
+      crossingReduction: new crossingReduction.LayerSweep(),
       positionAssignment: positionAssignment
     });
   }
@@ -165,7 +165,7 @@ class Layouter {
     const layerMap = this.layerAssignment().call(g);
     const layers = groupLayers(g, layerMap);
     normalize(g, layers, layerMap, this.edgeMargin());
-    this.crossingReduction()(g, layers);
+    this.crossingReduction().call(g, layers);
     for (let i = 0; i < layers.length; ++i) {
       const layer = layers[i];
       for (let j = 0; j < layer.length; ++j) {
