@@ -145,7 +145,7 @@ class Layouter {
       vertexMargin: 10,
       edgeMargin: 10,
       ltor: true,
-      cycleRemoval: cycleRemoval,
+      cycleRemoval: new cycleRemoval.CycleRemoval(),
       layerAssignment: new layerAssignment.QuadHeuristic(),
       crossingReduction: crossingReduction,
       positionAssignment: positionAssignment
@@ -161,7 +161,7 @@ class Layouter {
       vertexMargin: this.vertexMargin(),
       ltor: this.ltor()
     });
-    this.cycleRemoval()(g);
+    this.cycleRemoval().call(g);
     const layerMap = this.layerAssignment().call(g);
     const layers = groupLayers(g, layerMap);
     normalize(g, layers, layerMap, this.edgeMargin());
