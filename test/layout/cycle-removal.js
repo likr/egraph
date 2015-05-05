@@ -1,20 +1,20 @@
 'use strict';
 
 import expect from 'expect.js';
-import graph from '../../src/graph';
+import Graph from '../../src/graph';
 import cycleRemoval from '../../src/layout/cycle-removal';
 import cycleEdges from '../../src/layout/cycle-removal/cycle-edges';
 
 describe('cycleEdges(g)', () => {
   it('returns cycle edges of g', () => {
-    var g = graph();
-    var a = g.addVertex();
-    var b = g.addVertex();
-    var c = g.addVertex();
-    g.addEdge(a, b);
-    g.addEdge(b, c);
-    g.addEdge(c, a);
-    var edges = cycleEdges(g);
+    const graph = new Graph();
+    const a = graph.addVertex();
+    const b = graph.addVertex();
+    const c = graph.addVertex();
+    graph.addEdge(a, b);
+    graph.addEdge(b, c);
+    graph.addEdge(c, a);
+    const edges = cycleEdges(graph);
     expect(edges.length).to.be(1);
     expect(edges[0][0]).to.be(c);
     expect(edges[0][1]).to.be(a);
@@ -23,14 +23,14 @@ describe('cycleEdges(g)', () => {
 
 describe('cycleRemoval(g)', () => {
   it('replace cycle edges with the inverse edges', () => {
-    var g = graph();
-    var a = g.addVertex();
-    var b = g.addVertex();
-    var c = g.addVertex();
-    g.addEdge(a, b);
-    g.addEdge(b, c);
-    g.addEdge(c, a);
-    cycleRemoval(g);
-    expect(g.edge(a, c)).to.be.ok();
+    var graph = new Graph();
+    var a = graph.addVertex();
+    var b = graph.addVertex();
+    var c = graph.addVertex();
+    graph.addEdge(a, b);
+    graph.addEdge(b, c);
+    graph.addEdge(c, a);
+    cycleRemoval(graph);
+    expect(graph.edge(a, c)).to.be.ok();
   });
 });

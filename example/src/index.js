@@ -2,7 +2,7 @@
 
 import querystring from 'querystring'
 import d3 from 'd3';
-import graph from '../../src/graph';
+import Graph from '../../src/graph';
 import katz from '../../src/network/centrality/katz';
 import newman from '../../src/network/community/newman';
 import Renderer from '../../src/renderer';
@@ -73,7 +73,7 @@ renderer.edgeRenderer()
 d3.json('data/graph.json', (data) => {
   const params = parseHash();
 
-  const g = graph();
+  const g = new Graph();
   for (const {u, d} of data.vertices) {
     g.addVertex(u, d);
   }

@@ -1,6 +1,6 @@
 'use strict';
 
-import graph from '../graph';
+import Graph from '../graph';
 import defineAccessors from '../utils/define-accessors';
 import cycleRemoval from './cycle-removal';
 import layerAssignment from './layer-assignment';
@@ -9,7 +9,7 @@ import crossingReduction from './crossing-reduction';
 import positionAssignment from './position-assignment';
 
 const initGraph = (gOrig, {ltor, vertexWidth, vertexHeight, edgeWidth, layerMargin, vertexMargin}) => {
-  const g = graph();
+  const g = new Graph();
   for (const u of gOrig.vertices()) {
     const uNode = gOrig.vertex(u),
           w = vertexWidth({u, d: uNode}),

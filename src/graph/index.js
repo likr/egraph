@@ -1,141 +1,144 @@
 'use strict';
 
-const graph = function () {
+const privates = new WeakMap();
 
-  var vertices = {},
-      numVertices = 0,
-      numEdges = 0,
-      idOffset = 0;
+const p = (self) => privates.get(self);
 
-  function nextVertexId() {
-    while (vertices[idOffset]) {
-      idOffset++;
-    }
-    return idOffset++;
+class Graph {
+  constructor() {
+    privates.set(this, {
+      vertices: {},
+      numVertices: 0,
+      numEdges: 0,
+      idOffset: 0
+    });
   }
 
-  class Graph {
-    vertex(u) {
-      if (vertices[u]) {
-        return vertices[u].data;
-      }
-      return null;
+  vertex(u) {
+    if (p(this).vertices[u]) {
+      return p(this).vertices[u].data;
     }
+    return null;
+  }
 
-    edge(u, v) {
-      if (vertices[u] && vertices[u].outVertices[v]) {
-        return vertices[u].outVertices[v];
-      }
-      return null;
+  edge(u, v) {
+    if (p(this).vertices[u] && p(this).vertices[u].outVertices[v]) {
+      return p(this).vertices[u].outVertices[v];
     }
+    return null;
+  }
 
-    vertices() {
-      return Object.keys(vertices).map(u => +u);
-    }
+  vertices() {
+    return Object.keys(p(this).vertices).map(u => +u);
+  }
 
-    edges() {
-      const edges = [];
-      for (let u in vertices) {
-        for (let v in vertices[u].outVertices) {
-          edges.push([+u, +v]);
-        }
-      }
-      return edges;
-    }
-
-    outVertices(u) {
-      return Object.keys(vertices[u].outVertices).map(v => +v);
-    }
-
-    inVertices(u) {
-      return Object.keys(vertices[u].inVertices).map(v => +v);
-    }
-
-    *outEdges(u) {
-      for (let v of this.outVertices(u)) {
-        yield [u, v];
+  edges() {
+    const edges = [];
+    for (let u in p(this).vertices) {
+      for (let v in p(this).vertices[u].outVertices) {
+        edges.push([+u, +v]);
       }
     }
+    return edges;
+  }
 
-    *inEdges(u) {
-      for (let v of this.inVertices(u)) {
-        yield [v, u];
-      }
-    }
+  outVertices(u) {
+    return Object.keys(p(this).vertices[u].outVertices).map(v => +v);
+  }
 
-    numVertices() {
-      return numVertices;
-    }
+  inVertices(u) {
+    return Object.keys(p(this).vertices[u].inVertices).map(v => +v);
+  }
 
-    numEdges() {
-      return numEdges;
-    }
-
-    outDegree(u) {
-      return Object.keys(vertices[u].outVertices).length;
-    }
-
-    inDegree(u) {
-      return Object.keys(vertices[u].inVertices).length;
-    }
-
-    addVertex(u, obj) {
-      if (u === undefined) {
-        u = {};
-      }
-      if (obj === undefined) {
-        obj = u;
-        u = nextVertexId();
-      }
-      vertices[u] = {
-        outVertices: {},
-        inVertices: {},
-        children: new Set(),
-        parents: new Set(),
-        data: obj
-      };
-      numVertices++;
-      return u;
-    }
-
-    addEdge(u, v, obj={}) {
-      vertices[u].outVertices[v] = obj;
-      vertices[v].inVertices[u] = obj;
-      numEdges++;
-    }
-
-    addChild(u, v) {
-      vertices[u].children.add(u);
-      vertices[v].parents.add(v);
-    }
-
-    removeVertex(u) {
-      for (let v of this.outVertices(u)) {
-        this.removeEdge(u, v);
-      }
-      for (let v of this.inVertices(u)) {
-        this.removeEdge(v, u);
-      }
-      delete vertices[u];
-      numVertices--;
-    }
-
-    removeEdge(u, v) {
-      delete vertices[u].outVertices[v];
-      delete vertices[v].inVertices[u];
-      numEdges--;
-    }
-
-    toString() {
-      const obj = {
-        vertices: this.vertices().map(u => ({u, d: this.vertex(u)})),
-        edges: this.edges().map(([u, v]) => ({u, v, d: this.edge(u, v)}))
-      };
-      return JSON.stringify(obj);
+  *outEdges(u) {
+    for (let v of this.outVertices(u)) {
+      yield [u, v];
     }
   }
 
-  return new Graph();
-};
+  *inEdges(u) {
+    for (let v of this.inVertices(u)) {
+      yield [v, u];
+    }
+  }
 
-export default graph;
+  numVertices() {
+    return p(this).numVertices;
+  }
+
+  numEdges() {
+    return p(this).numEdges;
+  }
+
+  outDegree(u) {
+    return Object.keys(p(this).vertices[u].outVertices).length;
+  }
+
+  inDegree(u) {
+    return Object.keys(p(this).vertices[u].inVertices).length;
+  }
+
+  addVertex(u, obj) {
+    const nextVertexId = () => {
+      while (p(this).vertices[p(this).idOffset]) {
+        p(this).idOffset++;
+      }
+      return p(this).idOffset++;
+    };
+
+    if (u === undefined) {
+      u = {};
+    }
+    if (obj === undefined) {
+      obj = u;
+      u = nextVertexId();
+    }
+    p(this).vertices[u] = {
+      outVertices: {},
+      inVertices: {},
+      children: new Set(),
+      parents: new Set(),
+      data: obj
+    };
+    p(this).numVertices++;
+    return u;
+  }
+
+  addEdge(u, v, obj={}) {
+    p(this).vertices[u].outVertices[v] = obj;
+    p(this).vertices[v].inVertices[u] = obj;
+    p(this).numEdges++;
+  }
+
+  addChild(u, v) {
+    p(this).vertices[u].children.add(u);
+    p(this).vertices[v].parents.add(v);
+  }
+
+  removeVertex(u) {
+    for (let v of this.outVertices(u)) {
+      this.removeEdge(u, v);
+    }
+    for (let v of this.inVertices(u)) {
+      this.removeEdge(v, u);
+    }
+    delete p(this).vertices[u];
+    p(this).numVertices--;
+  }
+
+  removeEdge(u, v) {
+    delete p(this).vertices[u].outVertices[v];
+    delete p(this).vertices[v].inVertices[u];
+    p(this).numEdges--;
+  }
+
+  toString() {
+    const obj = {
+      vertices: this.vertices().map(u => ({u, d: this.vertex(u)})),
+      edges: this.edges().map(([u, v]) => ({u, v, d: this.edge(u, v)}))
+    };
+    return JSON.stringify(obj);
+  }
+}
+
+export default Graph;

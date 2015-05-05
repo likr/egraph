@@ -1,9 +1,9 @@
 'use strict';
 
-import graph from './';
+import Graph from './';
 
 const copy = (g) => {
-  const newGraph = graph();
+  const newGraph = new Graph();
   for (const u of g.vertices()) {
     newGraph.addVertex(u, g.vertex(u));
   }

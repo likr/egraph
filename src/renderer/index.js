@@ -1,7 +1,7 @@
 'use strict';
 
 import d3 from 'd3';
-import graph from '../graph';
+import Graph from '../graph';
 import Layouter from '../layout';
 import verticesRenderer from './vertices-renderer';
 import edgesRenderer from './edges-renderer';
@@ -12,7 +12,7 @@ import defineAccessors from '../utils/define-accessors';
 const render = ({vertexVisibility, edgeVisibility, layouter, vertexRenderer, edgeRenderer}) => {
   return (selection) => {
     selection.each(function (gOrig) {
-      const g = graph();
+      const g = new Graph();
       for (const u of gOrig.vertices()) {
         g.addVertex(u, gOrig.vertex(u));
       }
