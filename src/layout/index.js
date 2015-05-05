@@ -1,6 +1,7 @@
 'use strict';
 
 import Graph from '../graph';
+import accessor from '../utils/accessor';
 import cycleRemoval from './cycle-removal';
 import layerAssignment from './layer-assignment';
 import normalize from './normalize';
@@ -134,8 +135,6 @@ const groupLayers = (g, layers) => {
 
 const privates = new WeakMap();
 
-const p = (self) => privates.get(self);
-
 class Layouter {
   constructor() {
     privates.set(this, {
@@ -180,91 +179,47 @@ class Layouter {
   }
 
   vertexWidth(arg) {
-    if (arguments.length === 0) {
-      return p(this).vertexWidth;
-    }
-    p(this).vertexWidth = arg;
-    return this;
+    return accessor(this, privates, 'vertexWidth', arguments);
   }
 
   vertexHeight(arg) {
-    if (arguments.length === 0) {
-      return p(this).vertexHeight;
-    }
-    p(this).vertexHeight = arg;
-    return this;
+    return accessor(this, privates, 'vertexHeight', arguments);
   }
 
   edgeWidth(arg) {
-    if (arguments.length === 0) {
-      return p(this).edgeWidth;
-    }
-    p(this).edgeWidth = arg;
-    return this;
+    return accessor(this, privates, 'edgeWidth', arguments);
   }
 
   layerMargin(arg) {
-    if (arguments.length === 0) {
-      return p(this).layerMargin;
-    }
-    p(this).layerMargin = arg;
-    return this;
+    return accessor(this, privates, 'layerMargin', arguments);
   }
 
   vertexMargin(arg) {
-    if (arguments.length === 0) {
-      return p(this).vertexMargin;
-    }
-    p(this).vertexMargin = arg;
-    return this;
+    return accessor(this, privates, 'vertexMargin', arguments);
   }
 
   edgeMargin(arg) {
-    if (arguments.length === 0) {
-      return p(this).edgeMargin;
-    }
-    p(this).edgeMargin = arg;
-    return this;
+    return accessor(this, privates, 'edgeMargin', arguments);
   }
 
   ltor(arg) {
-    if (arguments.length === 0) {
-      return p(this).ltor;
-    }
-    p(this).ltor = arg;
-    return this;
+    return accessor(this, privates, 'ltor', arguments);
   }
 
   cycleRemoval(arg) {
-    if (arguments.length === 0) {
-      return p(this).cycleRemoval;
-    }
-    p(this).cycleRemoval = arg;
-    return this;
+    return accessor(this, privates, 'cycleRemoval', arguments);
   }
 
   layerAssignment(arg) {
-    if (arguments.length === 0) {
-      return p(this).layerAssignment;
-    }
-    p(this).layerAssignment = arg;
-    return this;
+    return accessor(this, privates, 'layerAssignment', arguments);
   }
 
   crossingReduction(arg) {
-    if (arguments.length === 0) {
-      return p(this).crossingReduction;
-    }
-    p(this).crossingReduction = arg;
-    return this;
+    return accessor(this, privates, 'crossingReduction', arguments);
   }
 
   positionAssignment(arg) {
-    if (arguments.length === 0) {
-      return p(this).positionAssignment;
-    }
-    p(this).positionAssignment = arg;
-    return this;
+    return accessor(this, privates, 'positionAssignment', arguments);
   }
 }
 
