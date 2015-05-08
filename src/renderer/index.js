@@ -72,6 +72,7 @@ const render = ({vertexVisibility, edgeVisibility, layouter, vertexRenderer, edg
             data: d
           };
         }
+        vertices[u].g = g;
         vertices[u].px = vertices[u].x;
         vertices[u].py = vertices[u].y;
         vertices[u].x = positions.vertices[u].x;
@@ -92,6 +93,7 @@ const render = ({vertexVisibility, edgeVisibility, layouter, vertexRenderer, edg
             data: g.edge(u, v)
           };
         }
+        edges[key].g = g;
         edges[key].ppoints = edges[key].points;
         edges[key].points = positions.edges[u][v].points;
         edges[key].width = positions.edges[u][v].width;

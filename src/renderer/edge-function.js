@@ -7,7 +7,8 @@ const edgeFunction = (f) => {
       v: d.target.key,
       ud: d.source.data,
       vd: d.target.data,
-      d: d.data
+      d: d.data,
+      g: d.g
     };
     return f.call(this, arg, i);
   };
