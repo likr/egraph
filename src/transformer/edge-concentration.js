@@ -20,7 +20,7 @@ const layerDegree = (g, h1, h2) => {
   return degree;
 };
 
-const edgeConcentration = (g, h1, h2, k) => {
+const edgeConcentration = (g, h1, h2, k, dummy) => {
   const active = {},
         degree = layerDegree(g, h1, h2),
         isActive = (u) => active[u],
@@ -63,7 +63,7 @@ const edgeConcentration = (g, h1, h2, k) => {
     }
 
     if (maxH1.length > 1 && maxH2.length > 1) {
-      const w = g.addVertex();
+      const w = g.addVertex(dummy());
       for (const u of maxH1) {
         for (const v of maxH2) {
           g.removeEdge(u, v);
@@ -108,7 +108,8 @@ class EdgeConcentrationTransformer {
   constructor() {
     privates.set(this, {
       cycleRemoval: new cycleRemoval.CycleRemoval(),
-      layerAssignment: new layerAssignment.QuadHeuristic()
+      layerAssignment: new layerAssignment.QuadHeuristic(),
+      dummy: () => ({dummy: true})
     });
   }
 
@@ -127,7 +128,7 @@ class EdgeConcentrationTransformer {
           edges += 1;
         }
       }
-      edgeConcentration(g, h1, Array.from(h2.values()), (edges / 4).toFixed());
+      edgeConcentration(g, h1, Array.from(h2.values()), (edges / 4).toFixed(), this.dummy());
     }
     return g;
   }
@@ -138,6 +139,10 @@ class EdgeConcentrationTransformer {
 
   layerAssignment(arg) {
     return accessor(this, privates, 'layerAssignment', arguments);
+  }
+
+  dummy(arg) {
+    return accessor(this, privates, 'dummy', arguments);
   }
 }
 
