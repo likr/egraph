@@ -1,7 +1,13 @@
 'use strict';
 
+import CoarseGrainingTransformer from './coarse-graining';
 import IdentityTransformer from './identity';
+import IsmTransformer from './ism';
+import PipeTransformer from './pipe';
 
 export default {
-  IdentityTransformer
+  CoarseGrainingTransformer,
+  IdentityTransformer,
+  IsmTransformer,
+  PipeTransformer
 };
