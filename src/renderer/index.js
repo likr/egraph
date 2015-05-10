@@ -2,42 +2,20 @@
 
 import d3 from 'd3';
 import Graph from '../graph';
-import layouter from '../layouter';
+import IdentityTransformer from '../transformer/identity';
+import SugiyamaLayouter from '../layouter/sugiyama';
 import verticesRenderer from './vertices-renderer';
 import edgesRenderer from './edges-renderer';
 import TextVertexRenderer from './vertex-renderer/text-vertex-renderer';
 import CurvedEdgeRenderer from './edge-renderer/curved-edge-renderer';
 import accessor from '../utils/accessor';
 
-const render = ({vertexVisibility, edgeVisibility, layouter, vertexRenderer, edgeRenderer}) => {
+const render = ({transformer, layouter, vertexRenderer, edgeRenderer}) => {
   return (selection) => {
     selection.each(function (gOrig) {
-      const g = new Graph();
-      for (const u of gOrig.vertices()) {
-        g.addVertex(u, gOrig.vertex(u));
-      }
-      for (const [u, v] of gOrig.edges()) {
-        const ud = gOrig.vertex(u),
-              vd = gOrig.vertex(v),
-              d = gOrig.edge(u, v);
-        if (edgeVisibility({u, v, ud, vd, d})) {
-          g.addEdge(u, v, gOrig.edge(u, v));
-        }
-      }
-      for (const u of g.vertices()) {
-        if (!vertexVisibility({u, d: g.vertex(u)})) {
-          for (const v of g.inVertices(u)) {
-            for (const w of g.outVertices(u)) {
-              g.addEdge(v, w);
-            }
-          }
-          g.removeVertex(u);
-        }
-      }
-
-      const positions = layouter.layout(g);
-
-      const element = d3.select(this);
+      const g = transformer.transform(gOrig),
+            positions = layouter.layout(g),
+            element = d3.select(this);
 
       let contentsSelection = element.selectAll('g.contents');
       if (contentsSelection.empty()) {
@@ -124,9 +102,8 @@ const privates = new WeakMap();
 class Renderer {
   constructor() {
     privates.set(this, {
-      vertexVisibility: () => true,
-      edgeVisibility: () => true,
-      layouter: new layouter.SugiyamaLayouter()
+      transformer: new IdentityTransformer(),
+      layouter: new SugiyamaLayouter()
         .layerMargin(200)
         .vertexMargin(3)
         .edgeMargin(3),
@@ -137,20 +114,15 @@ class Renderer {
 
   render() {
     return render({
-      vertexVisibility: this.vertexVisibility(),
-      edgeVisibility: this.edgeVisibility(),
+      transformer: this.transformer(),
       layouter: this.layouter(),
       vertexRenderer: this.vertexRenderer(),
       edgeRenderer: this.edgeRenderer()
     });
   }
 
-  vertexVisibility(arg) {
-    return accessor(this, privates, 'vertexVisibility', arguments);
-  }
-
-  edgeVisibility(arg) {
-    return accessor(this, privates, 'edgeVisibility', arguments);
+  transformer(arg) {
+    return accessor(this, privates, 'transformer', arguments);
   }
 
   layouter(arg) {

@@ -6,6 +6,7 @@ import Graph from '../../src/graph';
 import katz from '../../src/network/centrality/katz';
 import newman from '../../src/network/community/newman';
 import Renderer from '../../src/renderer';
+import CoarseGrainingTransformer from '../../src/transformer/coarse-graining';
 
 const parseHash = () => {
   const params = querystring.parse(location.hash.substr(2));
@@ -52,6 +53,8 @@ const vertexScale = d3.scale.linear()
 const filter = new Filter();
 
 const renderer = new Renderer()
+  .transformer(new CoarseGrainingTransformer());
+renderer.transformer()
   .vertexVisibility(({u}) => filter.call(u));
 renderer.layouter()
   .edgeWidth(() => 2)

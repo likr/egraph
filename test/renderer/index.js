@@ -2,40 +2,25 @@
 
 import expect from 'expect.js';
 import Renderer from '../../src/renderer';
-import layouter from '../../src/layouter';
+import Transformer from '../../src/transformer/identity';
+import Layouter from '../../src/layouter/sugiyama';
 import VertexRenderer from '../../src/renderer/vertex-renderer/circle-vertex-renderer';
 import EdgeRenderer from '../../src/renderer/edge-renderer/straight-edge-renderer';
 
 describe('Renderer', () => {
-  describe('vertexVisibility()', () => {
-    it('returns current vertexVisibility function', () => {
+  describe('transformer()', () => {
+    it('returns current transformer instance', () => {
       const renderer = new Renderer();
-      expect(renderer.vertexVisibility()).to.be.a('function');
+      expect(renderer.transformer()).to.have.property('transform');
     });
   });
 
-  describe('vertexVisibility(f)', () => {
-    it('sets vertexVisibility and returns self', () => {
+  describe('transformer(transformer)', () => {
+    it('sets transformer and returns self', () => {
       const renderer = new Renderer(),
-            f = () => true;
-      expect(renderer.vertexVisibility(f)).to.be(renderer);
-      expect(renderer.vertexVisibility()).to.be(f);
-    });
-  });
-
-  describe('edgeVisibility()', () => {
-    it('returns current edgeVisibility function', () => {
-      const renderer = new Renderer();
-      expect(renderer.edgeVisibility()).to.be.a('function');
-    });
-  });
-
-  describe('edgeVisibility(f)', () => {
-    it('sets edgeVisibility and returns self', () => {
-      const renderer = new Renderer(),
-            f = () => true;
-      expect(renderer.edgeVisibility(f)).to.be(renderer);
-      expect(renderer.edgeVisibility()).to.be(f);
+            transformer = new Transformer();
+      expect(renderer.transformer(transformer)).to.be(renderer);
+      expect(renderer.transformer()).to.be(transformer);
     });
   });
 
@@ -49,9 +34,9 @@ describe('Renderer', () => {
   describe('layouter(layouter)', () => {
     it('sets layouter and returns self', () => {
       const renderer = new Renderer(),
-            sugiyamaLayouter = new layouter.SugiyamaLayouter();
-      expect(renderer.layouter(sugiyamaLayouter)).to.be(renderer);
-      expect(renderer.layouter()).to.be(sugiyamaLayouter);
+            layouter = new Layouter();
+      expect(renderer.layouter(layouter)).to.be(renderer);
+      expect(renderer.layouter()).to.be(layouter);
     });
   });
 
