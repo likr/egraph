@@ -76,8 +76,8 @@ const normalize = (g) => {
       yMin = Infinity;
   for (const u of g.vertices()) {
     const uNode = g.vertex(u);
-    xMin = Math.min(xMin, uNode.x - uNode.width / 2);
-    yMin = Math.min(yMin, uNode.y - uNode.height / 2);
+    xMin = Math.min(xMin, uNode.x - uNode.origWidth / 2);
+    yMin = Math.min(yMin, uNode.y - uNode.origHeight / 2);
   }
   for (const u of g.vertices()) {
     const uNode = g.vertex(u);

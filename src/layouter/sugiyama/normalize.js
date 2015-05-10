@@ -10,7 +10,9 @@ const normalize = function (g, layers, layerMap, edgeMargin) {
         w2 = g.addVertex({
           dummy: true,
           width: d.width + edgeMargin,
+          origWidth: d.width + edgeMargin,
           height: 0,
+          origHeight: 0,
           layer: i
         });
         g.addEdge(w1, w2, {
