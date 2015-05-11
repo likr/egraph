@@ -35,6 +35,9 @@ const edgeConcentration = (g, h1, h2, k, dummy) => {
     }
 
     h2.sort(cmp);
+    if (degree[h2[jOffset]] === 0) {
+      break;
+    }
 
     let maxEdges = 0,
         maxH1,
@@ -82,7 +85,7 @@ const edgeConcentration = (g, h1, h2, k, dummy) => {
       jOffset += 1;
     }
 
-    if (jOffset >= h2.length || degree[h2[jOffset]] === 0) {
+    if (jOffset >= h2.length) {
       break;
     }
   }
