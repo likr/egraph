@@ -116,8 +116,7 @@ class EdgeConcentrationTransformer {
     });
   }
 
-  transform(gOrig) {
-    const g = copy(gOrig);
+  transform(g) {
     this.cycleRemoval().call(g);
     const layerMap = this.layerAssignment().call(g);
     const layers = groupLayers(g, layerMap);

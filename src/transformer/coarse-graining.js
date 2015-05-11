@@ -3,18 +3,13 @@
 import Graph from '../graph';
 import accessor from '../utils/accessor';
 
-const transform = (gOrig, vertexVisibility, edgeVisibility) => {
-  const g = new Graph();
-
-  for (const u of gOrig.vertices()) {
-    g.addVertex(u, gOrig.vertex(u));
-  }
-  for (const [u, v] of gOrig.edges()) {
-    const ud = gOrig.vertex(u),
-          vd = gOrig.vertex(v),
-          d = gOrig.edge(u, v);
-    if (edgeVisibility({u, v, ud, vd, d})) {
-      g.addEdge(u, v, gOrig.edge(u, v));
+const transform = (g, vertexVisibility, edgeVisibility) => {
+  for (const [u, v] of g.edges()) {
+    const ud = g.vertex(u),
+          vd = g.vertex(v),
+          d = g.edge(u, v);
+    if (!edgeVisibility({u, v, ud, vd, d})) {
+      g.removeEdge(u, v);
     }
   }
 

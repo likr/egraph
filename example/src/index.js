@@ -54,6 +54,7 @@ const filter = new Filter();
 
 const renderer = new Renderer()
   .transformer(new transformers.PipeTransformer(
+    new transformers.CopyTransformer(),
     new transformers.CoarseGrainingTransformer()
       .vertexVisibility(({u}) => filter.call(u)),
     new transformers.IsmTransformer()

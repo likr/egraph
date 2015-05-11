@@ -39,8 +39,7 @@ class IsmTransformer {
   constructor() {
   }
 
-  transform(gOrig) {
-    const g = copy(gOrig);
+  transform(g) {
     transform(g);
     return g;
   }
