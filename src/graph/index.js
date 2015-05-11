@@ -5,12 +5,12 @@ const privates = new WeakMap();
 const p = (self) => privates.get(self);
 
 class Graph {
-  constructor() {
+  constructor(idOffset=0) {
     privates.set(this, {
       vertices: {},
       numVertices: 0,
       numEdges: 0,
-      idOffset: 0
+      idOffset: idOffset
     });
   }
 

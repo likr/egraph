@@ -244,5 +244,8 @@ describe('copy', () => {
     const newGraph = copy(graph);
     expect(newGraph.numVertices()).to.be(graph.numVertices());
     expect(newGraph.numEdges()).to.be(graph.numEdges());
+
+    newGraph.removeVertex(u);
+    expect(newGraph.addVertex()).to.be(3);
   });
 });

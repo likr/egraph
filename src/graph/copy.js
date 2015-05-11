@@ -3,7 +3,8 @@
 import Graph from './';
 
 const copy = (g) => {
-  const newGraph = new Graph();
+  const idOffset = Math.max(...g.vertices());
+  const newGraph = new Graph(idOffset);
   for (const u of g.vertices()) {
     newGraph.addVertex(u, g.vertex(u));
   }
