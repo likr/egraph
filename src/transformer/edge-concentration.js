@@ -68,11 +68,6 @@ const edgeConcentration = (g, h1, h2, k, dummy) => {
     if (maxH1.length > 1 && maxH2.length > 1) {
       const w = g.addVertex(dummy());
       for (const u of maxH1) {
-        for (const v of maxH2) {
-          g.removeEdge(u, v);
-        }
-      }
-      for (const u of maxH1) {
         g.addEdge(u, w);
       }
       for (const v of maxH2) {
@@ -87,6 +82,16 @@ const edgeConcentration = (g, h1, h2, k, dummy) => {
 
     if (jOffset >= h2.length) {
       break;
+    }
+  }
+
+  for (const w of m) {
+    for (const u of g.inVertices(w)) {
+      for (const v of g.outVertices(w)) {
+        if (g.edge(u, v)) {
+          g.removeEdge(u, v);
+        }
+      }
     }
   }
 
