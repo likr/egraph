@@ -3,6 +3,7 @@
 import expect from 'expect.js';
 import Graph from '../../src/graph';
 import EdgeConcentrationTransformer from '../../src/transformer/edge-concentration';
+import newbery from '../../src/transformer/edge-concentration/newbery';
 
 describe('EdgeConcentrationTransformer', () => {
   describe('transform(g)', () => {
@@ -129,5 +130,55 @@ describe('EdgeConcentrationTransformer', () => {
       expect(transformed.inDegree(v4)).to.be(1);
       expect(transformed.outDegree(v4)).to.be(0);
     });
+  });
+});
+
+describe('newbery(g, h1, h2)', () => {
+  it('returns edge concentrations', () => {
+    const g = new Graph(),
+          u1 = g.addVertex(),
+          u2 = g.addVertex(),
+          u3 = g.addVertex(),
+          v1 = g.addVertex(),
+          v2 = g.addVertex(),
+          v3 = g.addVertex(),
+          v4 = g.addVertex(),
+          v5 = g.addVertex(),
+          v6 = g.addVertex(),
+          v7 = g.addVertex(),
+          v8 = g.addVertex(),
+          v9 = g.addVertex(),
+          h1 = [u1, u2, u3],
+          h2 = [v1, v2, v3, v4, v5, v6, v7, v8, v9];
+    g.addEdge(u1, v1);
+    g.addEdge(u1, v2);
+    g.addEdge(u1, v3);
+    g.addEdge(u1, v4);
+    g.addEdge(u1, v5);
+    g.addEdge(u1, v6);
+    g.addEdge(u1, v7);
+    g.addEdge(u2, v1);
+    g.addEdge(u2, v2);
+    g.addEdge(u2, v3);
+    g.addEdge(u2, v4);
+    g.addEdge(u2, v5);
+    g.addEdge(u2, v6);
+    g.addEdge(u2, v7);
+    g.addEdge(u2, v8);
+    g.addEdge(u2, v9);
+    g.addEdge(u3, v3);
+    g.addEdge(u3, v4);
+    g.addEdge(u3, v5);
+    g.addEdge(u3, v6);
+    g.addEdge(u3, v7);
+    g.addEdge(u3, v8);
+    g.addEdge(u3, v9);
+
+    const result = newbery(g, h1, h2);
+    expect(result).to.be.eql([
+      { source: [ 0, 2, 1 ], target: [ 5, 6, 7, 8, 9 ] },
+      { source: [ 0, 1 ], target: [ 3, 4 ] },
+      { source: [ 1, 2 ], target: [ 10, 11 ] }
+    ]);
   });
 });
