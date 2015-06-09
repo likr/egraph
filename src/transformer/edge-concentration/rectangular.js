@@ -1,24 +1,34 @@
-const layerDegree = (g, h1, h2) => {
+const layerVertices = (g, h1, h2) => {
   const us = new Set(h1),
-        degree = {};
+        vertices = {};
   for (const v of h2) {
-    let val = 0;
+    vertices[v] = new Set();
     for (const u of g.inVertices(v)) {
       if (us.has(u)) {
-        val += 1;
+        vertices[v].add(u);
       }
     }
-    degree[v] = val;
   }
-  return degree;
+  return vertices;
 };
 
 const rectangular = (g, h1, h2) => {
   const k = g.numEdges(),
         active = {},
-        degree = layerDegree(g, h1, h2),
+        vertices = layerVertices(g, h1, h2),
         isActive = (u) => active[u],
-        cmp = (v1, v2) => degree[v2] - degree[v1];
+        cmp = (v1, v2) => vertices[v2].size - vertices[v1].size,
+        isNew = (maxH1, maxH2) => {
+          let count = 0;
+          for (const u of maxH1) {
+            for (const v of maxH2) {
+              if (!vertices[v].has(u)) {
+                count += 1;
+              }
+            }
+          }
+          return maxH1.length * maxH2.length - maxH1.length - maxH2.length >= count;
+        };
   h2 = Array.from(h2);
 
   const concentrations = [];
@@ -29,7 +39,7 @@ const rectangular = (g, h1, h2) => {
     }
 
     h2.sort(cmp);
-    if (degree[h2[jOffset]] === 0) {
+    if (vertices[h2[jOffset]].size <= 0) {
       break;
     }
 
@@ -59,9 +69,11 @@ const rectangular = (g, h1, h2) => {
       h += 1;
     }
 
-    if (maxH1.length > 1 && maxH2.length > 1) {
+    if (maxH1.length > 1 && maxH2.length > 1 && isNew(maxH1, maxH2)) {
       for (const v of maxH2) {
-        degree[v] -= maxH1.length;
+        for (const u of maxH1) {
+          vertices[v].delete(u);
+        }
       }
       concentrations.push({
         source: Array.from(maxH1),
