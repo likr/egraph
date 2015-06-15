@@ -18,16 +18,16 @@ const rectangular = (g, h1, h2) => {
         vertices = layerVertices(g, h1, h2),
         isActive = (u) => active[u],
         cmp = (v1, v2) => vertices[v2].size - vertices[v1].size,
-        isNew = (maxH1, maxH2) => {
+        d = (s, t) => {
           let count = 0;
-          for (const u of maxH1) {
-            for (const v of maxH2) {
-              if (!vertices[v].has(u)) {
+          for (const u of s) {
+            for (const v of t) {
+              if (vertices[v].has(u)) {
                 count += 1;
               }
             }
           }
-          return maxH1.length * maxH2.length - maxH1.length - maxH2.length >= count;
+          return count - s.length - t.length;
         };
   h2 = Array.from(h2);
 
@@ -43,11 +43,10 @@ const rectangular = (g, h1, h2) => {
       break;
     }
 
-    let maxEdges = 0,
+    let maxD = -1,
         maxH1,
         maxH2,
-        tmpH2 = [],
-        h = 1;
+        tmpH2 = [];
     for (let j = jOffset; j < h2.length; ++j) {
       const v = h2[j];
       let count = 0;
@@ -61,15 +60,16 @@ const rectangular = (g, h1, h2) => {
         }
       }
       tmpH2.push(v);
-      if (count * h > maxEdges) {
-        maxEdges = count * h;
-        maxH1 = h1.filter(isActive);
+      let tmpH1 = h1.filter(isActive),
+          tmpD = d(tmpH1, tmpH2);
+      if (tmpD > maxD) {
+        maxD = tmpD;
+        maxH1 = tmpH1;
         maxH2 = Array.from(tmpH2);
       }
-      h += 1;
     }
 
-    if (maxH1.length > 1 && maxH2.length > 1 && isNew(maxH1, maxH2)) {
+    if (maxD > -1) {
       for (const v of maxH2) {
         for (const u of maxH1) {
           vertices[v].delete(u);
