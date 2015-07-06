@@ -40,9 +40,10 @@ describe('Graph', () => {
       const obj = {
         spam: 'ham'
       };
-      const u = graph.addVertex(0, obj);
+      const u = graph.addVertex();
+      const v = graph.addVertex(u, obj);
       expect(graph.numVertices()).to.be(1);
-      expect(u).to.be(0);
+      expect(u).to.be(v);
       expect(graph.vertex(u)).to.be(obj);
     });
   });
@@ -66,6 +67,7 @@ describe('Graph', () => {
       };
       const u = graph.addVertex();
       const v = graph.addVertex();
+      graph.addEdge(u, v);
       graph.addEdge(u, v, obj);
       expect(graph.numEdges()).to.be(1);
       expect(graph.edge(u, v)).to.be(obj);

@@ -93,21 +93,27 @@ class Graph {
       obj = u;
       u = nextVertexId();
     }
-    p(this).vertices[u] = {
-      outVertices: {},
-      inVertices: {},
-      children: new Set(),
-      parents: new Set(),
-      data: obj
-    };
-    p(this).numVertices++;
+    if (this.vertex(u)) {
+      p(this).vertices[u].data = obj;
+    } else {
+      p(this).vertices[u] = {
+        outVertices: {},
+        inVertices: {},
+        children: new Set(),
+        parents: new Set(),
+        data: obj
+      };
+      p(this).numVertices++;
+    }
     return u;
   }
 
   addEdge(u, v, obj={}) {
+    if (!this.edge(u, v)) {
+      p(this).numEdges++;
+    }
     p(this).vertices[u].outVertices[v] = obj;
     p(this).vertices[v].inVertices[u] = obj;
-    p(this).numEdges++;
   }
 
   addChild(u, v) {
