@@ -1,6 +1,6 @@
 {
   "name": "eg-graph",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Graph drawig tool",
   "main": "lib/index.js",
   "files": [
