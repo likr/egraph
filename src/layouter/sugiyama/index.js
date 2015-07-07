@@ -8,15 +8,18 @@ import normalize from './normalize';
 import crossingReduction from './crossing-reduction';
 import positionAssignment from './position-assignment';
 
-const initGraph = (gOrig, {ltor, vertexWidth, vertexHeight, edgeWidth, layerMargin, vertexMargin}) => {
+const initGraph = (gOrig, {ltor, vertexWidth, vertexHeight, edgeWidth, layerMargin, vertexMargin,
+                           vertexLeftMargin, vertexRightMargin, vertexTopMargin, vertexBottomMargin}) => {
   const g = new Graph();
   for (const u of gOrig.vertices()) {
-    const uNode = gOrig.vertex(u),
-          w = vertexWidth({u, d: uNode}),
-          h = vertexHeight({u, d: uNode});
+    const d = gOrig.vertex(u),
+          w = vertexWidth({u, d}),
+          h = vertexHeight({u, d}),
+          horizontalMargin = vertexLeftMargin({u, d}) + vertexRightMargin({u, d}),
+          verticalMargin = vertexTopMargin({u, d}) + vertexBottomMargin({u, d});
     g.addVertex(u, {
-      width: ltor ? h + vertexMargin : w + layerMargin,
-      height: ltor ? w + layerMargin : h + vertexMargin,
+      width: ltor ? h + vertexMargin + verticalMargin : w + layerMargin + horizontalMargin,
+      height: ltor ? w + layerMargin + horizontalMargin : h + vertexMargin + verticalMargin,
       origWidth: ltor ? h : w,
       origHeight: ltor ? w : h
     });
@@ -143,6 +146,10 @@ class SugiyamaLayouter {
       edgeWidth: () => 1,
       layerMargin: 10,
       vertexMargin: 10,
+      vertexLeftMargin: () => 0,
+      vertexRightMargin: () => 0,
+      vertexTopMargin: () => 0,
+      vertexBottomMargin: () => 0,
       edgeMargin: 10,
       ltor: true,
       cycleRemoval: new cycleRemoval.CycleRemoval(),
@@ -159,6 +166,10 @@ class SugiyamaLayouter {
       edgeWidth: this.edgeWidth(),
       layerMargin: this.layerMargin(),
       vertexMargin: this.vertexMargin(),
+      vertexLeftMargin: this.vertexLeftMargin(),
+      vertexRightMargin: this.vertexRightMargin(),
+      vertexTopMargin: this.vertexTopMargin(),
+      vertexBottomMargin: this.vertexBottomMargin(),
       ltor: this.ltor()
     });
     this.cycleRemoval().call(g);
@@ -200,6 +211,22 @@ class SugiyamaLayouter {
 
   edgeMargin(arg) {
     return accessor(this, privates, 'edgeMargin', arguments);
+  }
+
+  vertexLeftMargin(arg) {
+    return accessor(this, privates, 'vertexLeftMargin', arguments);
+  }
+
+  vertexRightMargin(arg) {
+    return accessor(this, privates, 'vertexRightMargin', arguments);
+  }
+
+  vertexTopMargin(arg) {
+    return accessor(this, privates, 'vertexTopMargin', arguments);
+  }
+
+  vertexBottomMargin(arg) {
+    return accessor(this, privates, 'vertexBottomMargin', arguments);
   }
 
   ltor(arg) {

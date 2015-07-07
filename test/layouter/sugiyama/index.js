@@ -31,7 +31,12 @@ describe('SugiyamaLayouter', () => {
       graph.addEdge(c1, d3);
       graph.addEdge(c2, d1);
       graph.addEdge(c2, d2);
-      const result = new SugiyamaLayouter().layout(graph);
+      const layouter = new SugiyamaLayouter()
+              .vertexLeftMargin(() => 2)
+              .vertexRightMargin(() => 2)
+              .vertexTopMargin(() => 2)
+              .vertexBottomMargin(() => 2),
+            result = layouter.layout(graph);
       expect(result).to.have.property('vertices');
       expect(result).to.have.property('edges');
     });
