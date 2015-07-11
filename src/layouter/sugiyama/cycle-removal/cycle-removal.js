@@ -6,7 +6,7 @@ const cycleRemoval = (g) => {
   for (const [u, v] of cycleEdges(g)) {
     var obj = g.edge(u, v);
     g.removeEdge(u, v);
-    g.addEdge(v, u, obj);
+    g.addEdge(v, u, Object.assign({reversed: true}, obj));
   }
 };
 

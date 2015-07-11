@@ -51,12 +51,24 @@ const simplify = (points, ltor) => {
   }
 };
 
+const reversed = (arr) => {
+  const result = [];
+  for (const x of arr) {
+    result.unshift(x);
+  }
+  return result;
+};
+
 const buildResult = (g, layers, ltor) => {
   const result = {
           vertices: {},
           edges: {}
         },
         layerHeights = [];
+
+  for (const u of g.vertices()) {
+    result.edges[u] = {};
+  }
 
   for (const layer of layers) {
     let maxHeight = -Infinity;
@@ -80,10 +92,6 @@ const buildResult = (g, layers, ltor) => {
           layer: uNode.layer,
           order: uNode.order
         };
-
-        if (result.edges[u] === undefined) {
-          result.edges[u] = {};
-        }
 
         for (const v of g.outVertices(u)) {
           const points = ltor
@@ -112,10 +120,19 @@ const buildResult = (g, layers, ltor) => {
             points.push([wNode.x, wNode.y - (wNode.origHeight || 0) / 2]);
           }
           simplify(points, ltor);
-          result.edges[u][w] = {
-            points: points,
-            width: g.edge(u, v).width
-          };
+          if (g.edge(u, v).reversed) {
+            result.edges[w][u] = {
+              points: reversed(points),
+              reversed: true,
+              width: g.edge(u, v).width
+            };
+          } else {
+            result.edges[u][w] = {
+              points: points,
+              reversed: false,
+              width: g.edge(u, v).width
+            };
+          }
         }
       }
     }

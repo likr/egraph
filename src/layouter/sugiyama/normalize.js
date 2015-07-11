@@ -16,14 +16,17 @@ const normalize = function (g, layers, layerMap, edgeMargin) {
           layer: i
         });
         g.addEdge(w1, w2, {
-          width: d.width,
-          dummy: true
+          dummy: true,
+          reversed: g.edge(u, v).reversed,
+          width: d.width
         });
         layers[i].push(w2);
         w1 = w2;
       }
       g.addEdge(w1, v, {
-        dummy: true
+        dummy: true,
+        reversed: g.edge(u, v).reversed,
+        width: d.width
       });
       g.removeEdge(u, v);
     }
