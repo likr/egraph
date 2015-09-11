@@ -15,7 +15,6 @@
     "babel": "*",
     "babelify": "*",
     "browserify": "^9.0.8",
-    "d3": "^3.5.5",
     "expect.js": "^0.3.1",
     "gulp": "^3.8.11",
     "gulp-babel": "*",
