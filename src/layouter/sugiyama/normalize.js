@@ -7,7 +7,8 @@ const normalize = function (g, layers, layerMap, edgeMargin) {
     if (layerMap[v] - layerMap[u] > 1) {
       w1 = u;
       for (i = layerMap[u] + 1; i < layerMap[v]; ++i) {
-        w2 = g.addVertex({
+        w2 = g.nextVertexId();
+        g.addVertex(w2, {
           dummy: true,
           width: d.width + edgeMargin,
           origWidth: d.width + edgeMargin,

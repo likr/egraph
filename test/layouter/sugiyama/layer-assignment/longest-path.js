@@ -7,16 +7,17 @@ import LongestPath from '../../../../src/layouter/sugiyama/layer-assignment/long
 describe('LongestPath', () => {
   describe('call(graph)', () => {
     it('returns layers', () => {
-      const graph = new Graph();
-      const a = graph.addVertex();
-      const b = graph.addVertex();
-      const c = graph.addVertex();
-      const d = graph.addVertex();
-      const e = graph.addVertex();
-      graph.addEdge(a, b);
-      graph.addEdge(b, c);
-      graph.addEdge(d, c);
-      graph.addEdge(d, e);
+      const [a, b, c, d, e] = [0, 1, 2, 3, 4];
+      const graph = new Graph()
+        .addVertex(a)
+        .addVertex(b)
+        .addVertex(c)
+        .addVertex(d)
+        .addVertex(e)
+        .addEdge(a, b)
+        .addEdge(b, c)
+        .addEdge(d, c)
+        .addEdge(d, e);
       expect(new LongestPath().call(graph)).to.be.eql({
         [a]: 0,
         [b]: 1,

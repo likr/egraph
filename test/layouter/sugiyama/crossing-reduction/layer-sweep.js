@@ -7,30 +7,34 @@ import LayerSweep from '../../../../src/layouter/sugiyama/crossing-reduction/lay
 describe('LayerSweep', () => {
   describe('call(g, layers)', () => {
     it('sorts layers to minimize number of crossing', () => {
-      const graph = new Graph();
-      const a1 = graph.addVertex();
-      const a2 = graph.addVertex();
-      const a3 = graph.addVertex();
-      const b1 = graph.addVertex();
-      const b2 = graph.addVertex();
-      const b3 = graph.addVertex();
-      const c1 = graph.addVertex();
-      const c2 = graph.addVertex();
-      const c3 = graph.addVertex();
-      const d1 = graph.addVertex();
-      const d2 = graph.addVertex();
-      const d3 = graph.addVertex();
-      graph.addEdge(a1, b2);
-      graph.addEdge(a2, b1);
-      graph.addEdge(a3, b1);
-      graph.addEdge(b1, c1);
-      graph.addEdge(b2, c1);
-      graph.addEdge(b2, c2);
-      graph.addEdge(b2, c3);
-      graph.addEdge(b3, c2);
-      graph.addEdge(c1, d3);
-      graph.addEdge(c2, d1);
-      graph.addEdge(c2, d2);
+      const [a1, a2, a3] = [0, 1, 2],
+        [b1, b2, b3] = [3, 4, 5],
+        [c1, c2, c3] = [6, 7, 8],
+        [d1, d2, d3] = [9, 10, 11];
+      const graph = new Graph()
+        .addVertex(a1)
+        .addVertex(a2)
+        .addVertex(a3)
+        .addVertex(b1)
+        .addVertex(b2)
+        .addVertex(b3)
+        .addVertex(c1)
+        .addVertex(c2)
+        .addVertex(c3)
+        .addVertex(d1)
+        .addVertex(d2)
+        .addVertex(d3)
+        .addEdge(a1, b2)
+        .addEdge(a2, b1)
+        .addEdge(a3, b1)
+        .addEdge(b1, c1)
+        .addEdge(b2, c1)
+        .addEdge(b2, c2)
+        .addEdge(b2, c3)
+        .addEdge(b3, c2)
+        .addEdge(c1, d3)
+        .addEdge(c2, d1)
+        .addEdge(c2, d2);
       const layers = [
         [a1, a2, a3],
         [b1, b2, b3],

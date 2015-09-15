@@ -33,7 +33,7 @@ gulp.task('example', function() {
     .pipe(gulp.dest('example'));
 });
 
-gulp.task('mocha', shell.task(['mocha --recursive --colors --reporter dot --compilers js:babel/register']));
+gulp.task('mocha', shell.task(['mocha --recursive --colors --reporter dot --require misc/babel_hook.js']));
 
 gulp.task('build', ['babel']);
 

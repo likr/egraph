@@ -7,30 +7,34 @@ import SugiyamaLayouter from '../../../src/layouter/sugiyama';
 describe('SugiyamaLayouter', () => {
   describe('layout(g)', () => {
     it('returns positions of vertices', () => {
-      const graph = new Graph();
-      const a1 = graph.addVertex({width: 1, height: 1});
-      const a2 = graph.addVertex({width: 1, height: 1});
-      const a3 = graph.addVertex({width: 1, height: 1});
-      const b1 = graph.addVertex({width: 1, height: 1});
-      const b2 = graph.addVertex({width: 1, height: 1});
-      const b3 = graph.addVertex({width: 1, height: 1});
-      const c1 = graph.addVertex({width: 1, height: 1});
-      const c2 = graph.addVertex({width: 1, height: 1});
-      const c3 = graph.addVertex({width: 1, height: 1});
-      const d1 = graph.addVertex({width: 1, height: 1});
-      const d2 = graph.addVertex({width: 1, height: 1});
-      const d3 = graph.addVertex({width: 1, height: 1});
-      graph.addEdge(a1, b2);
-      graph.addEdge(a2, b1);
-      graph.addEdge(a3, b1);
-      graph.addEdge(b1, c1);
-      graph.addEdge(b2, c1);
-      graph.addEdge(b2, c2);
-      graph.addEdge(b2, c3);
-      graph.addEdge(b3, c2);
-      graph.addEdge(c1, d3);
-      graph.addEdge(c2, d1);
-      graph.addEdge(c2, d2);
+      const [a1, a2, a3] = [0, 1, 2],
+        [b1, b2, b3] = [3, 4, 5],
+        [c1, c2, c3] = [6, 7, 8],
+        [d1, d2, d3] = [9, 10, 11];
+      const graph = new Graph()
+        .addVertex(a1, {width: 1, height: 1})
+        .addVertex(a2, {width: 1, height: 1})
+        .addVertex(a3, {width: 1, height: 1})
+        .addVertex(b1, {width: 1, height: 1})
+        .addVertex(b2, {width: 1, height: 1})
+        .addVertex(b3, {width: 1, height: 1})
+        .addVertex(c1, {width: 1, height: 1})
+        .addVertex(c2, {width: 1, height: 1})
+        .addVertex(c3, {width: 1, height: 1})
+        .addVertex(d1, {width: 1, height: 1})
+        .addVertex(d2, {width: 1, height: 1})
+        .addVertex(d3, {width: 1, height: 1})
+        .addEdge(a1, b2)
+        .addEdge(a2, b1)
+        .addEdge(a3, b1)
+        .addEdge(b1, c1)
+        .addEdge(b2, c1)
+        .addEdge(b2, c2)
+        .addEdge(b2, c3)
+        .addEdge(b3, c2)
+        .addEdge(c1, d3)
+        .addEdge(c2, d1)
+        .addEdge(c2, d2);
       const layouter = new SugiyamaLayouter()
               .vertexLeftMargin(() => 2)
               .vertexRightMargin(() => 2)

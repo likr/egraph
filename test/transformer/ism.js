@@ -7,13 +7,14 @@ import IsmTransformer from '../../src/transformer/ism';
 describe('IsmTransformer ', () => {
   describe('transform(g)', () => {
     it('returns transformed graph', () => {
-      const graph = new Graph();
-      const u = graph.addVertex();
-      const v = graph.addVertex();
-      const w = graph.addVertex();
-      graph.addEdge(u, v);
-      graph.addEdge(u, w);
-      graph.addEdge(v, w);
+      const u = 0, v = 1, w = 2;
+      const graph = new Graph()
+        .addVertex(u)
+        .addVertex(v)
+        .addVertex(w)
+        .addEdge(u, v)
+        .addEdge(u, w)
+        .addEdge(v, w);
       const transformed = new IsmTransformer().transform(graph);
       expect(transformed.edge(u, v)).to.be.ok();
       expect(transformed.edge(v, w)).to.be.ok();

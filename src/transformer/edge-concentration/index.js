@@ -1,6 +1,5 @@
 'use strict';
 
-import copy from '../../graph/copy';
 import accessor from '../../utils/accessor';
 import cycleRemoval from '../../layouter/sugiyama/cycle-removal';
 import layerAssignment from '../../layouter/sugiyama/layer-assignment';
@@ -8,7 +7,8 @@ import rectangular from './rectangular';
 
 const edgeConcentration = (g, h1, h2, method, dummy) => {
   for (const concentration of method(g, h1, h2)) {
-    const w = g.addVertex(dummy());
+    const w = g.nextVertexId();
+    g.addVertex(w, dummy());
     for (const u of concentration.source) {
       g.addEdge(u, w);
     }

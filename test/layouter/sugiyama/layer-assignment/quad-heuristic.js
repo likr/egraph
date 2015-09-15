@@ -7,21 +7,22 @@ import QuadHeuristic from '../../../../src/layouter/sugiyama/layer-assignment/qu
 describe('QuadHeuristic', () => {
   describe('call(graph)', () => {
     it('returns layers', () => {
-      const graph = new Graph();
-      const a = graph.addVertex();
-      const b = graph.addVertex();
-      const c = graph.addVertex();
-      const d = graph.addVertex();
-      const e = graph.addVertex();
-      const f = graph.addVertex();
-      const g = graph.addVertex();
-      const h = graph.addVertex();
-      graph.addEdge(a, b);
-      graph.addEdge(b, c);
-      graph.addEdge(c, d);
-      graph.addEdge(d, e);
-      graph.addEdge(f, g);
-      graph.addEdge(g, h);
+      const [a, b, c, d, e, f, g, h] = [0, 1, 2, 3, 4, 5, 6, 7];
+      const graph = new Graph()
+        .addVertex(a)
+        .addVertex(b)
+        .addVertex(c)
+        .addVertex(d)
+        .addVertex(e)
+        .addVertex(f)
+        .addVertex(g)
+        .addVertex(h)
+        .addEdge(a, b)
+        .addEdge(b, c)
+        .addEdge(c, d)
+        .addEdge(d, e)
+        .addEdge(f, g)
+        .addEdge(g, h);
       expect(new QuadHeuristic().call(graph)).to.be.eql({
         [a]: 0,
         [b]: 1,

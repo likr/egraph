@@ -8,63 +8,68 @@ import horizontalCompaction from '../../../../src/layouter/sugiyama/position-ass
 
 describe('markConflicts(g, layers)', () => {
   it('set flags to edges which has type 1 or 2 conflict', () => {
-    const graph = new Graph();
-    const a1 = graph.addVertex({layer: 0, order: 0});
-    const a2 = graph.addVertex({layer: 0, order: 1});
-    const b1 = graph.addVertex({layer: 1, order: 0});
-    const b2 = graph.addVertex({layer: 1, order: 1});
-    const b3 = graph.addVertex({layer: 1, order: 2, dummy: true});
-    const b4 = graph.addVertex({layer: 1, order: 3});
-    const b5 = graph.addVertex({layer: 1, order: 4, dummy: true});
-    const b6 = graph.addVertex({layer: 1, order: 5, dummy: true});
-    const b7 = graph.addVertex({layer: 1, order: 6});
-    const b8 = graph.addVertex({layer: 1, order: 7});
-    const c1 = graph.addVertex({layer: 2, order: 0});
-    const c2 = graph.addVertex({layer: 2, order: 1});
-    const c3 = graph.addVertex({layer: 2, order: 2, dummy: true});
-    const c4 = graph.addVertex({layer: 2, order: 3, dummy: true});
-    const c5 = graph.addVertex({layer: 2, order: 4, dummy: true});
-    const c6 = graph.addVertex({layer: 2, order: 5});
-    const d1 = graph.addVertex({layer: 3, order: 0});
-    const d2 = graph.addVertex({layer: 3, order: 1});
-    const d3 = graph.addVertex({layer: 3, order: 2, dummy: true});
-    const d4 = graph.addVertex({layer: 3, order: 3, dummy: true});
-    const d5 = graph.addVertex({layer: 3, order: 4, dummy: true});
-    const d6 = graph.addVertex({layer: 3, order: 5});
-    const d7 = graph.addVertex({layer: 3, order: 6, dummy: true});
-    const e1 = graph.addVertex({layer: 4, order: 0});
-    const e2 = graph.addVertex({layer: 4, order: 1});
-    const e3 = graph.addVertex({layer: 4, order: 2});
-    graph.addEdge(a1, b1);
-    graph.addEdge(a1, b6);
-    graph.addEdge(a1, b8);
-    graph.addEdge(a2, b3);
-    graph.addEdge(a2, b5);
-    graph.addEdge(b2, c2);
-    graph.addEdge(b3, c2);
-    graph.addEdge(b4, c2);
-    graph.addEdge(b5, c3);
-    graph.addEdge(b6, c4);
-    graph.addEdge(b7, c2);
-    graph.addEdge(b7, c6);
-    graph.addEdge(b8, c2);
-    graph.addEdge(b8, c5);
-    graph.addEdge(c1, d1);
-    graph.addEdge(c1, d2);
-    graph.addEdge(c1, d6);
-    graph.addEdge(c3, d4);
-    graph.addEdge(c4, d5);
-    graph.addEdge(c5, d6);
-    graph.addEdge(c6, d3);
-    graph.addEdge(c6, d7);
-    graph.addEdge(d1, e1);
-    graph.addEdge(d1, e2);
-    graph.addEdge(d2, e2);
-    graph.addEdge(d3, e1);
-    graph.addEdge(d4, e3);
-    graph.addEdge(d5, e3);
-    graph.addEdge(d6, e3);
-    graph.addEdge(d7, e3);
+    const [a1, a2] = [0, 1],
+      [b1, b2, b3, b4, b5, b6, b7, b8] = [2, 3, 4, 5, 6, 7, 8, 9],
+      [c1, c2, c3, c4, c5, c6] = [10, 11, 12, 13, 14, 15],
+      [d1, d2, d3, d4, d5, d6, d7] = [16, 17, 18, 19, 20, 21, 22, 23],
+      [e1, e2, e3] = [24, 25, 26];
+    const graph = new Graph()
+      .addVertex(a1, {width: 10, layer: 0, order: 0})
+      .addVertex(a2, {width: 10, layer: 0, order: 1})
+      .addVertex(b1, {width: 10, layer: 1, order: 0})
+      .addVertex(b2, {width: 10, layer: 1, order: 1})
+      .addVertex(b3, {width: 10, layer: 1, order: 2, dummy: true})
+      .addVertex(b4, {width: 10, layer: 1, order: 3})
+      .addVertex(b5, {width: 10, layer: 1, order: 4, dummy: true})
+      .addVertex(b6, {width: 10, layer: 1, order: 5, dummy: true})
+      .addVertex(b7, {width: 10, layer: 1, order: 6})
+      .addVertex(b8, {width: 10, layer: 1, order: 7})
+      .addVertex(c1, {width: 10, layer: 2, order: 0})
+      .addVertex(c2, {width: 10, layer: 2, order: 1})
+      .addVertex(c3, {width: 10, layer: 2, order: 2, dummy: true})
+      .addVertex(c4, {width: 10, layer: 2, order: 3, dummy: true})
+      .addVertex(c5, {width: 10, layer: 2, order: 4, dummy: true})
+      .addVertex(c6, {width: 10, layer: 2, order: 5})
+      .addVertex(d1, {width: 10, layer: 3, order: 0})
+      .addVertex(d2, {width: 10, layer: 3, order: 1})
+      .addVertex(d3, {width: 10, layer: 3, order: 2, dummy: true})
+      .addVertex(d4, {width: 10, layer: 3, order: 3, dummy: true})
+      .addVertex(d5, {width: 10, layer: 3, order: 4, dummy: true})
+      .addVertex(d6, {width: 10, layer: 3, order: 5})
+      .addVertex(d7, {width: 10, layer: 3, order: 6, dummy: true})
+      .addVertex(e1, {width: 10, layer: 4, order: 0})
+      .addVertex(e2, {width: 10, layer: 4, order: 1})
+      .addVertex(e3, {width: 10, layer: 4, order: 2})
+      .addEdge(a1, b1)
+      .addEdge(a1, b6)
+      .addEdge(a1, b8)
+      .addEdge(a2, b3)
+      .addEdge(a2, b5)
+      .addEdge(b2, c2)
+      .addEdge(b3, c2)
+      .addEdge(b4, c2)
+      .addEdge(b5, c3)
+      .addEdge(b6, c4)
+      .addEdge(b7, c2, {type1Conflict: true})
+      .addEdge(b7, c6)
+      .addEdge(b8, c2, {type1Conflict: true})
+      .addEdge(b8, c5)
+      .addEdge(c1, d1)
+      .addEdge(c1, d2)
+      .addEdge(c1, d6, {type1Conflict: true})
+      .addEdge(c3, d4)
+      .addEdge(c4, d5)
+      .addEdge(c5, d6)
+      .addEdge(c6, d3, {type1Conflict: true})
+      .addEdge(c6, d7)
+      .addEdge(d1, e1)
+      .addEdge(d1, e2)
+      .addEdge(d2, e2)
+      .addEdge(d3, e1)
+      .addEdge(d4, e3)
+      .addEdge(d5, e3)
+      .addEdge(d6, e3)
+      .addEdge(d7, e3);
     const layers = [
       [a1, a2],
       [b1, b2, b3, b4, b5, b6, b7, b8],
@@ -85,63 +90,68 @@ describe('markConflicts(g, layers)', () => {
 
 describe('verticalAlignment(g, layers, {rtol: false, btot: false})', () => {
   it('set root and align for all vertices', () => {
-    const graph = new Graph();
-    const a1 = graph.addVertex({layer: 0, order: 0});
-    const a2 = graph.addVertex({layer: 0, order: 1});
-    const b1 = graph.addVertex({layer: 1, order: 0});
-    const b2 = graph.addVertex({layer: 1, order: 1});
-    const b3 = graph.addVertex({layer: 1, order: 2, dummy: true});
-    const b4 = graph.addVertex({layer: 1, order: 3});
-    const b5 = graph.addVertex({layer: 1, order: 4, dummy: true});
-    const b6 = graph.addVertex({layer: 1, order: 5, dummy: true});
-    const b7 = graph.addVertex({layer: 1, order: 6});
-    const b8 = graph.addVertex({layer: 1, order: 7});
-    const c1 = graph.addVertex({layer: 2, order: 0});
-    const c2 = graph.addVertex({layer: 2, order: 1});
-    const c3 = graph.addVertex({layer: 2, order: 2, dummy: true});
-    const c4 = graph.addVertex({layer: 2, order: 3, dummy: true});
-    const c5 = graph.addVertex({layer: 2, order: 4, dummy: true});
-    const c6 = graph.addVertex({layer: 2, order: 5});
-    const d1 = graph.addVertex({layer: 3, order: 0});
-    const d2 = graph.addVertex({layer: 3, order: 1});
-    const d3 = graph.addVertex({layer: 3, order: 2, dummy: true});
-    const d4 = graph.addVertex({layer: 3, order: 3, dummy: true});
-    const d5 = graph.addVertex({layer: 3, order: 4, dummy: true});
-    const d6 = graph.addVertex({layer: 3, order: 5});
-    const d7 = graph.addVertex({layer: 3, order: 6, dummy: true});
-    const e1 = graph.addVertex({layer: 4, order: 0});
-    const e2 = graph.addVertex({layer: 4, order: 1});
-    const e3 = graph.addVertex({layer: 4, order: 2});
-    graph.addEdge(a1, b1);
-    graph.addEdge(a1, b6);
-    graph.addEdge(a1, b8);
-    graph.addEdge(a2, b3);
-    graph.addEdge(a2, b5);
-    graph.addEdge(b2, c2);
-    graph.addEdge(b3, c2);
-    graph.addEdge(b4, c2);
-    graph.addEdge(b5, c3);
-    graph.addEdge(b6, c4);
-    graph.addEdge(b7, c2, {type1Conflict: true});
-    graph.addEdge(b7, c6);
-    graph.addEdge(b8, c2, {type1Conflict: true});
-    graph.addEdge(b8, c5);
-    graph.addEdge(c1, d1);
-    graph.addEdge(c1, d2);
-    graph.addEdge(c1, d6, {type1Conflict: true});
-    graph.addEdge(c3, d4);
-    graph.addEdge(c4, d5);
-    graph.addEdge(c5, d6);
-    graph.addEdge(c6, d3, {type1Conflict: true});
-    graph.addEdge(c6, d7);
-    graph.addEdge(d1, e1);
-    graph.addEdge(d1, e2);
-    graph.addEdge(d2, e2);
-    graph.addEdge(d3, e1);
-    graph.addEdge(d4, e3);
-    graph.addEdge(d5, e3);
-    graph.addEdge(d6, e3);
-    graph.addEdge(d7, e3);
+    const [a1, a2] = [0, 1],
+      [b1, b2, b3, b4, b5, b6, b7, b8] = [2, 3, 4, 5, 6, 7, 8, 9],
+      [c1, c2, c3, c4, c5, c6] = [10, 11, 12, 13, 14, 15],
+      [d1, d2, d3, d4, d5, d6, d7] = [16, 17, 18, 19, 20, 21, 22, 23],
+      [e1, e2, e3] = [24, 25, 26];
+    const graph = new Graph()
+      .addVertex(a1, {width: 10, layer: 0, order: 0})
+      .addVertex(a2, {width: 10, layer: 0, order: 1})
+      .addVertex(b1, {width: 10, layer: 1, order: 0})
+      .addVertex(b2, {width: 10, layer: 1, order: 1})
+      .addVertex(b3, {width: 10, layer: 1, order: 2, dummy: true})
+      .addVertex(b4, {width: 10, layer: 1, order: 3})
+      .addVertex(b5, {width: 10, layer: 1, order: 4, dummy: true})
+      .addVertex(b6, {width: 10, layer: 1, order: 5, dummy: true})
+      .addVertex(b7, {width: 10, layer: 1, order: 6})
+      .addVertex(b8, {width: 10, layer: 1, order: 7})
+      .addVertex(c1, {width: 10, layer: 2, order: 0})
+      .addVertex(c2, {width: 10, layer: 2, order: 1})
+      .addVertex(c3, {width: 10, layer: 2, order: 2, dummy: true})
+      .addVertex(c4, {width: 10, layer: 2, order: 3, dummy: true})
+      .addVertex(c5, {width: 10, layer: 2, order: 4, dummy: true})
+      .addVertex(c6, {width: 10, layer: 2, order: 5})
+      .addVertex(d1, {width: 10, layer: 3, order: 0})
+      .addVertex(d2, {width: 10, layer: 3, order: 1})
+      .addVertex(d3, {width: 10, layer: 3, order: 2, dummy: true})
+      .addVertex(d4, {width: 10, layer: 3, order: 3, dummy: true})
+      .addVertex(d5, {width: 10, layer: 3, order: 4, dummy: true})
+      .addVertex(d6, {width: 10, layer: 3, order: 5})
+      .addVertex(d7, {width: 10, layer: 3, order: 6, dummy: true})
+      .addVertex(e1, {width: 10, layer: 4, order: 0})
+      .addVertex(e2, {width: 10, layer: 4, order: 1})
+      .addVertex(e3, {width: 10, layer: 4, order: 2})
+      .addEdge(a1, b1)
+      .addEdge(a1, b6)
+      .addEdge(a1, b8)
+      .addEdge(a2, b3)
+      .addEdge(a2, b5)
+      .addEdge(b2, c2)
+      .addEdge(b3, c2)
+      .addEdge(b4, c2)
+      .addEdge(b5, c3)
+      .addEdge(b6, c4)
+      .addEdge(b7, c2, {type1Conflict: true})
+      .addEdge(b7, c6)
+      .addEdge(b8, c2, {type1Conflict: true})
+      .addEdge(b8, c5)
+      .addEdge(c1, d1)
+      .addEdge(c1, d2)
+      .addEdge(c1, d6, {type1Conflict: true})
+      .addEdge(c3, d4)
+      .addEdge(c4, d5)
+      .addEdge(c5, d6)
+      .addEdge(c6, d3, {type1Conflict: true})
+      .addEdge(c6, d7)
+      .addEdge(d1, e1)
+      .addEdge(d1, e2)
+      .addEdge(d2, e2)
+      .addEdge(d3, e1)
+      .addEdge(d4, e3)
+      .addEdge(d5, e3)
+      .addEdge(d6, e3)
+      .addEdge(d7, e3);
     const layers = [
       [a1, a2],
       [b1, b2, b3, b4, b5, b6, b7, b8],
@@ -207,63 +217,68 @@ describe('verticalAlignment(g, layers, {rtol: false, btot: false})', () => {
 
 describe('horizontalCompaction(g, layers)', () => {
   it('set x for all vertices', () => {
-    const graph = new Graph();
-    const a1 = graph.addVertex({width: 10, layer: 0, order: 0});
-    const a2 = graph.addVertex({width: 10, layer: 0, order: 1});
-    const b1 = graph.addVertex({width: 10, layer: 1, order: 0});
-    const b2 = graph.addVertex({width: 10, layer: 1, order: 1});
-    const b3 = graph.addVertex({width: 10, layer: 1, order: 2, dummy: true});
-    const b4 = graph.addVertex({width: 10, layer: 1, order: 3});
-    const b5 = graph.addVertex({width: 10, layer: 1, order: 4, dummy: true});
-    const b6 = graph.addVertex({width: 10, layer: 1, order: 5, dummy: true});
-    const b7 = graph.addVertex({width: 10, layer: 1, order: 6});
-    const b8 = graph.addVertex({width: 10, layer: 1, order: 7});
-    const c1 = graph.addVertex({width: 10, layer: 2, order: 0});
-    const c2 = graph.addVertex({width: 10, layer: 2, order: 1});
-    const c3 = graph.addVertex({width: 10, layer: 2, order: 2, dummy: true});
-    const c4 = graph.addVertex({width: 10, layer: 2, order: 3, dummy: true});
-    const c5 = graph.addVertex({width: 10, layer: 2, order: 4, dummy: true});
-    const c6 = graph.addVertex({width: 10, layer: 2, order: 5});
-    const d1 = graph.addVertex({width: 10, layer: 3, order: 0});
-    const d2 = graph.addVertex({width: 10, layer: 3, order: 1});
-    const d3 = graph.addVertex({width: 10, layer: 3, order: 2, dummy: true});
-    const d4 = graph.addVertex({width: 10, layer: 3, order: 3, dummy: true});
-    const d5 = graph.addVertex({width: 10, layer: 3, order: 4, dummy: true});
-    const d6 = graph.addVertex({width: 10, layer: 3, order: 5});
-    const d7 = graph.addVertex({width: 10, layer: 3, order: 6, dummy: true});
-    const e1 = graph.addVertex({width: 10, layer: 4, order: 0});
-    const e2 = graph.addVertex({width: 10, layer: 4, order: 1});
-    const e3 = graph.addVertex({width: 10, layer: 4, order: 2});
-    graph.addEdge(a1, b1);
-    graph.addEdge(a1, b6);
-    graph.addEdge(a1, b8);
-    graph.addEdge(a2, b3);
-    graph.addEdge(a2, b5);
-    graph.addEdge(b2, c2);
-    graph.addEdge(b3, c2);
-    graph.addEdge(b4, c2);
-    graph.addEdge(b5, c3);
-    graph.addEdge(b6, c4);
-    graph.addEdge(b7, c2, {type1Conflict: true});
-    graph.addEdge(b7, c6);
-    graph.addEdge(b8, c2, {type1Conflict: true});
-    graph.addEdge(b8, c5);
-    graph.addEdge(c1, d1);
-    graph.addEdge(c1, d2);
-    graph.addEdge(c1, d6, {type1Conflict: true});
-    graph.addEdge(c3, d4);
-    graph.addEdge(c4, d5);
-    graph.addEdge(c5, d6);
-    graph.addEdge(c6, d3, {type1Conflict: true});
-    graph.addEdge(c6, d7);
-    graph.addEdge(d1, e1);
-    graph.addEdge(d1, e2);
-    graph.addEdge(d2, e2);
-    graph.addEdge(d3, e1);
-    graph.addEdge(d4, e3);
-    graph.addEdge(d5, e3);
-    graph.addEdge(d6, e3);
-    graph.addEdge(d7, e3);
+    const [a1, a2] = [0, 1],
+      [b1, b2, b3, b4, b5, b6, b7, b8] = [2, 3, 4, 5, 6, 7, 8, 9],
+      [c1, c2, c3, c4, c5, c6] = [10, 11, 12, 13, 14, 15],
+      [d1, d2, d3, d4, d5, d6, d7] = [16, 17, 18, 19, 20, 21, 22, 23],
+      [e1, e2, e3] = [24, 25, 26];
+    const graph = new Graph()
+      .addVertex(a1, {width: 10, layer: 0, order: 0})
+      .addVertex(a2, {width: 10, layer: 0, order: 1})
+      .addVertex(b1, {width: 10, layer: 1, order: 0})
+      .addVertex(b2, {width: 10, layer: 1, order: 1})
+      .addVertex(b3, {width: 10, layer: 1, order: 2, dummy: true})
+      .addVertex(b4, {width: 10, layer: 1, order: 3})
+      .addVertex(b5, {width: 10, layer: 1, order: 4, dummy: true})
+      .addVertex(b6, {width: 10, layer: 1, order: 5, dummy: true})
+      .addVertex(b7, {width: 10, layer: 1, order: 6})
+      .addVertex(b8, {width: 10, layer: 1, order: 7})
+      .addVertex(c1, {width: 10, layer: 2, order: 0})
+      .addVertex(c2, {width: 10, layer: 2, order: 1})
+      .addVertex(c3, {width: 10, layer: 2, order: 2, dummy: true})
+      .addVertex(c4, {width: 10, layer: 2, order: 3, dummy: true})
+      .addVertex(c5, {width: 10, layer: 2, order: 4, dummy: true})
+      .addVertex(c6, {width: 10, layer: 2, order: 5})
+      .addVertex(d1, {width: 10, layer: 3, order: 0})
+      .addVertex(d2, {width: 10, layer: 3, order: 1})
+      .addVertex(d3, {width: 10, layer: 3, order: 2, dummy: true})
+      .addVertex(d4, {width: 10, layer: 3, order: 3, dummy: true})
+      .addVertex(d5, {width: 10, layer: 3, order: 4, dummy: true})
+      .addVertex(d6, {width: 10, layer: 3, order: 5})
+      .addVertex(d7, {width: 10, layer: 3, order: 6, dummy: true})
+      .addVertex(e1, {width: 10, layer: 4, order: 0})
+      .addVertex(e2, {width: 10, layer: 4, order: 1})
+      .addVertex(e3, {width: 10, layer: 4, order: 2})
+      .addEdge(a1, b1)
+      .addEdge(a1, b6)
+      .addEdge(a1, b8)
+      .addEdge(a2, b3)
+      .addEdge(a2, b5)
+      .addEdge(b2, c2)
+      .addEdge(b3, c2)
+      .addEdge(b4, c2)
+      .addEdge(b5, c3)
+      .addEdge(b6, c4)
+      .addEdge(b7, c2, {type1Conflict: true})
+      .addEdge(b7, c6)
+      .addEdge(b8, c2, {type1Conflict: true})
+      .addEdge(b8, c5)
+      .addEdge(c1, d1)
+      .addEdge(c1, d2)
+      .addEdge(c1, d6, {type1Conflict: true})
+      .addEdge(c3, d4)
+      .addEdge(c4, d5)
+      .addEdge(c5, d6)
+      .addEdge(c6, d3, {type1Conflict: true})
+      .addEdge(c6, d7)
+      .addEdge(d1, e1)
+      .addEdge(d1, e2)
+      .addEdge(d2, e2)
+      .addEdge(d3, e1)
+      .addEdge(d4, e3)
+      .addEdge(d5, e3)
+      .addEdge(d6, e3)
+      .addEdge(d7, e3);
     const layers = [
       [a1, a2],
       [b1, b2, b3, b4, b5, b6, b7, b8],
