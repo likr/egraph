@@ -1,3 +1,5 @@
+import Immutable from "immutable";
+
 const privates = new WeakMap();
 
 const p = (self) => privates.get(self);
@@ -5,35 +7,38 @@ const p = (self) => privates.get(self);
 class ImmutableGraph {
   constructor() {
     privates.set(this, {
-      vertices: {},
+      vertices: new Immutable.Map(),
       numVertices: 0,
       numEdges: 0
     });
   }
 
   vertex(u) {
-    if (p(this).vertices[u]) {
-      return p(this).vertices[u].data;
+    const vertices = p(this).vertices;
+    if (vertices.get(u)) {
+      return vertices.get(u).get("data");
     }
     return null;
   }
 
   edge(u, v) {
-    if (p(this).vertices[u] && p(this).vertices[u].outVertices[v]) {
-      return p(this).vertices[u].outVertices[v];
+    const vertices = p(this).vertices;
+    if (vertices.get(u) && vertices.get(u).get("outVertices").get(v)) {
+      return vertices.get(u).get("outVertices").get(v);
     }
     return null;
   }
 
   vertices() {
-    return Object.keys(p(this).vertices).map(u => +u);
+    return Array.from(p(this).vertices.keys());
   }
 
   edges() {
+    const vertices = p(this).vertices;
     const edges = [];
-    for (let u in p(this).vertices) {
-      for (let v in p(this).vertices[u].outVertices) {
-        edges.push([+u, +v]);
+    for (const u of vertices.keys()) {
+      for (const v of vertices.get(u).get("outVertices").keys()) {
+        edges.push([u, v]);
       }
     }
     return edges;
@@ -43,14 +48,14 @@ class ImmutableGraph {
     if (this.vertex(u) === null) {
       throw new Error(`Invalid vertex: ${u}`);
     }
-    return Object.keys(p(this).vertices[u].outVertices).map(v => +v);
+    return Array.from(p(this).vertices.get(u).get("outVertices").keys());
   }
 
   inVertices(u) {
     if (this.vertex(u) === null) {
       throw new Error(`Invalid vertex: ${u}`);
     }
-    return Object.keys(p(this).vertices[u].inVertices).map(v => +v);
+    return Array.from(p(this).vertices.get(u).get("inVertices").keys());
   }
 
   *outEdges(u) {
@@ -74,11 +79,11 @@ class ImmutableGraph {
   }
 
   outDegree(u) {
-    return Object.keys(p(this).vertices[u].outVertices).length;
+    return p(this).vertices.get(u).get("outVertices").size;
   }
 
   inDegree(u) {
-    return Object.keys(p(this).vertices[u].inVertices).length;
+    return p(this).vertices.get(u).get("inVertices").size;
   }
 
   addVertex(u, d={}) {
@@ -86,16 +91,14 @@ class ImmutableGraph {
       throw new Error(`Duplicated vertex: ${u}`);
     }
     const graph = new ImmutableGraph();
-    Object.assign(p(graph), {
+    privates.set(graph, {
       numVertices: p(this).numVertices + 1,
       numEdges: p(this).numEdges,
-      vertices: Object.assign({}, p(this).vertices, {
-        [u]: {
-          outVertices: {},
-          inVertices: {},
-          data: d
-        }
-      })
+      vertices: p(this).vertices.set(u, new Immutable.Map({
+        outVertices: new Immutable.Map(),
+        inVertices: new Immutable.Map(),
+        data: d
+      }))
     });
     return graph;
   }
@@ -110,22 +113,14 @@ class ImmutableGraph {
     if (this.edge(u, v)) {
       throw new Error(`Duplicated edge: (${u}, ${v})`);
     }
-    const graph = new ImmutableGraph(),
-      vertices = p(this).vertices;
-    Object.assign(p(graph), {
+    const graph = new ImmutableGraph();
+    privates.set(graph, {
       numVertices: p(this).numVertices,
       numEdges: p(this).numEdges + 1,
-      vertices: Object.assign(vertices, {
-        [u]: Object.assign(vertices[u], {
-          outVertices: Object.assign(vertices[u].outVertices, {
-            [v]: obj
-          })
-        }),
-        [v]: Object.assign(vertices[v], {
-          inVertices: Object.assign(vertices[v].inVertices, {
-            [u]: obj
-          })
-        })
+      vertices: p(this).vertices.withMutations((vertices) => {
+        vertices
+          .set(u, vertices.get(u).set("outVertices", vertices.get(u).get("outVertices").set(v, obj)))
+          .set(v, vertices.get(v).set("inVertices", vertices.get(v).get("inVertices").set(u, obj)));
       })
     });
     return graph;
