@@ -1,6 +1,6 @@
 {
-  "name": "eg-graph",
-  "version": "0.0.15",
+  "name": "egraph",
+  "version": "1.0.0",
   "description": "Graph drawig tool",
   "main": "lib/index.js",
   "files": [
@@ -28,6 +28,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "babel-runtime": "*"
+    "babel-runtime": "*",
+    "immutable": "^3.7.5"
   }
 }
