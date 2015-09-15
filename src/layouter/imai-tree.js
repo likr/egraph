@@ -9,7 +9,7 @@ const normalize = function (g, layers, edgeMargin) {
     if (layers[v] - layers[u] > 1) {
       w1 = u;
       for (i = layers[u] + 1; i < layers[v]; ++i) {
-        w2 = g.nextVertexId();
+        w2 = Symbol();
         g.addVertex(w2, {
           dummy: true,
           width: d.width + edgeMargin,

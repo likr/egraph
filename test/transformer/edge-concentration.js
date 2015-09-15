@@ -1,5 +1,3 @@
-'use strict';
-
 import expect from 'expect.js';
 import Graph from '../../src/graph';
 import EdgeConcentrationTransformer from '../../src/transformer/edge-concentration';

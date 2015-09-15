@@ -1,10 +1,8 @@
-'use strict';
-
 const privates = new WeakMap();
 
 const p = (self) => privates.get(self);
 
-class Graph {
+class ImmutableGraph {
   constructor() {
     privates.set(this, {
       vertices: {},
@@ -13,7 +11,7 @@ class Graph {
     });
   }
 
-  vertex(u, g) {
+  vertex(u) {
     if (p(this).vertices[u]) {
       return p(this).vertices[u].data;
     }
@@ -87,7 +85,7 @@ class Graph {
     if (this.vertex(u)) {
       throw new Error(`Duplicated vertex: ${u}`);
     }
-    const graph = new Graph();
+    const graph = new ImmutableGraph();
     Object.assign(p(graph), {
       numVertices: p(this).numVertices + 1,
       numEdges: p(this).numEdges,
@@ -112,7 +110,7 @@ class Graph {
     if (this.edge(u, v)) {
       throw new Error(`Duplicated edge: (${u}, ${v})`);
     }
-    const graph = new Graph(),
+    const graph = new ImmutableGraph(),
       vertices = p(this).vertices;
     Object.assign(p(graph), {
       numVertices: p(this).numVertices,
@@ -159,4 +157,4 @@ class Graph {
   }
 }
 
-export default Graph;
+export default ImmutableGraph;

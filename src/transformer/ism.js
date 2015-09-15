@@ -1,7 +1,3 @@
-'use strict';
-
-import copy from '../graph/copy';
-
 const transform = (g) => {
   const vertices = g.vertices(),
         n = vertices.length,

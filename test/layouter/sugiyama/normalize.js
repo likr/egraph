@@ -21,11 +21,12 @@ describe('normalize(g, layers, layerMap, edgeMargin)', () => {
             [c]: 2
           };
     normalize(graph, layers, layerMap, 5);
+    const d = graph.vertices()[3];
     expect(graph.numVertices()).to.be(4);
     expect(graph.numEdges()).to.be(4);
-    expect(graph.vertex(3).dummy).to.be.ok();
-    expect(graph.edge(a, 3).dummy).to.be.ok();
-    expect(graph.edge(3, c).dummy).to.be.ok();
-    expect(layers).to.be.eql([[a], [b, 3], [c]]);
+    expect(graph.vertex(d).dummy).to.be.ok();
+    expect(graph.edge(a, d).dummy).to.be.ok();
+    expect(graph.edge(d, c).dummy).to.be.ok();
+    expect(layers).to.be.eql([[a], [b, d], [c]]);
   });
 });

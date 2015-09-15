@@ -3,38 +3,40 @@ const privates = new WeakMap();
 const p = (self) => privates.get(self);
 
 class MutableGraph {
-  constructor(idOffset=0) {
+  constructor() {
     privates.set(this, {
-      vertices: {},
+      vertices: new Map(),
       numVertices: 0,
-      numEdges: 0,
-      idOffset: idOffset
+      numEdges: 0
     });
   }
 
   vertex(u) {
-    if (p(this).vertices[u]) {
-      return p(this).vertices[u].data;
+    const vertices = p(this).vertices;
+    if (vertices.get(u)) {
+      return vertices.get(u).data;
     }
     return null;
   }
 
   edge(u, v) {
-    if (p(this).vertices[u] && p(this).vertices[u].outVertices[v]) {
-      return p(this).vertices[u].outVertices[v];
+    const vertices = p(this).vertices;
+    if (vertices.get(u) && vertices.get(u).outVertices.get(v)) {
+      return vertices.get(u).outVertices.get(v);
     }
     return null;
   }
 
   vertices() {
-    return Object.keys(p(this).vertices).map(u => +u);
+    return Array.from(p(this).vertices.keys());
   }
 
   edges() {
+    const vertices = p(this).vertices;
     const edges = [];
-    for (let u in p(this).vertices) {
-      for (let v in p(this).vertices[u].outVertices) {
-        edges.push([+u, +v]);
+    for (const u of vertices.keys()) {
+      for (const v of vertices.get(u).outVertices.keys()) {
+        edges.push([u, v]);
       }
     }
     return edges;
@@ -44,14 +46,14 @@ class MutableGraph {
     if (this.vertex(u) === null) {
       throw new Error(`Invalid vertex: ${u}`);
     }
-    return Object.keys(p(this).vertices[u].outVertices).map(v => +v);
+    return Array.from(p(this).vertices.get(u).outVertices.keys());
   }
 
   inVertices(u) {
     if (this.vertex(u) === null) {
       throw new Error(`Invalid vertex: ${u}`);
     }
-    return Object.keys(p(this).vertices[u].inVertices).map(v => +v);
+    return Array.from(p(this).vertices.get(u).inVertices.keys());
   }
 
   *outEdges(u) {
@@ -75,31 +77,28 @@ class MutableGraph {
   }
 
   outDegree(u) {
-    return Object.keys(p(this).vertices[u].outVertices).length;
+    if (this.vertex(u) === null) {
+      throw new Error(`Invalid vertex: ${u}`);
+    }
+    return p(this).vertices.get(u).outVertices.size;
   }
 
   inDegree(u) {
-    return Object.keys(p(this).vertices[u].inVertices).length;
-  }
-
-  nextVertexId() {
-    while (p(this).vertices[p(this).idOffset]) {
-      p(this).idOffset++;
+    if (this.vertex(u) === null) {
+      throw new Error(`Invalid vertex: ${u}`);
     }
-    return p(this).idOffset++;
-  };
+    return p(this).vertices.get(u).inVertices.size;
+  }
 
   addVertex(u, obj={}) {
     if (this.vertex(u)) {
       throw new Error(`Duplicated vertex: ${u}`);
     }
-    p(this).vertices[u] = {
-      outVertices: {},
-      inVertices: {},
-      children: new Set(),
-      parents: new Set(),
+    p(this).vertices.set(u, {
+      outVertices: new Map(),
+      inVertices: new Map(),
       data: obj
-    };
+    });
     p(this).numVertices++;
     return this;
   }
@@ -115,26 +114,26 @@ class MutableGraph {
       throw new Error(`Duplicated edge: (${u}, ${v})`);
     }
     p(this).numEdges++;
-    p(this).vertices[u].outVertices[v] = obj;
-    p(this).vertices[v].inVertices[u] = obj;
+    p(this).vertices.get(u).outVertices.set(v, obj);
+    p(this).vertices.get(v).inVertices.set(u, obj);
     return this;
   }
 
   removeVertex(u) {
-    for (let v of this.outVertices(u)) {
+    for (const v of this.outVertices(u)) {
       this.removeEdge(u, v);
     }
-    for (let v of this.inVertices(u)) {
+    for (const v of this.inVertices(u)) {
       this.removeEdge(v, u);
     }
-    delete p(this).vertices[u];
+    p(this).vertices.delete(u);
     p(this).numVertices--;
     return this;
   }
 
   removeEdge(u, v) {
-    delete p(this).vertices[u].outVertices[v];
-    delete p(this).vertices[v].inVertices[u];
+    p(this).vertices.get(u).outVertices.delete(v);
+    p(this).vertices.get(v).inVertices.delete(u);
     p(this).numEdges--;
     return this;
   }
