@@ -92,6 +92,86 @@ for (const [name, Graph] of [["ImmutableGraph", ImmutableGraph], ["MutableGraph"
       });
     });
 
+    describe("removeVertex(u)", () => {
+      const u = 0, v = 1;
+      var graph, graph2;
+
+      beforeEach(() => {
+        graph = new Graph();
+        graph2 = graph
+          .addVertex(u)
+          .addVertex(v)
+          .addEdge(u, v)
+          .removeVertex(u);
+      });
+
+      if (Graph === ImmutableGraph) {
+        it("should return new graph", () => {
+          assert.notEqual(graph, graph2);
+        });
+      } else {
+        it("should return self", () => {
+          assert.equal(graph, graph2);
+        });
+      }
+
+      it("should remove the vertex", () => {
+        assert.equal(graph2.vertex(u), null);
+      });
+
+      it("should decrease numVertices", () => {
+        assert.equal(graph2.numVertices(), 1);
+      });
+
+      it("should clear in/out edges", () => {
+        assert.equal(graph2.numEdges(), 0);
+      });
+
+      it("should throw Error when u is empty", () => {
+        assert.throws(() => {
+          graph2.removeVertex(u);
+        });
+      });
+    });
+
+    describe("removeEdge(u, v)", () => {
+      const u = 0, v = 1;
+      var graph, graph2;
+
+      beforeEach(() => {
+        graph = new Graph();
+        graph2 = graph
+          .addVertex(u)
+          .addVertex(v)
+          .addEdge(u, v)
+          .removeEdge(u, v);
+      });
+
+      if (Graph === ImmutableGraph) {
+        it("should return new graph", () => {
+          assert.notEqual(graph, graph2);
+        });
+      } else {
+        it("should return self", () => {
+          assert.equal(graph, graph2);
+        });
+      }
+
+      it("should remove the edge", () => {
+        assert.equal(graph2.edge(u, v), null);
+      });
+
+      it("should decrease numEdges", () => {
+        assert.equal(graph2.numEdges(), 0);
+      });
+
+      it("should throw Error when (u, v) is empty", () => {
+        assert.throws(() => {
+          graph2.removeEdge(u, v);
+        });
+      });
+    });
+
     describe("numVertices()", () => {
       it("returns number of vertices", () => {
         const graph = new Graph()

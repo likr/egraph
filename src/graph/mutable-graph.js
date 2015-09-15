@@ -112,6 +112,9 @@ class MutableGraph extends AbstractGraph {
   }
 
   removeEdge(u, v) {
+    if (this.edge(u, v) === null) {
+      throw Error(`Invalid edge: (${u}, ${v})`);
+    }
     p(this).vertices.get(u).outVertices.delete(v);
     p(this).vertices.get(v).inVertices.delete(u);
     p(this).numEdges--;

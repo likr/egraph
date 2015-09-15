@@ -106,20 +106,37 @@ class ImmutableGraph extends AbstractGraph {
   }
 
   removeVertex(u) {
-    for (let v of this.outVertices(u)) {
-      this.removeEdge(u, v);
+    var g = this;
+    for (const v of this.outVertices(u)) {
+      g = g.removeEdge(u, v);
     }
-    for (let v of this.inVertices(u)) {
-      this.removeEdge(v, u);
+    for (const v of this.inVertices(u)) {
+      g = g.removeEdge(v, u);
     }
-    delete p(this).vertices[u];
-    p(this).numVertices--;
+    const graph = new ImmutableGraph();
+    privates.set(graph, {
+      numVertices: p(g).numVertices - 1,
+      numEdges: p(g).numEdges,
+      vertices: p(g).vertices.delete(u)
+    });
+    return graph;
   }
 
   removeEdge(u, v) {
-    delete p(this).vertices[u].outVertices[v];
-    delete p(this).vertices[v].inVertices[u];
-    p(this).numEdges--;
+    if (this.edge(u, v) === null) {
+      throw Error(`Invalid edge: (${u}, ${v})`);
+    }
+    const graph = new ImmutableGraph();
+    privates.set(graph, {
+      numVertices: p(this).numVertices,
+      numEdges: p(this).numEdges - 1,
+      vertices: p(this).vertices.withMutations((vertices) => {
+        vertices
+          .set(u, vertices.get(u).set("outVertices", vertices.get(u).get("outVertices").delete(v)))
+          .set(v, vertices.get(v).set("inVertices", vertices.get(v).get("inVertices").delete(u)));
+      })
+    });
+    return graph
   }
 }
 
