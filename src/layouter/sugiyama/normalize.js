@@ -1,6 +1,4 @@
-'use strict';
-
-const normalize = function (g, layers, layerMap, edgeMargin) {
+const normalize = (g, layers, layerMap, edgeMargin) => {
   var i, w1, w2;
   for (let [u, v] of g.edges()) {
     const d = g.edge(u, v);
