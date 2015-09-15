@@ -47,6 +47,12 @@ for (const [name, Graph] of [["ImmutableGraph", ImmutableGraph], ["MutableGraph"
       it("should set d", () => {
         assert.equal(graph2.vertex(u), d);
       });
+
+      it("should throw Error when u is duplicated", () => {
+        assert.throws(() => {
+          graph2.addVertex(u, d);
+        });
+      });
     });
 
     describe("addEdge(u, v, d)", () => {
@@ -77,6 +83,12 @@ for (const [name, Graph] of [["ImmutableGraph", ImmutableGraph], ["MutableGraph"
 
       it("should set d", () => {
         assert.equal(graph2.edge(u, v), d);
+      });
+
+      it("should throw Error when (u, v) is duplicated", () => {
+        assert.throws(() => {
+          graph2.addEdge(u, v, d);
+        });
       });
     });
 

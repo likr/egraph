@@ -41,10 +41,16 @@ class MutableGraph {
   }
 
   outVertices(u) {
+    if (this.vertex(u) === null) {
+      throw new Error(`Invalid vertex: ${u}`);
+    }
     return Object.keys(p(this).vertices[u].outVertices).map(v => +v);
   }
 
   inVertices(u) {
+    if (this.vertex(u) === null) {
+      throw new Error(`Invalid vertex: ${u}`);
+    }
     return Object.keys(p(this).vertices[u].inVertices).map(v => +v);
   }
 
