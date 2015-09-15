@@ -1,9 +1,12 @@
+import AbstractGraph from "./abstract-graph";
+
 const privates = new WeakMap();
 
 const p = (self) => privates.get(self);
 
-class MutableGraph {
+class MutableGraph extends AbstractGraph {
   constructor() {
+    super();
     privates.set(this, {
       vertices: new Map(),
       numVertices: 0,
@@ -31,17 +34,6 @@ class MutableGraph {
     return Array.from(p(this).vertices.keys());
   }
 
-  edges() {
-    const vertices = p(this).vertices;
-    const edges = [];
-    for (const u of vertices.keys()) {
-      for (const v of vertices.get(u).outVertices.keys()) {
-        edges.push([u, v]);
-      }
-    }
-    return edges;
-  }
-
   outVertices(u) {
     if (this.vertex(u) === null) {
       throw new Error(`Invalid vertex: ${u}`);
@@ -54,18 +46,6 @@ class MutableGraph {
       throw new Error(`Invalid vertex: ${u}`);
     }
     return Array.from(p(this).vertices.get(u).inVertices.keys());
-  }
-
-  *outEdges(u) {
-    for (let v of this.outVertices(u)) {
-      yield [u, v];
-    }
-  }
-
-  *inEdges(u) {
-    for (let v of this.inVertices(u)) {
-      yield [v, u];
-    }
   }
 
   numVertices() {
@@ -136,14 +116,6 @@ class MutableGraph {
     p(this).vertices.get(v).inVertices.delete(u);
     p(this).numEdges--;
     return this;
-  }
-
-  toString() {
-    const obj = {
-      vertices: this.vertices().map(u => ({u, d: this.vertex(u)})),
-      edges: this.edges().map(([u, v]) => ({u, v, d: this.edge(u, v)}))
-    };
-    return JSON.stringify(obj);
   }
 }
 

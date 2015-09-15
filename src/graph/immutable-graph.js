@@ -1,11 +1,13 @@
 import Immutable from "immutable";
+import AbstractGraph from "./abstract-graph";
 
 const privates = new WeakMap();
 
 const p = (self) => privates.get(self);
 
-class ImmutableGraph {
+class ImmutableGraph extends AbstractGraph {
   constructor() {
+    super();
     privates.set(this, {
       vertices: new Immutable.Map(),
       numVertices: 0,
@@ -33,17 +35,6 @@ class ImmutableGraph {
     return Array.from(p(this).vertices.keys());
   }
 
-  edges() {
-    const vertices = p(this).vertices;
-    const edges = [];
-    for (const u of vertices.keys()) {
-      for (const v of vertices.get(u).get("outVertices").keys()) {
-        edges.push([u, v]);
-      }
-    }
-    return edges;
-  }
-
   outVertices(u) {
     if (this.vertex(u) === null) {
       throw new Error(`Invalid vertex: ${u}`);
@@ -56,18 +47,6 @@ class ImmutableGraph {
       throw new Error(`Invalid vertex: ${u}`);
     }
     return Array.from(p(this).vertices.get(u).get("inVertices").keys());
-  }
-
-  *outEdges(u) {
-    for (let v of this.outVertices(u)) {
-      yield [u, v];
-    }
-  }
-
-  *inEdges(u) {
-    for (let v of this.inVertices(u)) {
-      yield [v, u];
-    }
   }
 
   numVertices() {
@@ -141,14 +120,6 @@ class ImmutableGraph {
     delete p(this).vertices[u].outVertices[v];
     delete p(this).vertices[v].inVertices[u];
     p(this).numEdges--;
-  }
-
-  toString() {
-    const obj = {
-      vertices: this.vertices().map(u => ({u, d: this.vertex(u)})),
-      edges: this.edges().map(([u, v]) => ({u, v, d: this.edge(u, v)}))
-    };
-    return JSON.stringify(obj);
   }
 }
 
