@@ -1,6 +1,3 @@
-'use strict';
-
-import copy from '../../graph/copy';
 import accessor from '../../utils/accessor';
 import cycleRemoval from '../../layouter/sugiyama/cycle-removal';
 import layerAssignment from '../../layouter/sugiyama/layer-assignment';
@@ -8,7 +5,8 @@ import rectangular from './rectangular';
 
 const edgeConcentration = (g, h1, h2, method, dummy) => {
   for (const concentration of method(g, h1, h2)) {
-    const w = g.addVertex(dummy());
+    const w = Symbol();
+    g.addVertex(w, dummy());
     for (const u of concentration.source) {
       g.addEdge(u, w);
     }
@@ -68,19 +66,19 @@ class EdgeConcentrationTransformer {
     return g;
   }
 
-  cycleRemoval(arg) {
+  cycleRemoval() {
     return accessor(this, privates, 'cycleRemoval', arguments);
   }
 
-  layerAssignment(arg) {
+  layerAssignment() {
     return accessor(this, privates, 'layerAssignment', arguments);
   }
 
-  method(arg) {
+  method() {
     return accessor(this, privates, 'method', arguments);
   }
 
-  dummy(arg) {
+  dummy() {
     return accessor(this, privates, 'dummy', arguments);
   }
 }

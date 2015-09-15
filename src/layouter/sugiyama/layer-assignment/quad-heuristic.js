@@ -1,5 +1,3 @@
-'use strict';
-
 import accessor from '../../../utils/accessor';
 import LongestPath from './longest-path';
 
@@ -71,7 +69,7 @@ class QuadHeuristic {
     return quadHeuristic(g, this.repeat());
   }
 
-  repeat(arg) {
+  repeat() {
     return accessor(this, privates, 'repeat', arguments);
   }
 }

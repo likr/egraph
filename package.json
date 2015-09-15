@@ -1,6 +1,6 @@
 {
-  "name": "eg-graph",
-  "version": "0.0.15",
+  "name": "egraph",
+  "version": "1.0.0",
   "description": "Graph drawig tool",
   "main": "lib/index.js",
   "files": [
@@ -13,18 +13,22 @@
   "license": "MIT",
   "devDependencies": {
     "babel": "*",
+    "babel-plugin-espower": "^1.0.0",
     "babelify": "*",
     "browserify": "^9.0.8",
-    "d3": "^3.5.5",
+    "espower-loader": "^1.0.0",
     "expect.js": "^0.3.1",
     "gulp": "^3.8.11",
     "gulp-babel": "*",
     "gulp-plumber": "^1.0.0",
     "gulp-shell": "^0.4.0",
+    "intelli-espower-loader": "^1.0.0",
     "mocha": "^2.2.4",
+    "power-assert": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "babel-runtime": "*"
+    "babel-runtime": "*",
+    "immutable": "^3.7.5"
   }
 }

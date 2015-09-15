@@ -1,8 +1,8 @@
 import assert from 'power-assert';
 import Graph from '../../../../src/graph';
-import LongestPath from '../../../../src/layouter/sugiyama/layer-assignment/longest-path';
+import UserDefined from '../../../../src/layouter/sugiyama/layer-assignment/user-defined';
 
-describe('LongestPath', () => {
+describe('UserDefined', () => {
   describe('call(graph)', () => {
     it('returns layers', () => {
       const [a, b, c, d, e] = [0, 1, 2, 3, 4];
@@ -16,13 +16,15 @@ describe('LongestPath', () => {
         .addEdge(b, c)
         .addEdge(d, c)
         .addEdge(d, e);
-      assert.deepEqual(new LongestPath().call(graph), {
+      const layers = {
         [a]: 0,
         [b]: 1,
         [c]: 2,
         [d]: 1,
         [e]: 2
-      });
+      };
+      const layerAssignment = new UserDefined().f((u) => layers[u]);
+      assert.deepEqual(layerAssignment.call(graph), layers);
     });
   });
 });

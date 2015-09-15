@@ -206,63 +206,63 @@ class SugiyamaLayouter {
     return buildResult(g, layers, this.ltor());
   }
 
-  vertexWidth(arg) {
+  vertexWidth() {
     return accessor(this, privates, 'vertexWidth', arguments);
   }
 
-  vertexHeight(arg) {
+  vertexHeight() {
     return accessor(this, privates, 'vertexHeight', arguments);
   }
 
-  edgeWidth(arg) {
+  edgeWidth() {
     return accessor(this, privates, 'edgeWidth', arguments);
   }
 
-  layerMargin(arg) {
+  layerMargin() {
     return accessor(this, privates, 'layerMargin', arguments);
   }
 
-  vertexMargin(arg) {
+  vertexMargin() {
     return accessor(this, privates, 'vertexMargin', arguments);
   }
 
-  edgeMargin(arg) {
+  edgeMargin() {
     return accessor(this, privates, 'edgeMargin', arguments);
   }
 
-  vertexLeftMargin(arg) {
+  vertexLeftMargin() {
     return accessor(this, privates, 'vertexLeftMargin', arguments);
   }
 
-  vertexRightMargin(arg) {
+  vertexRightMargin() {
     return accessor(this, privates, 'vertexRightMargin', arguments);
   }
 
-  vertexTopMargin(arg) {
+  vertexTopMargin() {
     return accessor(this, privates, 'vertexTopMargin', arguments);
   }
 
-  vertexBottomMargin(arg) {
+  vertexBottomMargin() {
     return accessor(this, privates, 'vertexBottomMargin', arguments);
   }
 
-  ltor(arg) {
+  ltor() {
     return accessor(this, privates, 'ltor', arguments);
   }
 
-  cycleRemoval(arg) {
+  cycleRemoval() {
     return accessor(this, privates, 'cycleRemoval', arguments);
   }
 
-  layerAssignment(arg) {
+  layerAssignment() {
     return accessor(this, privates, 'layerAssignment', arguments);
   }
 
-  crossingReduction(arg) {
+  crossingReduction() {
     return accessor(this, privates, 'crossingReduction', arguments);
   }
 
-  positionAssignment(arg) {
+  positionAssignment() {
     return accessor(this, privates, 'positionAssignment', arguments);
   }
 }

@@ -1,6 +1,4 @@
-'use strict';
-
-const horizontalCompaction = (g, layers, {rtol=false, btot=false}) => {
+const horizontalCompaction = (g, layers, {rtol=false}) => {
   const orderNonZero = node => rtol
     ? node.order < layers[node.layer].length - 1
     : node.order > 0;

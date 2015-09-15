@@ -6,33 +6,35 @@ import priority from '../../../../src/layouter/sugiyama/position-assignment/prio
 
 describe('priority(g, h1, h2, positions, sizes)', () => {
   it('returns x2', () => {
-    const graph = new Graph();
-    const u1 = graph.addVertex();
-    const u2 = graph.addVertex();
-    const u3 = graph.addVertex();
-    const u4 = graph.addVertex();
-    const u5 = graph.addVertex();
-    const u6 = graph.addVertex();
-    const u7 = graph.addVertex();
-    const u8 = graph.addVertex();
-    const u9 = graph.addVertex();
-    const v1 = graph.addVertex();
-    const v2 = graph.addVertex();
-    const v3 = graph.addVertex();
-    const v4 = graph.addVertex();
-    graph.addEdge(u1, v1);
-    graph.addEdge(u2, v1);
-    graph.addEdge(u3, v1);
-    graph.addEdge(u4, v1);
-    graph.addEdge(u5, v1);
-    graph.addEdge(u6, v2);
-    graph.addEdge(u7, v3);
-    graph.addEdge(u8, v3);
-    graph.addEdge(u9, v3);
-    graph.addEdge(u7, v4);
-    graph.addEdge(u9, v4);
-    var h1 = [u1, u2, u3, u4, u5, u6, u7, u8, u9];
-    var h2 = [v1, v2, v3, v4];
+    const h1 = [0, 1, 2, 3, 4, 5, 6, 7, 8],
+      h2 = [9, 10, 11, 12],
+      [u1, u2, u3, u4, u5, u6, u7, u8, u9] = h1,
+      [v1, v2, v3, v4] = h2;
+    const graph = new Graph()
+      .addVertex(u1)
+      .addVertex(u2)
+      .addVertex(u3)
+      .addVertex(u4)
+      .addVertex(u5)
+      .addVertex(u6)
+      .addVertex(u7)
+      .addVertex(u8)
+      .addVertex(u9)
+      .addVertex(v1)
+      .addVertex(v2)
+      .addVertex(v3)
+      .addVertex(v4)
+      .addEdge(u1, v1)
+      .addEdge(u2, v1)
+      .addEdge(u3, v1)
+      .addEdge(u4, v1)
+      .addEdge(u5, v1)
+      .addEdge(u6, v2)
+      .addEdge(u7, v3)
+      .addEdge(u8, v3)
+      .addEdge(u9, v3)
+      .addEdge(u7, v4)
+      .addEdge(u9, v4);
     const positions = {
       [u1]: {
         x: 1
