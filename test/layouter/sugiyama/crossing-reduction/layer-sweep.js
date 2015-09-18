@@ -1,6 +1,4 @@
-'use strict';
-
-import expect from 'expect.js';
+import assert from 'power-assert';
 import Graph from '../../../../src/graph';
 import LayerSweep from '../../../../src/layouter/sugiyama/crossing-reduction/layer-sweep';
 
@@ -42,10 +40,10 @@ describe('LayerSweep', () => {
         [d1, d2, d3]
       ];
       new LayerSweep().call(graph, layers);
-      expect(layers).to.be.eql([
-        [a2, a3, a1],
-        [b1, b2, b3],
-        [c1, c3, c2],
+      assert.deepEqual(layers, [
+        [a1, a2, a3],
+        [b2, b1, b3],
+        [c3, c1, c2],
         [d3, d1, d2]
       ]);
     });
@@ -54,31 +52,31 @@ describe('LayerSweep', () => {
   describe('repeat()', () => {
     it('returns current repeat number', () => {
       const layerSweep = new LayerSweep();
-      expect(layerSweep.repeat()).to.be.a('number');
+      assert.ok(Number.isInteger(layerSweep.repeat()));
     });
   });
 
   describe('repeat(value)', () => {
     it('sets repeat value and returns self', () => {
       const layerSweep = new LayerSweep();
-      expect(layerSweep.repeat(100)).to.be(layerSweep);
-      expect(layerSweep.repeat()).to.be(100);
+      assert.equal(layerSweep.repeat(100), layerSweep);
+      assert.equal(layerSweep.repeat(), 100);
     });
   });
 
   describe('method()', () => {
     it('returns current method function', () => {
       const layerSweep = new LayerSweep();
-      expect(layerSweep.method()).to.be.a('function');
+      assert.ok(layerSweep.method());
     });
   });
 
   describe('method(value)', () => {
     it('sets method function and returns self', () => {
       const layerSweep = new LayerSweep(),
-            f = (g, layers) => {};
-      expect(layerSweep.method(f)).to.be(layerSweep);
-      expect(layerSweep.method()).to.be(f);
+            f = () => {};
+      assert.equal(layerSweep.method(f), layerSweep);
+      assert.equal(layerSweep.method(), f);
     });
   });
 });

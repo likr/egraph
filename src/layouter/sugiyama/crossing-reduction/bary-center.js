@@ -7,10 +7,7 @@ const baryCenter = (g, h1, h2, inverse=false) => {
         n = h1.length,
         m = h2.length,
         a = layerMatrix(g, h1, h2),
-        cmp = (u, v) => {
-          let d;
-          return (d = centers[u] - centers[v]) === 0 ? u - v : d;
-        };
+        cmp = (u, v) => centers[u] - centers[v];
   if (inverse) {
     for (let i = 0; i < n; ++i) {
       let sum = 0,
