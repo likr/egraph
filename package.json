@@ -1,6 +1,6 @@
 {
   "name": "egraph",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Graph drawig tool",
   "main": "lib/index.js",
   "files": [
