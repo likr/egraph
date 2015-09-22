@@ -1,5 +1,3 @@
-'use strict';
-
 import Graph from '../../graph';
 import accessor from '../../utils/accessor';
 import cycleRemoval from './cycle-removal';
@@ -150,6 +148,11 @@ const groupLayers = (g, layers) => {
     }
     result[layer].push(u);
   }
+  for (let i = 0; i < result.length; ++i) {
+    if (result[i] === undefined) {
+      result[i] = [];
+    }
+  }
   return result;
 };
 
@@ -192,7 +195,7 @@ class SugiyamaLayouter {
     this.cycleRemoval().call(g);
     const layerMap = this.layerAssignment().call(g);
     const layers = groupLayers(g, layerMap);
-    normalize(g, layers, layerMap, this.edgeMargin());
+    normalize(g, layers, layerMap, this.edgeMargin(), this.layerMargin());
     this.crossingReduction().call(g, layers);
     for (let i = 0; i < layers.length; ++i) {
       const layer = layers[i];

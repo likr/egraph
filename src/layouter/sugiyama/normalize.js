@@ -1,4 +1,4 @@
-const normalize = (g, layers, layerMap, edgeMargin) => {
+const normalize = (g, layers, layerMap, edgeMargin, layerMargin) => {
   var i, w1, w2;
   for (let [u, v] of g.edges()) {
     const d = g.edge(u, v);
@@ -10,7 +10,7 @@ const normalize = (g, layers, layerMap, edgeMargin) => {
           dummy: true,
           width: d.width + edgeMargin,
           origWidth: d.width + edgeMargin,
-          height: 0,
+          height: layerMargin,
           origHeight: 0,
           layer: i
         });
