@@ -1,6 +1,6 @@
 'use strict';
 
-import expect from 'expect.js';
+import assert from 'power-assert';
 import Graph from '../../../../src/graph';
 import baryCenter from '../../../../src/layouter/sugiyama/crossing-reduction/bary-center';
 
@@ -25,7 +25,21 @@ describe('baryCenter(g, h1, h2)', () => {
     const h1 = [u1, u2, u3, u4],
       h2 = [v1, v2, v3];
     baryCenter(graph, h1, h2);
-    expect(h2).to.be.eql([v2, v3, v1]);
+    assert.deepEqual(h2, [v2, v3, v1]);
+  });
+
+  it('sorts h2', () => {
+    const [u, v, w] = [Symbol(), Symbol(), Symbol()];
+    const graph = new Graph()
+      .addVertex(u)
+      .addVertex(v)
+      .addVertex(w)
+      .addEdge(u, v)
+      .addEdge(u, w);
+    const h1 = [u],
+      h2 = [v, w];
+    baryCenter(graph, h1, h2);
+    assert.deepEqual(h2, [v, w]);
   });
 });
 
@@ -50,6 +64,6 @@ describe('baryCenter(g, h1, h2, true)', () => {
     const h1 = [u1, u2, u3, u4],
       h2 = [v1, v2, v3];
     baryCenter(graph, h1, h2, true);
-    expect(h1).to.be.eql([u1, u3, u4, u2]);
+    assert.deepEqual(h1, [u1, u3, u4, u2]);
   });
 });
