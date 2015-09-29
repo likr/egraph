@@ -1,5 +1,3 @@
-'use strict';
-
 import layerMatrix from '../misc/layer-matrix';
 
 const cross = function (g, h1, h2) {

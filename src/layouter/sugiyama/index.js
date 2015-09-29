@@ -1,5 +1,6 @@
 import Graph from '../../graph';
 import accessor from '../../utils/accessor';
+import groupLayers from "./misc/group-layers";
 import cycleRemoval from './cycle-removal';
 import layerAssignment from './layer-assignment';
 import normalize from './normalize';
@@ -136,23 +137,6 @@ const buildResult = (g, layers, ltor) => {
     }
   }
 
-  return result;
-};
-
-const groupLayers = (g, layers) => {
-  const result = [];
-  for (const u of g.vertices()) {
-    const layer = layers[u];
-    if (result[layer] === undefined) {
-      result[layer] = [];
-    }
-    result[layer].push(u);
-  }
-  for (let i = 0; i < result.length; ++i) {
-    if (result[i] === undefined) {
-      result[i] = [];
-    }
-  }
   return result;
 };
 
