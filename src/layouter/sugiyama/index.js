@@ -1,7 +1,6 @@
-'use strict';
-
 import Graph from '../../graph';
 import accessor from '../../utils/accessor';
+import groupLayers from "./misc/group-layers";
 import cycleRemoval from './cycle-removal';
 import layerAssignment from './layer-assignment';
 import normalize from './normalize';
@@ -141,18 +140,6 @@ const buildResult = (g, layers, ltor) => {
   return result;
 };
 
-const groupLayers = (g, layers) => {
-  const result = [];
-  for (const u of g.vertices()) {
-    const layer = layers[u];
-    if (result[layer] === undefined) {
-      result[layer] = [];
-    }
-    result[layer].push(u);
-  }
-  return result;
-};
-
 const privates = new WeakMap();
 
 class SugiyamaLayouter {
@@ -192,7 +179,7 @@ class SugiyamaLayouter {
     this.cycleRemoval().call(g);
     const layerMap = this.layerAssignment().call(g);
     const layers = groupLayers(g, layerMap);
-    normalize(g, layers, layerMap, this.edgeMargin());
+    normalize(g, layers, layerMap, this.edgeMargin(), this.layerMargin());
     this.crossingReduction().call(g, layers);
     for (let i = 0; i < layers.length; ++i) {
       const layer = layers[i];

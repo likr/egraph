@@ -1,6 +1,7 @@
 import accessor from '../../utils/accessor';
 import cycleRemoval from '../../layouter/sugiyama/cycle-removal';
 import layerAssignment from '../../layouter/sugiyama/layer-assignment';
+import groupLayers from '../../layouter/sugiyama/misc/group-layers';
 import rectangular from './rectangular';
 
 const edgeConcentration = (g, h1, h2, method, dummy) => {
@@ -21,18 +22,6 @@ const edgeConcentration = (g, h1, h2, method, dummy) => {
       }
     }
   }
-};
-
-const groupLayers = (g, layers) => {
-  const result = [];
-  for (const u of g.vertices()) {
-    const layer = layers[u];
-    if (result[layer] === undefined) {
-      result[layer] = [];
-    }
-    result[layer].push(u);
-  }
-  return result;
 };
 
 const privates = new WeakMap();
