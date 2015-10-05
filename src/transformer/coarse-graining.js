@@ -14,7 +14,7 @@ const transform = (g, vertexVisibility, edgeVisibility) => {
     if (!vertexVisibility({u, d: g.vertex(u)})) {
       for (const v of g.inVertices(u)) {
         for (const w of g.outVertices(u)) {
-          if (!g.edge(u, v)) {
+          if (!g.edge(v, w)) {
             g.addEdge(v, w);
           }
         }
