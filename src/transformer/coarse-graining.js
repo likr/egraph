@@ -1,6 +1,3 @@
-'use strict';
-
-import Graph from '../graph';
 import accessor from '../utils/accessor';
 
 const transform = (g, vertexVisibility, edgeVisibility) => {
@@ -17,7 +14,9 @@ const transform = (g, vertexVisibility, edgeVisibility) => {
     if (!vertexVisibility({u, d: g.vertex(u)})) {
       for (const v of g.inVertices(u)) {
         for (const w of g.outVertices(u)) {
-          g.addEdge(v, w);
+          if (!g.edge(u, v)) {
+            g.addEdge(v, w);
+          }
         }
       }
       g.removeVertex(u);
@@ -41,11 +40,11 @@ class CoarseGrainingTransformer {
     return transform(g, this.vertexVisibility(), this.edgeVisibility());
   }
 
-  vertexVisibility(arg) {
+  vertexVisibility() {
     return accessor(this, privates, 'vertexVisibility', arguments);
   }
 
-  edgeVisibility(arg) {
+  edgeVisibility() {
     return accessor(this, privates, 'edgeVisibility', arguments);
   }
 }
