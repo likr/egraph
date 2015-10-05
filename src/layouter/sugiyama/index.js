@@ -178,7 +178,7 @@ class SugiyamaLayouter {
     });
     this.cycleRemoval().call(g);
     const layerMap = this.layerAssignment().call(g);
-    const layers = groupLayers(g, layerMap);
+    const layers = groupLayers(g, layerMap, true);
     normalize(g, layers, layerMap, this.edgeMargin(), this.layerMargin());
     this.crossingReduction().call(g, layers);
     for (let i = 0; i < layers.length; ++i) {
