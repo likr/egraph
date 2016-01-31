@@ -28,9 +28,9 @@ const initGraph = (gOrig, {ltor, vertexWidth, vertexHeight, edgeWidth, layerMarg
       width: edgeWidth({
         u,
         v,
-        ud: g.vertex(u),
-        vd: g.vertex(v),
-        d: g.edge(u, v)
+        ud: gOrig.vertex(u),
+        vd: gOrig.vertex(v),
+        d: gOrig.edge(u, v)
       })
     });
   }
