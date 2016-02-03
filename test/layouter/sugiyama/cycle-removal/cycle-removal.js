@@ -1,5 +1,3 @@
-'use strict';
-
 import expect from 'expect.js';
 import Graph from '../../../../src/graph';
 import CycleRemoval from '../../../../src/layouter/sugiyama/cycle-removal/cycle-removal';
@@ -17,6 +15,17 @@ describe('CycleRemoval', () => {
         .addEdge(c, a);
       new CycleRemoval().call(graph);
       expect(graph.edge(a, c)).to.be.ok();
+    });
+
+    it('should set multiple attribute', () => {
+      const [a, b] = [0, 1];
+      const graph = new Graph()
+        .addVertex(a)
+        .addVertex(b)
+        .addEdge(a, b)
+        .addEdge(b, a);
+      new CycleRemoval().call(graph);
+      expect(graph.edge(a, b).multiple === true).to.be.ok();
     });
   });
 });

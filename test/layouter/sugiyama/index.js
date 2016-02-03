@@ -44,5 +44,25 @@ describe('SugiyamaLayouter', () => {
       expect(result).to.have.property('vertices');
       expect(result).to.have.property('edges');
     });
+
+    it('should work with self loop graph', () => {
+      const a = 0;
+      const graph = new Graph()
+        .addVertex(a, {width: 1, height: 1})
+        .addEdge(a, a);
+      const layouter = new SugiyamaLayouter();
+      layouter.layout(graph);
+    });
+
+    it('should work with multiple edge graph', () => {
+      const [a, b] = [0, 1];
+      const graph = new Graph()
+        .addVertex(a, {width: 1, height: 1})
+        .addVertex(b, {width: 1, height: 1})
+        .addEdge(a, b)
+        .addEdge(b, a);
+      const layouter = new SugiyamaLayouter();
+      layouter.layout(graph);
+    });
   });
 });
