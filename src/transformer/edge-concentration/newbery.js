@@ -21,7 +21,7 @@ const setEquals = (a, b) => {
   return a.size === b.size && setminus(a, b).size === 0;
 };
 
-const newbery = (g, h1, h2, k, dummy) => {
+const newbery = (g, h1, h2) => {
   const intersections = [];
   for (let i = 0; i < h1.length; ++i) {
     const u1 = h1[i];
