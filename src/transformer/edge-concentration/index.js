@@ -4,9 +4,9 @@ import layerAssignment from '../../layouter/sugiyama/layer-assignment';
 import groupLayers from '../../layouter/sugiyama/misc/group-layers';
 import rectangular from './rectangular';
 
-const edgeConcentration = (g, h1, h2, method, dummy) => {
+const edgeConcentration = (g, h1, h2, method, dummy, idGenerator) => {
   for (const concentration of method(g, h1, h2)) {
-    const w = Symbol();
+    const w = idGenerator(g, h1, h2);
     g.addVertex(w, dummy());
     for (const u of concentration.source) {
       g.addEdge(u, w);
@@ -32,7 +32,8 @@ class EdgeConcentrationTransformer {
       cycleRemoval: new cycleRemoval.CycleRemoval(),
       layerAssignment: new layerAssignment.QuadHeuristic(),
       method: rectangular,
-      dummy: () => ({dummy: true})
+      dummy: () => ({dummy: true}),
+      idGenerator: () => Symbol()
     });
   }
 
@@ -50,7 +51,7 @@ class EdgeConcentrationTransformer {
           edges += 1;
         }
       }
-      edgeConcentration(g, h1, Array.from(h2.values()), this.method(), this.dummy());
+      edgeConcentration(g, h1, Array.from(h2.values()), this.method(), this.dummy(), this.idGenerator());
     }
     return g;
   }
@@ -69,6 +70,10 @@ class EdgeConcentrationTransformer {
 
   dummy() {
     return accessor(this, privates, 'dummy', arguments);
+  }
+
+  idGenerator() {
+    return accessor(this, privates, 'idGenerator', arguments);
   }
 }
 
