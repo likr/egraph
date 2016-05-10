@@ -1,10 +1,8 @@
-'use strict'
-
 const threeLayerBaryCenter = (g, h1, h2, h3) => {
   const centers = {}
   for (let v of h2) {
-    let sum = 0,
-      count = 0
+    let sum = 0
+    let count = 0
     for (let i = 0; i < h1.length; ++i) {
       let u = h1[i]
       if (g.edge(u, v)) {
@@ -26,4 +24,4 @@ const threeLayerBaryCenter = (g, h1, h2, h3) => {
   })
 }
 
-export default threeLayerBaryCenter
+module.exports = threeLayerBaryCenter

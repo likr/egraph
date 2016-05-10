@@ -1,8 +1,6 @@
-'use strict'
-
-const greedySwitch = (g, h1, h2, inverse = false) => {
+const greedySwitch = (g, h1in, h2in, inverse = false) => {
   const hasEdge = inverse ? (u, v) => g.edge(v, u) : (u, v) => g.edge(u, v)
-  ;[h1, h2] = inverse ? [h2, h1] : [h1, h2]
+  const [h1, h2] = inverse ? [h2in, h1in] : [h1in, h2in]
 
   const c = (v1, v2) => {
     let count = 0
@@ -24,15 +22,16 @@ const greedySwitch = (g, h1, h2, inverse = false) => {
   do {
     improve = 0
     for (let i = 1; i < h2.length; ++i) {
-      const v1 = h2[i - 1],
-        v2 = h2[i],
-        c12 = c(v1, v2),
-        c21 = c(v2, v1)
-      if (c12 > c21) { [h2[i - 1], h2[i]] = [v2, v1]
+      const v1 = h2[i - 1]
+      const v2 = h2[i]
+      const c12 = c(v1, v2)
+      const c21 = c(v2, v1)
+      if (c12 > c21) {
+        [h2[i - 1], h2[i]] = [v2, v1]
         improve += c12 - c21
       }
     }
   } while (improve > 0)
 }
 
-export default greedySwitch
+module.exports = greedySwitch

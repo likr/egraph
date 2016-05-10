@@ -1,16 +1,14 @@
-'use strict'
-
 const katz = (g) => {
-  const alpha = 0.1,
-    beta = 1.0,
-    maxIter = 1000,
-    tol = 1.0e-6,
-    normalized = true,
-    nnodes = g.numVertices(),
-    b = {},
-    vertices = g.vertices()
-  let x = {},
-    x0 = {}
+  const alpha = 0.1
+  const beta = 1.0
+  const maxIter = 1000
+  const tol = 1.0e-6
+  const normalized = true
+  const nnodes = g.numVertices()
+  const b = {}
+  const vertices = g.vertices()
+  let x = {}
+  let x0 = {}
 
   const err = () => {
     return vertices.reduce((e, u) => e + Math.abs(x[u] - x0[u]), 0)
@@ -21,7 +19,8 @@ const katz = (g) => {
     b[u] = beta
   }
 
-  for (let i = 0; i < maxIter; ++i) { [x, x0] = [x0, x]
+  for (let i = 0; i < maxIter; ++i) {
+    [x, x0] = [x0, x]
     for (const u of vertices) {
       x[u] = 0
     }
@@ -52,4 +51,4 @@ const katz = (g) => {
   return x
 }
 
-export default katz
+module.exports = katz

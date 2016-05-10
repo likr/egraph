@@ -1,10 +1,8 @@
-'use strict'
-
-import layerMatrix from '../misc/layer-matrix'
+const layerMatrix = require('../misc/layer-matrix')
 
 const fixType2Conflicts = (g, layers) => {
-  const dummy = {},
-    order = {}
+  const dummy = {}
+  const order = {}
 
   for (const u of g.vertices()) {
     const node = g.vertex(u)
@@ -13,11 +11,11 @@ const fixType2Conflicts = (g, layers) => {
   }
 
   for (let i = 1; i < layers.length; ++i) {
-    const h1 = layers[i - 1],
-      h2 = layers[i],
-      n = h1.length,
-      m = h2.length,
-      a = layerMatrix(g, h1, h2)
+    const h1 = layers[i - 1]
+    const h2 = layers[i]
+    const n = h1.length
+    const m = h2.length
+    const a = layerMatrix(g, h1, h2)
     for (let j2 = 0; j2 < m - 1; ++j2) {
       const v2 = h2[j2]
       if (!dummy[v2]) {
@@ -29,9 +27,9 @@ const fixType2Conflicts = (g, layers) => {
           continue
         }
         for (let i2 = n - 1; i2 > 0; --i2) {
-          const i1 = i2 - 1,
-            u1 = h1[i1],
-            u2 = h1[i2]
+          const i1 = i2 - 1
+          const u1 = h1[i1]
+          const u2 = h1[i2]
           if (dummy[u1] && dummy[u2] && a[i1 * m + j1] && a[i2 * m + j2]) {
             h2[j1] = v2
             h2[j2] = v1
@@ -48,4 +46,4 @@ const fixType2Conflicts = (g, layers) => {
   }
 }
 
-export default fixType2Conflicts
+module.exports = fixType2Conflicts

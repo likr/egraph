@@ -1,14 +1,12 @@
-'use strict'
-
 const newman = (g) => {
-  const n = g.numVertices(),
-    m = g.numEdges(),
-    vertices = g.vertices(),
-    ck = new Array(n),
-    nb = new Array(n * n),
-    mask = new Array(n),
-    communities = new Array(n),
-    result = {}
+  const n = g.numVertices()
+  const m = g.numEdges()
+  const vertices = g.vertices()
+  const ck = new Array(n)
+  const nb = new Array(n * n)
+  const mask = new Array(n)
+  const communities = new Array(n)
+  const result = {}
 
   for (let i = 0; i < n; ++i) {
     const u = vertices[i]
@@ -21,11 +19,12 @@ const newman = (g) => {
     }
   }
 
-  let qMax = -Infinity,
-    q = 0
+  let qMax = -Infinity
+  let q = 0
   for (let nc = n; nc > 1; --nc) {
-    let deltaQMax = -Infinity,
-      fromIndex, toIndex
+    let deltaQMax = -Infinity
+    let fromIndex
+    let toIndex
     for (let i = 0; i < n; ++i) {
       if (mask[i]) {
         continue
@@ -65,4 +64,4 @@ const newman = (g) => {
   return result
 }
 
-export default newman
+module.exports = newman
