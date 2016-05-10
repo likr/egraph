@@ -6,7 +6,7 @@ Layered graph layout tools
 ## Developing a graph
 
 ```javascript
-var Graph = require('egraph/lib/graph');
+var Graph = require('egraph/graph');
 
 var graph = new Graph();
 var u = 0;
@@ -19,7 +19,7 @@ graph.addEdge(u, v, {weight: 1});
 ## Laying out a graph
 
 ```javascript
-var Layouter = require('egraph/lib/layouter/sugiyama');
+var Layouter = require('egraph/layouter/sugiyama');
 var layouter = new Layouter()
   .vertexWidth((arg) => arg.d.width)
   .vertexHeight((arg) => arg.d.height);
