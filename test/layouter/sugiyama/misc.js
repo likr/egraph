@@ -1,12 +1,11 @@
-'use strict';
-
-import expect from 'expect.js';
-import Graph from '../../../src/graph';
-import median from '../../../src/layouter/sugiyama/misc/median';
+/* eslint-env mocha */
+const assert = require('power-assert')
+const Graph = require('../../../graph')
+const median = require('../../../layouter/sugiyama/misc/median')
 
 describe('median(g, v)', () => {
   it('returns left median and right median of in vertices, which has even length, of v ', () => {
-    const a = 0, b = 1, c = 2, d = 3, e = 4;
+    const [a, b, c, d, e] = [0, 1, 2, 3, 4]
     const graph = new Graph()
       .addVertex(a, {order: 0})
       .addVertex(b, {order: 1})
@@ -16,15 +15,15 @@ describe('median(g, v)', () => {
       .addEdge(a, e)
       .addEdge(b, e)
       .addEdge(c, e)
-      .addEdge(d, e);
-    expect(median(graph, e)).to.be.eql({
+      .addEdge(d, e)
+    assert.deepEqual(median(graph, e), {
       left: b,
       right: c
-    });
-  });
+    })
+  })
 
   it('returns left median and right median of in vertices, which has odd length, of v', () => {
-    const a = 0, b = 1, c = 2, d = 3, e = 4, f = 5;
+    const [a, b, c, d, e, f] = [0, 1, 2, 3, 4, 5]
     const graph = new Graph()
       .addVertex(a, {order: 0})
       .addVertex(b, {order: 1})
@@ -36,17 +35,17 @@ describe('median(g, v)', () => {
       .addEdge(b, f)
       .addEdge(c, f)
       .addEdge(d, f)
-      .addEdge(e, f);
-    expect(median(graph, f)).to.be.eql({
+      .addEdge(e, f)
+    assert.deepEqual(median(graph, f), {
       left: c,
       right: c
-    });
-  });
-});
+    })
+  })
+})
 
 describe('median(g, v, true)', () => {
   it('returns left median and right median of out vertices, which has even length, of v', () => {
-    const a = 0, b = 1, c = 2, d = 3, e = 4;
+    const [a, b, c, d, e] = [0, 1, 2, 3, 4]
     const graph = new Graph()
       .addVertex(a, {order: 0})
       .addVertex(b, {order: 1})
@@ -56,15 +55,15 @@ describe('median(g, v, true)', () => {
       .addEdge(e, a)
       .addEdge(e, b)
       .addEdge(e, c)
-      .addEdge(e, d);
-    expect(median(graph, e, true)).to.be.eql({
+      .addEdge(e, d)
+    assert.deepEqual(median(graph, e, true), {
       left: b,
       right: c
-    });
-  });
+    })
+  })
 
   it('returns left median and right median of out vertices, which has odd length, of v', () => {
-    const a = 0, b = 1, c = 2, d = 3, e = 4, f = 5;
+    const [a, b, c, d, e, f] = [0, 1, 2, 3, 4, 5]
     const graph = new Graph()
       .addVertex(a, {order: 0})
       .addVertex(b, {order: 1})
@@ -76,10 +75,10 @@ describe('median(g, v, true)', () => {
       .addEdge(f, b)
       .addEdge(f, c)
       .addEdge(f, d)
-      .addEdge(f, e);
-    expect(median(graph, f, true)).to.be.eql({
+      .addEdge(f, e)
+    assert.deepEqual(median(graph, f, true), {
       left: c,
       right: c
-    });
-  });
-});
+    })
+  })
+})

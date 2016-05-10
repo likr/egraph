@@ -1,15 +1,14 @@
-'use strict';
-
-import expect from 'expect.js';
-import Graph from '../../../../src/graph';
-import priority from '../../../../src/layouter/sugiyama/position-assignment/priority';
+/* eslint-env mocha */
+const assert = require('power-assert')
+const Graph = require('../../../../graph')
+const priority = require('../../../../layouter/sugiyama/position-assignment/priority')
 
 describe('priority(g, h1, h2, positions, sizes)', () => {
   it('returns x2', () => {
-    const h1 = [0, 1, 2, 3, 4, 5, 6, 7, 8],
-      h2 = [9, 10, 11, 12],
-      [u1, u2, u3, u4, u5, u6, u7, u8, u9] = h1,
-      [v1, v2, v3, v4] = h2;
+    const h1 = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    const h2 = [9, 10, 11, 12]
+    const [u1, u2, u3, u4, u5, u6, u7, u8, u9] = h1
+    const [v1, v2, v3, v4] = h2
     const graph = new Graph()
       .addVertex(u1)
       .addVertex(u2)
@@ -34,7 +33,7 @@ describe('priority(g, h1, h2, positions, sizes)', () => {
       .addEdge(u8, v3)
       .addEdge(u9, v3)
       .addEdge(u7, v4)
-      .addEdge(u9, v4);
+      .addEdge(u9, v4)
     const positions = {
       [u1]: {
         x: 1
@@ -75,7 +74,7 @@ describe('priority(g, h1, h2, positions, sizes)', () => {
       [v4]: {
         x: 4
       }
-    };
+    }
     const sizes = {
       [v1]: {
         width: 1
@@ -89,9 +88,9 @@ describe('priority(g, h1, h2, positions, sizes)', () => {
       [v4]: {
         width: 1
       }
-    };
-    priority(graph, h1, h2, positions, sizes);
-    expect(positions).to.be.eql({
+    }
+    priority(graph, h1, h2, positions, sizes)
+    assert.deepEqual(positions, {
       [u1]: {
         x: 1
       },
@@ -131,6 +130,6 @@ describe('priority(g, h1, h2, positions, sizes)', () => {
       [v4]: {
         x: 9
       }
-    });
-  });
-});
+    })
+  })
+})

@@ -1,13 +1,17 @@
 {
   "name": "egraph",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Graph drawig tool",
   "main": "lib/index.js",
   "files": [
-    "lib"
+    "graph",
+    "layouter",
+    "network",
+    "transformer",
+    "utils"
   ],
   "scripts": {
-    "test": "gulp test"
+    "test": "mocha --recursive --require intelli-espower-loader"
   },
   "repository": {
     "type": "git",
@@ -16,22 +20,8 @@
   "author": "Yosuke ONOUE <onoue@likr-lab.com>",
   "license": "MIT",
   "devDependencies": {
-    "babel": "^5.8.35",
-    "babel-plugin-espower": "^1.0.0",
-    "babelify": "^5.0.5",
-    "browserify": "^9.0.8",
-    "espower-loader": "^1.0.0",
-    "expect.js": "^0.3.1",
-    "gulp": "^3.8.11",
-    "gulp-babel": "^5.3.0",
-    "gulp-plumber": "^1.0.0",
-    "gulp-shell": "^0.4.0",
-    "intelli-espower-loader": "^1.0.0",
-    "mocha": "^2.2.4",
-    "power-assert": "^1.0.1",
-    "vinyl-source-stream": "^1.1.0"
-  },
-  "dependencies": {
-    "babel-runtime": "^5.8.35"
+    "intelli-espower-loader": "^1.0.1",
+    "mocha": "^2.4.5",
+    "power-assert": "^1.4.1"
   }
 }

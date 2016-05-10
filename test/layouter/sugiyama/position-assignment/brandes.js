@@ -1,18 +1,17 @@
-'use strict';
-
-import expect from 'expect.js';
-import Graph from '../../../../src/graph';
-import markConflicts from '../../../../src/layouter/sugiyama/position-assignment/brandes/mark-conflicts';
-import verticalAlignment from '../../../../src/layouter/sugiyama/position-assignment/brandes/vertical-alignment';
-import horizontalCompaction from '../../../../src/layouter/sugiyama/position-assignment/brandes/horizontal-compaction';
+/* eslint-env mocha */
+const assert = require('power-assert')
+const Graph = require('../../../../graph')
+const markConflicts = require('../../../../layouter/sugiyama/position-assignment/brandes/mark-conflicts')
+const verticalAlignment = require('../../../../layouter/sugiyama/position-assignment/brandes/vertical-alignment')
+const horizontalCompaction = require('../../../../layouter/sugiyama/position-assignment/brandes/horizontal-compaction')
 
 describe('markConflicts(g, layers)', () => {
   it('set flags to edges which has type 1 or 2 conflict', () => {
-    const [a1, a2] = [0, 1],
-      [b1, b2, b3, b4, b5, b6, b7, b8] = [2, 3, 4, 5, 6, 7, 8, 9],
-      [c1, c2, c3, c4, c5, c6] = [10, 11, 12, 13, 14, 15],
-      [d1, d2, d3, d4, d5, d6, d7] = [16, 17, 18, 19, 20, 21, 22, 23],
-      [e1, e2, e3] = [24, 25, 26];
+    const [a1, a2] = [0, 1]
+    const [b1, b2, b3, b4, b5, b6, b7, b8] = [2, 3, 4, 5, 6, 7, 8, 9]
+    const [c1, c2, c3, c4, c5, c6] = [10, 11, 12, 13, 14, 15]
+    const [d1, d2, d3, d4, d5, d6, d7] = [16, 17, 18, 19, 20, 21, 22, 23]
+    const [e1, e2, e3] = [24, 25, 26]
     const graph = new Graph()
       .addVertex(a1, {width: 10, layer: 0, order: 0})
       .addVertex(a2, {width: 10, layer: 0, order: 1})
@@ -69,32 +68,32 @@ describe('markConflicts(g, layers)', () => {
       .addEdge(d4, e3)
       .addEdge(d5, e3)
       .addEdge(d6, e3)
-      .addEdge(d7, e3);
+      .addEdge(d7, e3)
     const layers = [
       [a1, a2],
       [b1, b2, b3, b4, b5, b6, b7, b8],
       [c1, c2, c3, c4, c5, c6],
       [d1, d2, d3, d4, d5, d6, d7],
       [e1, e2, e3]
-    ];
-    markConflicts(graph, layers);
+    ]
+    markConflicts(graph, layers)
     for (const [u, v] of graph.edges()) {
       if ((u === b7 && v === c2) || (u === b8 && v === c2) || (u === c1 && v === d6) || (u === c6 && v === d3)) {
-        expect(graph.edge(u, v)).to.have.property('type1Conflict', true);
+        assert(graph.edge(u, v).type1Conflict)
       } else {
-        expect(graph.edge(u, v)).to.not.have.property('type1Conflict');
+        assert.equal(graph.edge(u, v).type1Conflict, undefined)
       }
     }
-  });
-});
+  })
+})
 
 describe('verticalAlignment(g, layers, {rtol: false, btot: false})', () => {
   it('set root and align for all vertices', () => {
-    const [a1, a2] = [0, 1],
-      [b1, b2, b3, b4, b5, b6, b7, b8] = [2, 3, 4, 5, 6, 7, 8, 9],
-      [c1, c2, c3, c4, c5, c6] = [10, 11, 12, 13, 14, 15],
-      [d1, d2, d3, d4, d5, d6, d7] = [16, 17, 18, 19, 20, 21, 22, 23],
-      [e1, e2, e3] = [24, 25, 26];
+    const [a1, a2] = [0, 1]
+    const [b1, b2, b3, b4, b5, b6, b7, b8] = [2, 3, 4, 5, 6, 7, 8, 9]
+    const [c1, c2, c3, c4, c5, c6] = [10, 11, 12, 13, 14, 15]
+    const [d1, d2, d3, d4, d5, d6, d7] = [16, 17, 18, 19, 20, 21, 22, 23]
+    const [e1, e2, e3] = [24, 25, 26]
     const graph = new Graph()
       .addVertex(a1, {width: 10, layer: 0, order: 0})
       .addVertex(a2, {width: 10, layer: 0, order: 1})
@@ -151,77 +150,77 @@ describe('verticalAlignment(g, layers, {rtol: false, btot: false})', () => {
       .addEdge(d4, e3)
       .addEdge(d5, e3)
       .addEdge(d6, e3)
-      .addEdge(d7, e3);
+      .addEdge(d7, e3)
     const layers = [
       [a1, a2],
       [b1, b2, b3, b4, b5, b6, b7, b8],
       [c1, c2, c3, c4, c5, c6],
       [d1, d2, d3, d4, d5, d6, d7],
       [e1, e2, e3]
-    ];
-    verticalAlignment(graph, layers, {rtol: false, btot: false});
-    expect(graph.vertex(a1)).to.have.property('root', a1);
-    expect(graph.vertex(a1)).to.have.property('align', b1);
-    expect(graph.vertex(a2)).to.have.property('root', a2);
-    expect(graph.vertex(a2)).to.have.property('align', b3);
-    expect(graph.vertex(b1)).to.have.property('root', a1);
-    expect(graph.vertex(b1)).to.have.property('align', a1);
-    expect(graph.vertex(b2)).to.have.property('root', b2);
-    expect(graph.vertex(b2)).to.have.property('align', b2);
-    expect(graph.vertex(b3)).to.have.property('root', a2);
-    expect(graph.vertex(b3)).to.have.property('align', a2);
-    expect(graph.vertex(b4)).to.have.property('root', b4);
-    expect(graph.vertex(b4)).to.have.property('align', c2);
-    expect(graph.vertex(b5)).to.have.property('root', b5);
-    expect(graph.vertex(b5)).to.have.property('align', c3);
-    expect(graph.vertex(b6)).to.have.property('root', b6);
-    expect(graph.vertex(b6)).to.have.property('align', c4);
-    expect(graph.vertex(b7)).to.have.property('root', b7);
-    expect(graph.vertex(b7)).to.have.property('align', b7);
-    expect(graph.vertex(b8)).to.have.property('root', b8);
-    expect(graph.vertex(b8)).to.have.property('align', c5);
-    expect(graph.vertex(c1)).to.have.property('root', c1);
-    expect(graph.vertex(c1)).to.have.property('align', d1);
-    expect(graph.vertex(c2)).to.have.property('root', b4);
-    expect(graph.vertex(c2)).to.have.property('align', b4);
-    expect(graph.vertex(c3)).to.have.property('root', b5);
-    expect(graph.vertex(c3)).to.have.property('align', d4);
-    expect(graph.vertex(c4)).to.have.property('root', b6);
-    expect(graph.vertex(c4)).to.have.property('align', d5);
-    expect(graph.vertex(c5)).to.have.property('root', b8);
-    expect(graph.vertex(c5)).to.have.property('align', d6);
-    expect(graph.vertex(c6)).to.have.property('root', c6);
-    expect(graph.vertex(c6)).to.have.property('align', d7);
-    expect(graph.vertex(d1)).to.have.property('root', c1);
-    expect(graph.vertex(d1)).to.have.property('align', e1);
-    expect(graph.vertex(d2)).to.have.property('root', d2);
-    expect(graph.vertex(d2)).to.have.property('align', e2);
-    expect(graph.vertex(d3)).to.have.property('root', d3);
-    expect(graph.vertex(d3)).to.have.property('align', d3);
-    expect(graph.vertex(d4)).to.have.property('root', b5);
-    expect(graph.vertex(d4)).to.have.property('align', b5);
-    expect(graph.vertex(d5)).to.have.property('root', b6);
-    expect(graph.vertex(d5)).to.have.property('align', e3);
-    expect(graph.vertex(d6)).to.have.property('root', b8);
-    expect(graph.vertex(d6)).to.have.property('align', b8);
-    expect(graph.vertex(d7)).to.have.property('root', c6);
-    expect(graph.vertex(d7)).to.have.property('align', c6);
-    expect(graph.vertex(e1)).to.have.property('root', c1);
-    expect(graph.vertex(e1)).to.have.property('align', c1);
-    expect(graph.vertex(e2)).to.have.property('root', d2);
-    expect(graph.vertex(e2)).to.have.property('align', d2);
-    expect(graph.vertex(e3)).to.have.property('root', b6);
-    expect(graph.vertex(e3)).to.have.property('align', b6);
-  });
-});
+    ]
+    verticalAlignment(graph, layers, {rtol: false, btot: false})
+    assert.equal(graph.vertex(a1).root, a1)
+    assert.equal(graph.vertex(a1).align, b1)
+    assert.equal(graph.vertex(a2).root, a2)
+    assert.equal(graph.vertex(a2).align, b3)
+    assert.equal(graph.vertex(b1).root, a1)
+    assert.equal(graph.vertex(b1).align, a1)
+    assert.equal(graph.vertex(b2).root, b2)
+    assert.equal(graph.vertex(b2).align, b2)
+    assert.equal(graph.vertex(b3).root, a2)
+    assert.equal(graph.vertex(b3).align, a2)
+    assert.equal(graph.vertex(b4).root, b4)
+    assert.equal(graph.vertex(b4).align, c2)
+    assert.equal(graph.vertex(b5).root, b5)
+    assert.equal(graph.vertex(b5).align, c3)
+    assert.equal(graph.vertex(b6).root, b6)
+    assert.equal(graph.vertex(b6).align, c4)
+    assert.equal(graph.vertex(b7).root, b7)
+    assert.equal(graph.vertex(b7).align, b7)
+    assert.equal(graph.vertex(b8).root, b8)
+    assert.equal(graph.vertex(b8).align, c5)
+    assert.equal(graph.vertex(c1).root, c1)
+    assert.equal(graph.vertex(c1).align, d1)
+    assert.equal(graph.vertex(c2).root, b4)
+    assert.equal(graph.vertex(c2).align, b4)
+    assert.equal(graph.vertex(c3).root, b5)
+    assert.equal(graph.vertex(c3).align, d4)
+    assert.equal(graph.vertex(c4).root, b6)
+    assert.equal(graph.vertex(c4).align, d5)
+    assert.equal(graph.vertex(c5).root, b8)
+    assert.equal(graph.vertex(c5).align, d6)
+    assert.equal(graph.vertex(c6).root, c6)
+    assert.equal(graph.vertex(c6).align, d7)
+    assert.equal(graph.vertex(d1).root, c1)
+    assert.equal(graph.vertex(d1).align, e1)
+    assert.equal(graph.vertex(d2).root, d2)
+    assert.equal(graph.vertex(d2).align, e2)
+    assert.equal(graph.vertex(d3).root, d3)
+    assert.equal(graph.vertex(d3).align, d3)
+    assert.equal(graph.vertex(d4).root, b5)
+    assert.equal(graph.vertex(d4).align, b5)
+    assert.equal(graph.vertex(d5).root, b6)
+    assert.equal(graph.vertex(d5).align, e3)
+    assert.equal(graph.vertex(d6).root, b8)
+    assert.equal(graph.vertex(d6).align, b8)
+    assert.equal(graph.vertex(d7).root, c6)
+    assert.equal(graph.vertex(d7).align, c6)
+    assert.equal(graph.vertex(e1).root, c1)
+    assert.equal(graph.vertex(e1).align, c1)
+    assert.equal(graph.vertex(e2).root, d2)
+    assert.equal(graph.vertex(e2).align, d2)
+    assert.equal(graph.vertex(e3).root, b6)
+    assert.equal(graph.vertex(e3).align, b6)
+  })
+})
 
 describe('horizontalCompaction(g, layers)', () => {
   it('set x for all vertices', () => {
-    const [a1, a2] = [0, 1],
-      [b1, b2, b3, b4, b5, b6, b7, b8] = [2, 3, 4, 5, 6, 7, 8, 9],
-      [c1, c2, c3, c4, c5, c6] = [10, 11, 12, 13, 14, 15],
-      [d1, d2, d3, d4, d5, d6, d7] = [16, 17, 18, 19, 20, 21, 22, 23],
-      [e1, e2, e3] = [24, 25, 26];
+    const [a1, a2] = [0, 1]
+    const [b1, b2, b3, b4, b5, b6, b7, b8] = [2, 3, 4, 5, 6, 7, 8, 9]
+    const [c1, c2, c3, c4, c5, c6] = [10, 11, 12, 13, 14, 15]
+    const [d1, d2, d3, d4, d5, d6, d7] = [16, 17, 18, 19, 20, 21, 22, 23]
+    const [e1, e2, e3] = [24, 25, 26]
     const graph = new Graph()
       .addVertex(a1, {width: 10, layer: 0, order: 0})
       .addVertex(a2, {width: 10, layer: 0, order: 1})
@@ -278,41 +277,41 @@ describe('horizontalCompaction(g, layers)', () => {
       .addEdge(d4, e3)
       .addEdge(d5, e3)
       .addEdge(d6, e3)
-      .addEdge(d7, e3);
+      .addEdge(d7, e3)
     const layers = [
       [a1, a2],
       [b1, b2, b3, b4, b5, b6, b7, b8],
       [c1, c2, c3, c4, c5, c6],
       [d1, d2, d3, d4, d5, d6, d7],
       [e1, e2, e3]
-    ];
-    verticalAlignment(graph, layers, {rtol: false, btot: false});
-    horizontalCompaction(graph, layers, {rtol: false, btot: false});
-    expect(graph.vertex(a1)).to.have.property('x', 0);
-    expect(graph.vertex(a2)).to.have.property('x', 20);
-    expect(graph.vertex(b1)).to.have.property('x', 0);
-    expect(graph.vertex(b2)).to.have.property('x', 10);
-    expect(graph.vertex(b3)).to.have.property('x', 20);
-    expect(graph.vertex(b4)).to.have.property('x', 30);
-    expect(graph.vertex(b5)).to.have.property('x', 40);
-    expect(graph.vertex(b6)).to.have.property('x', 50);
-    expect(graph.vertex(b7)).to.have.property('x', 60);
-    expect(graph.vertex(b8)).to.have.property('x', 70);
-    expect(graph.vertex(c1)).to.have.property('x', 10);
-    expect(graph.vertex(c2)).to.have.property('x', 30);
-    expect(graph.vertex(c3)).to.have.property('x', 40);
-    expect(graph.vertex(c4)).to.have.property('x', 50);
-    expect(graph.vertex(c5)).to.have.property('x', 70);
-    expect(graph.vertex(c6)).to.have.property('x', 80);
-    expect(graph.vertex(d1)).to.have.property('x', 10);
-    expect(graph.vertex(d2)).to.have.property('x', 20);
-    expect(graph.vertex(d3)).to.have.property('x', 30);
-    expect(graph.vertex(d4)).to.have.property('x', 40);
-    expect(graph.vertex(d5)).to.have.property('x', 50);
-    expect(graph.vertex(d6)).to.have.property('x', 70);
-    expect(graph.vertex(d7)).to.have.property('x', 80);
-    expect(graph.vertex(e1)).to.have.property('x', 10);
-    expect(graph.vertex(e2)).to.have.property('x', 20);
-    expect(graph.vertex(e3)).to.have.property('x', 50);
-  });
-});
+    ]
+    verticalAlignment(graph, layers, {rtol: false, btot: false})
+    horizontalCompaction(graph, layers, {rtol: false, btot: false})
+    assert.equal(graph.vertex(a1).x, 0)
+    assert.equal(graph.vertex(a2).x, 20)
+    assert.equal(graph.vertex(b1).x, 0)
+    assert.equal(graph.vertex(b2).x, 10)
+    assert.equal(graph.vertex(b3).x, 20)
+    assert.equal(graph.vertex(b4).x, 30)
+    assert.equal(graph.vertex(b5).x, 40)
+    assert.equal(graph.vertex(b6).x, 50)
+    assert.equal(graph.vertex(b7).x, 60)
+    assert.equal(graph.vertex(b8).x, 70)
+    assert.equal(graph.vertex(c1).x, 10)
+    assert.equal(graph.vertex(c2).x, 30)
+    assert.equal(graph.vertex(c3).x, 40)
+    assert.equal(graph.vertex(c4).x, 50)
+    assert.equal(graph.vertex(c5).x, 70)
+    assert.equal(graph.vertex(c6).x, 80)
+    assert.equal(graph.vertex(d1).x, 10)
+    assert.equal(graph.vertex(d2).x, 20)
+    assert.equal(graph.vertex(d3).x, 30)
+    assert.equal(graph.vertex(d4).x, 40)
+    assert.equal(graph.vertex(d5).x, 50)
+    assert.equal(graph.vertex(d6).x, 70)
+    assert.equal(graph.vertex(d7).x, 80)
+    assert.equal(graph.vertex(e1).x, 10)
+    assert.equal(graph.vertex(e2).x, 20)
+    assert.equal(graph.vertex(e3).x, 50)
+  })
+})

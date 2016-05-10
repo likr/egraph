@@ -1,7 +1,7 @@
 /* eslint-env mocha */
-import assert from 'power-assert'
-import Graph from '../src/graph/mutable-graph'
-import copy from '../src/graph/copy'
+const assert = require('power-assert')
+const Graph = require('../graph/mutable-graph')
+const copy = require('../graph/copy')
 
 describe('Graph', () => {
   describe('constructor', () => {

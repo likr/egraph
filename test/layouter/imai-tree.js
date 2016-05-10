@@ -1,13 +1,12 @@
-'use strict';
-
-import expect from 'expect.js';
-import Graph from '../../src/graph';
-import ImaiTreeLayouter from '../../src/layouter/imai-tree';
+/* eslint-env mocha */
+const assert = require('power-assert')
+const Graph = require('../../graph')
+const ImaiTreeLayouter = require('../../layouter/imai-tree')
 
 describe('ImaiTreeLayouter', () => {
   describe('layout(g)', () => {
     it('returns positions of vertices', () => {
-      const [u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13, u14, u15] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+      const [u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13, u14, u15] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
       const graph = new Graph()
         .addVertex(u1)
         .addVertex(u2)
@@ -37,10 +36,10 @@ describe('ImaiTreeLayouter', () => {
         .addEdge(u7, u12)
         .addEdge(u5, u13)
         .addEdge(u6, u14)
-        .addEdge(u6, u15);
-      const result = new ImaiTreeLayouter().layout(graph);
-      expect(result).to.have.property('vertices');
-      expect(result).to.have.property('edges');
-    });
-  });
-});
+        .addEdge(u6, u15)
+      const result = new ImaiTreeLayouter().layout(graph)
+      assert(result.vertices)
+      assert(result.edges)
+    })
+  })
+})

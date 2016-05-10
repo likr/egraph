@@ -1,13 +1,19 @@
-import expect from 'expect.js';
-import Graph from '../../src/graph';
-import EdgeConcentrationTransformer from '../../src/transformer/edge-concentration';
-import newbery from '../../src/transformer/edge-concentration/newbery';
-import mbea from '../../src/transformer/edge-concentration/mbea'
+/* eslint-env mocha */
+const assert = require('power-assert')
+const Graph = require('../../graph')
+const EdgeConcentrationTransformer = require('../../transformer/edge-concentration')
+const newbery = require('../../transformer/edge-concentration/newbery')
+const mbea = require('../../transformer/edge-concentration/mbea')
 
 describe('EdgeConcentrationTransformer', () => {
   describe('transform(g)', () => {
     it('returns transformed graph', () => {
-      const u1 = 0, u2 = 1, v1 = 2, v2 = 3, w1 = 4, w2 = 5;
+      const u1 = 0
+      const u2 = 1
+      const v1 = 2
+      const v2 = 3
+      const w1 = 4
+      const w2 = 5
       const graph = new Graph()
         .addVertex(u1)
         .addVertex(u2)
@@ -26,25 +32,25 @@ describe('EdgeConcentrationTransformer', () => {
         .addEdge(v1, w1)
         .addEdge(v1, w2)
         .addEdge(v2, w1)
-        .addEdge(v2, w2);
-      const transformed = new EdgeConcentrationTransformer().transform(graph);
-      expect(transformed.inDegree(u1)).to.be(0);
-      expect(transformed.outDegree(u1)).to.be(1);
-      expect(transformed.inDegree(u2)).to.be(0);
-      expect(transformed.outDegree(u2)).to.be(1);
-      expect(transformed.inDegree(v1)).to.be(1);
-      expect(transformed.outDegree(v1)).to.be(1);
-      expect(transformed.inDegree(v2)).to.be(1);
-      expect(transformed.outDegree(v2)).to.be(1);
-      expect(transformed.inDegree(w1)).to.be(2);
-      expect(transformed.outDegree(w1)).to.be(0);
-      expect(transformed.inDegree(w2)).to.be(2);
-      expect(transformed.outDegree(w2)).to.be(0);
-    });
+        .addEdge(v2, w2)
+      const transformed = new EdgeConcentrationTransformer().transform(graph)
+      assert.equal(transformed.inDegree(u1), 0)
+      assert.equal(transformed.outDegree(u1), 1)
+      assert.equal(transformed.inDegree(u2), 0)
+      assert.equal(transformed.outDegree(u2), 1)
+      assert.equal(transformed.inDegree(v1), 1)
+      assert.equal(transformed.outDegree(v1), 1)
+      assert.equal(transformed.inDegree(v2), 1)
+      assert.equal(transformed.outDegree(v2), 1)
+      assert.equal(transformed.inDegree(w1), 2)
+      assert.equal(transformed.outDegree(w1), 0)
+      assert.equal(transformed.inDegree(w2), 2)
+      assert.equal(transformed.outDegree(w2), 0)
+    })
 
     it('returns transformed graph', () => {
-      const [u1, u2, u3, u4] = [0, 1, 2, 3],
-        [v1, v2, v3, v4] = [4, 5, 6, 7];
+      const [u1, u2, u3, u4] = [0, 1, 2, 3]
+      const [v1, v2, v3, v4] = [4, 5, 6, 7]
       const graph = new Graph()
         .addVertex(u1)
         .addVertex(u2)
@@ -61,29 +67,29 @@ describe('EdgeConcentrationTransformer', () => {
         .addEdge(u3, v3)
         .addEdge(u3, v4)
         .addEdge(u4, v3)
-        .addEdge(u4, v4);
-      const transformed = new EdgeConcentrationTransformer().transform(graph);
-      expect(transformed.inDegree(u1)).to.be(0);
-      expect(transformed.outDegree(u1)).to.be(1);
-      expect(transformed.inDegree(u2)).to.be(0);
-      expect(transformed.outDegree(u2)).to.be(1);
-      expect(transformed.inDegree(v1)).to.be(1);
-      expect(transformed.outDegree(v1)).to.be(0);
-      expect(transformed.inDegree(v2)).to.be(1);
-      expect(transformed.outDegree(v2)).to.be(0);
-      expect(transformed.inDegree(u3)).to.be(0);
-      expect(transformed.outDegree(u3)).to.be(1);
-      expect(transformed.inDegree(u4)).to.be(0);
-      expect(transformed.outDegree(u4)).to.be(1);
-      expect(transformed.inDegree(v3)).to.be(1);
-      expect(transformed.outDegree(v3)).to.be(0);
-      expect(transformed.inDegree(v4)).to.be(1);
-      expect(transformed.outDegree(v4)).to.be(0);
-    });
+        .addEdge(u4, v4)
+      const transformed = new EdgeConcentrationTransformer().transform(graph)
+      assert.equal(transformed.inDegree(u1), 0)
+      assert.equal(transformed.outDegree(u1), 1)
+      assert.equal(transformed.inDegree(u2), 0)
+      assert.equal(transformed.outDegree(u2), 1)
+      assert.equal(transformed.inDegree(v1), 1)
+      assert.equal(transformed.outDegree(v1), 0)
+      assert.equal(transformed.inDegree(v2), 1)
+      assert.equal(transformed.outDegree(v2), 0)
+      assert.equal(transformed.inDegree(u3), 0)
+      assert.equal(transformed.outDegree(u3), 1)
+      assert.equal(transformed.inDegree(u4), 0)
+      assert.equal(transformed.outDegree(u4), 1)
+      assert.equal(transformed.inDegree(v3), 1)
+      assert.equal(transformed.outDegree(v3), 0)
+      assert.equal(transformed.inDegree(v4), 1)
+      assert.equal(transformed.outDegree(v4), 0)
+    })
 
     it('returns transformed graph', () => {
-      const [u1, u2, u3, u4, u5] = [0, 1, 2, 3, 4],
-        [v1, v2, v3, v4, v5] = [5, 6, 7, 8, 9];
+      const [u1, u2, u3, u4, u5] = [0, 1, 2, 3, 4]
+      const [v1, v2, v3, v4, v5] = [5, 6, 7, 8, 9]
       const graph = new Graph()
         .addVertex(u1)
         .addVertex(u2)
@@ -111,38 +117,38 @@ describe('EdgeConcentrationTransformer', () => {
         .addEdge(u4, v5)
         .addEdge(u5, v3)
         .addEdge(u5, v4)
-        .addEdge(u5, v5);
-      const transformed = new EdgeConcentrationTransformer().transform(graph);
-      expect(transformed.inDegree(u1)).to.be(0);
-      expect(transformed.outDegree(u1)).to.be(1);
-      expect(transformed.inDegree(u2)).to.be(0);
-      expect(transformed.outDegree(u2)).to.be(1);
-      expect(transformed.inDegree(u3)).to.be(0);
-      expect(transformed.outDegree(u3)).to.be(2);
-      expect(transformed.inDegree(u4)).to.be(0);
-      expect(transformed.outDegree(u4)).to.be(1);
-      expect(transformed.inDegree(u5)).to.be(0);
-      expect(transformed.outDegree(u5)).to.be(1);
-      expect(transformed.inDegree(v1)).to.be(1);
-      expect(transformed.outDegree(v1)).to.be(0);
-      expect(transformed.inDegree(v2)).to.be(1);
-      expect(transformed.outDegree(v2)).to.be(0);
-      expect(transformed.inDegree(v3)).to.be(2);
-      expect(transformed.outDegree(v3)).to.be(0);
-      expect(transformed.inDegree(v4)).to.be(1);
-      expect(transformed.outDegree(v4)).to.be(0);
-      expect(transformed.inDegree(v4)).to.be(1);
-      expect(transformed.outDegree(v4)).to.be(0);
-    });
-  });
-});
+        .addEdge(u5, v5)
+      const transformed = new EdgeConcentrationTransformer().transform(graph)
+      assert.equal(transformed.inDegree(u1), 0)
+      assert.equal(transformed.outDegree(u1), 1)
+      assert.equal(transformed.inDegree(u2), 0)
+      assert.equal(transformed.outDegree(u2), 1)
+      assert.equal(transformed.inDegree(u3), 0)
+      assert.equal(transformed.outDegree(u3), 2)
+      assert.equal(transformed.inDegree(u4), 0)
+      assert.equal(transformed.outDegree(u4), 1)
+      assert.equal(transformed.inDegree(u5), 0)
+      assert.equal(transformed.outDegree(u5), 1)
+      assert.equal(transformed.inDegree(v1), 1)
+      assert.equal(transformed.outDegree(v1), 0)
+      assert.equal(transformed.inDegree(v2), 1)
+      assert.equal(transformed.outDegree(v2), 0)
+      assert.equal(transformed.inDegree(v3), 2)
+      assert.equal(transformed.outDegree(v3), 0)
+      assert.equal(transformed.inDegree(v4), 1)
+      assert.equal(transformed.outDegree(v4), 0)
+      assert.equal(transformed.inDegree(v4), 1)
+      assert.equal(transformed.outDegree(v4), 0)
+    })
+  })
+})
 
 describe('newbery(g, h1, h2)', () => {
   it('returns edge concentrations', () => {
-    const h1 = [0, 1, 2],
-      h2 = [3, 4, 5, 6, 7, 8, 9, 10, 11],
-      [u1, u2, u3] = h1,
-      [v1, v2, v3, v4, v5, v6, v7, v8, v9] = h2;
+    const h1 = [0, 1, 2]
+    const h2 = [3, 4, 5, 6, 7, 8, 9, 10, 11]
+    const [u1, u2, u3] = h1
+    const [v1, v2, v3, v4, v5, v6, v7, v8, v9] = h2
     const graph = new Graph()
       .addVertex(u1)
       .addVertex(u2)
@@ -178,23 +184,23 @@ describe('newbery(g, h1, h2)', () => {
       .addEdge(u3, v6)
       .addEdge(u3, v7)
       .addEdge(u3, v8)
-      .addEdge(u3, v9);
+      .addEdge(u3, v9)
 
-    const result = newbery(graph, h1, h2);
-    expect(result).to.be.eql([
+    const result = newbery(graph, h1, h2)
+    assert.deepEqual(result, [
       { source: [ 0, 2, 1 ], target: [ 5, 6, 7, 8, 9 ] },
       { source: [ 0, 1 ], target: [ 3, 4 ] },
       { source: [ 1, 2 ], target: [ 10, 11 ] }
-    ]);
-  });
-});
+    ])
+  })
+})
 
 describe('mbea(g, h1, h2)', () => {
   it('returns edge concentrations', () => {
-    const h1 = [0, 1, 2],
-      h2 = [3, 4, 5, 6, 7, 8, 9, 10, 11],
-      [u1, u2, u3] = h1,
-      [v1, v2, v3, v4, v5, v6, v7, v8, v9] = h2;
+    const h1 = [0, 1, 2]
+    const h2 = [3, 4, 5, 6, 7, 8, 9, 10, 11]
+    const [u1, u2, u3] = h1
+    const [v1, v2, v3, v4, v5, v6, v7, v8, v9] = h2
     const graph = new Graph()
       .addVertex(u1)
       .addVertex(u2)
@@ -230,11 +236,11 @@ describe('mbea(g, h1, h2)', () => {
       .addEdge(u3, v6)
       .addEdge(u3, v7)
       .addEdge(u3, v8)
-      .addEdge(u3, v9);
+      .addEdge(u3, v9)
 
-    const result = mbea(graph, h1, h2);
-    expect(result).to.be.eql([
+    const result = mbea(graph, h1, h2)
+    assert.deepEqual(result, [
       { source: [ 1, 2 ], target: [ 5, 6, 7, 8, 9, 10, 11 ] }
-    ]);
-  });
-});
+    ])
+  })
+})

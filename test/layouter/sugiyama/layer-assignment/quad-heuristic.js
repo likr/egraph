@@ -1,13 +1,12 @@
-'use strict';
-
-import expect from 'expect.js';
-import Graph from '../../../../src/graph';
-import QuadHeuristic from '../../../../src/layouter/sugiyama/layer-assignment/quad-heuristic';
+/* eslint-env mocha */
+const assert = require('power-assert')
+const Graph = require('../../../../graph')
+const QuadHeuristic = require('../../../../layouter/sugiyama/layer-assignment/quad-heuristic')
 
 describe('QuadHeuristic', () => {
   describe('call(graph)', () => {
     it('returns layers', () => {
-      const [a, b, c, d, e, f, g, h] = [0, 1, 2, 3, 4, 5, 6, 7];
+      const [a, b, c, d, e, f, g, h] = [0, 1, 2, 3, 4, 5, 6, 7]
       const graph = new Graph()
         .addVertex(a)
         .addVertex(b)
@@ -22,8 +21,8 @@ describe('QuadHeuristic', () => {
         .addEdge(c, d)
         .addEdge(d, e)
         .addEdge(f, g)
-        .addEdge(g, h);
-      expect(new QuadHeuristic().call(graph)).to.be.eql({
+        .addEdge(g, h)
+      assert.deepEqual(new QuadHeuristic().call(graph), {
         [a]: 0,
         [b]: 1,
         [c]: 2,
@@ -32,22 +31,22 @@ describe('QuadHeuristic', () => {
         [f]: 0,
         [g]: 2,
         [h]: 4
-      });
-    });
-  });
+      })
+    })
+  })
 
   describe('repeat()', () => {
     it('returns current repeat number', () => {
-      const qh = new QuadHeuristic();
-      expect(qh.repeat()).to.be.a('number');
-    });
-  });
+      const qh = new QuadHeuristic()
+      assert(qh.repeat())
+    })
+  })
 
   describe('repeat(val)', () => {
     it('sets repeat number and returns self', () => {
-      const qh = new QuadHeuristic();
-      expect(qh.repeat(8)).to.be(qh);
-      expect(qh.repeat()).to.be(8);
-    });
-  });
-});
+      const qh = new QuadHeuristic()
+      assert.equal(qh.repeat(8), qh)
+      assert.equal(qh.repeat(), 8)
+    })
+  })
+})
