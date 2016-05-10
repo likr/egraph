@@ -32,7 +32,6 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "babel-runtime": "^5.8.35",
-    "immutable": "^3.7.5"
+    "babel-runtime": "^5.8.35"
   }
 }
