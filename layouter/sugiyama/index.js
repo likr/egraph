@@ -1,5 +1,6 @@
 const Graph = require('../../graph')
 const accessor = require('../../utils/accessor')
+const connectedComponents = require('./misc/connected-components')
 const groupLayers = require('./misc/group-layers')
 const cycleRemoval = require('./cycle-removal')
 const layerAssignment = require('./layer-assignment')
@@ -179,17 +180,27 @@ class SugiyamaLayouter {
     const layerMap = this.layerAssignment().call(g)
     const layers = groupLayers(g, layerMap, true)
     normalize(g, layers, layerMap, this.edgeMargin(), this.layerMargin())
-    this.crossingReduction().call(g, layers)
-    for (let i = 0; i < layers.length; ++i) {
-      const layer = layers[i]
+    const normalizedLayers = layers.map(() => [])
+    for (const component of connectedComponents(g)) {
+      const vertices = new Set(component)
+      const componentLayers = layers.map((h) => h.filter((u) => vertices.has(u)))
+      this.crossingReduction().call(g, componentLayers)
+      for (let i = 0; i < layers.length; ++i) {
+        for (const u of componentLayers[i]) {
+          normalizedLayers[i].push(u)
+        }
+      }
+    }
+    for (let i = 0; i < normalizedLayers.length; ++i) {
+      const layer = normalizedLayers[i]
       for (let j = 0; j < layer.length; ++j) {
         const u = layer[j]
         g.vertex(u).layer = i
         g.vertex(u).order = j
       }
     }
-    this.positionAssignment().call(g, layers)
-    return buildResult(g, layers, this.ltor())
+    this.positionAssignment().call(g, normalizedLayers)
+    return buildResult(g, normalizedLayers, this.ltor())
   }
 
   vertexWidth () {
