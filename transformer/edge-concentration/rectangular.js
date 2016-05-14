@@ -13,6 +13,9 @@ const layerVertices = (g, h1, h2) => {
 }
 
 const rectangular = (g, h1, h2) => {
+  if (h1.length === 0 || h2.length === 0) {
+    return []
+  }
   const k = g.numEdges()
   const active = {}
   const vertices = layerVertices(g, h1, h2)
