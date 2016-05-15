@@ -1,9 +1,7 @@
 /* eslint-env mocha */
 const assert = require('power-assert')
-const Graph = require('../../graph')
-const EdgeConcentrationTransformer = require('../../transformer/edge-concentration')
-const newbery = require('../../transformer/edge-concentration/newbery')
-const mbea = require('../../transformer/edge-concentration/mbea')
+const Graph = require('../../../graph')
+const EdgeConcentrationTransformer = require('../../../transformer/edge-concentration')
 
 describe('EdgeConcentrationTransformer', () => {
   describe('transform(g)', () => {
@@ -141,106 +139,23 @@ describe('EdgeConcentrationTransformer', () => {
       assert.equal(transformed.outDegree(v4), 0)
     })
   })
-})
 
-describe('newbery(g, h1, h2)', () => {
-  it('returns edge concentrations', () => {
-    const h1 = [0, 1, 2]
-    const h2 = [3, 4, 5, 6, 7, 8, 9, 10, 11]
-    const [u1, u2, u3] = h1
-    const [v1, v2, v3, v4, v5, v6, v7, v8, v9] = h2
+  it('pass source and sink vertices into dummy callback', () => {
     const graph = new Graph()
-      .addVertex(u1)
-      .addVertex(u2)
-      .addVertex(u3)
-      .addVertex(v1)
-      .addVertex(v2)
-      .addVertex(v3)
-      .addVertex(v4)
-      .addVertex(v5)
-      .addVertex(v6)
-      .addVertex(v7)
-      .addVertex(v8)
-      .addVertex(v9)
-      .addEdge(u1, v1)
-      .addEdge(u1, v2)
-      .addEdge(u1, v3)
-      .addEdge(u1, v4)
-      .addEdge(u1, v5)
-      .addEdge(u1, v6)
-      .addEdge(u1, v7)
-      .addEdge(u2, v1)
-      .addEdge(u2, v2)
-      .addEdge(u2, v3)
-      .addEdge(u2, v4)
-      .addEdge(u2, v5)
-      .addEdge(u2, v6)
-      .addEdge(u2, v7)
-      .addEdge(u2, v8)
-      .addEdge(u2, v9)
-      .addEdge(u3, v3)
-      .addEdge(u3, v4)
-      .addEdge(u3, v5)
-      .addEdge(u3, v6)
-      .addEdge(u3, v7)
-      .addEdge(u3, v8)
-      .addEdge(u3, v9)
+    graph.addVertex(0)
+    graph.addVertex(1)
+    graph.addVertex(2)
+    graph.addVertex(3)
+    graph.addEdge(0, 2)
+    graph.addEdge(0, 3)
+    graph.addEdge(1, 2)
+    graph.addEdge(1, 3)
 
-    const result = newbery(graph, h1, h2)
-    assert.deepEqual(result, [
-      { source: [ 0, 2, 1 ], target: [ 5, 6, 7, 8, 9 ] },
-      { source: [ 0, 1 ], target: [ 3, 4 ] },
-      { source: [ 1, 2 ], target: [ 10, 11 ] }
-    ])
-  })
-})
-
-describe('mbea(g, h1, h2)', () => {
-  it('returns edge concentrations', () => {
-    const h1 = [0, 1, 2]
-    const h2 = [3, 4, 5, 6, 7, 8, 9, 10, 11]
-    const [u1, u2, u3] = h1
-    const [v1, v2, v3, v4, v5, v6, v7, v8, v9] = h2
-    const graph = new Graph()
-      .addVertex(u1)
-      .addVertex(u2)
-      .addVertex(u3)
-      .addVertex(v1)
-      .addVertex(v2)
-      .addVertex(v3)
-      .addVertex(v4)
-      .addVertex(v5)
-      .addVertex(v6)
-      .addVertex(v7)
-      .addVertex(v8)
-      .addVertex(v9)
-      .addEdge(u1, v1)
-      .addEdge(u1, v2)
-      .addEdge(u1, v3)
-      .addEdge(u1, v4)
-      .addEdge(u1, v5)
-      .addEdge(u1, v6)
-      .addEdge(u1, v7)
-      .addEdge(u2, v1)
-      .addEdge(u2, v2)
-      .addEdge(u2, v3)
-      .addEdge(u2, v4)
-      .addEdge(u2, v5)
-      .addEdge(u2, v6)
-      .addEdge(u2, v7)
-      .addEdge(u2, v8)
-      .addEdge(u2, v9)
-      .addEdge(u3, v3)
-      .addEdge(u3, v4)
-      .addEdge(u3, v5)
-      .addEdge(u3, v6)
-      .addEdge(u3, v7)
-      .addEdge(u3, v8)
-      .addEdge(u3, v9)
-
-    const result = mbea(graph, h1, h2)
-    assert.deepEqual(result, [
-      { source: [ 1, 2 ], target: [ 5, 6, 7, 8, 9, 10, 11 ] }
-    ])
+    new EdgeConcentrationTransformer()
+      .dummy((source, target) => {
+        assert.deepEqual(source, [0, 1])
+        assert.deepEqual(target, [2, 3])
+      })
+      .transform(graph)
   })
 })

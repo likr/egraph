@@ -7,7 +7,7 @@ const rectangular = require('./rectangular')
 const edgeConcentration = (g, h1, h2, method, dummy, idGenerator) => {
   for (const concentration of method(g, h1, h2)) {
     const w = idGenerator(g, h1, h2)
-    g.addVertex(w, dummy())
+    g.addVertex(w, dummy(concentration.source, concentration.target))
     for (const u of concentration.source) {
       g.addEdge(u, w)
     }
