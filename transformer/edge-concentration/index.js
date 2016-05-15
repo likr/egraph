@@ -1,3 +1,4 @@
+const Graph = require('../../graph')
 const accessor = require('../../utils/accessor')
 const cycleRemoval = require('../../layouter/sugiyama/cycle-removal')
 const layerAssignment = require('../../layouter/sugiyama/layer-assignment')
@@ -5,7 +6,22 @@ const groupLayers = require('../../layouter/sugiyama/misc/group-layers')
 const rectangular = require('./rectangular')
 
 const edgeConcentration = (g, h1, h2, method, dummy, idGenerator) => {
-  for (const concentration of method(g, h1, h2)) {
+  const subgraph = new Graph()
+  for (const u of h1) {
+    subgraph.addVertex(u, g.vertex(u))
+  }
+  for (const u of h2) {
+    subgraph.addVertex(u, g.vertex(u))
+  }
+  for (const u of h1) {
+    for (const v of h2) {
+      if (g.edge(u, v)) {
+        subgraph.addEdge(u, v, g.edge(u, v))
+      }
+    }
+  }
+
+  for (const concentration of method(subgraph, h1, h2)) {
     const w = idGenerator(g, h1, h2)
     g.addVertex(w, dummy(concentration.source, concentration.target))
     for (const u of concentration.source) {

@@ -1,5 +1,3 @@
-const Graph = require('../../graph')
-
 const bicliqueFind = (graph, L, R, P, Q, cliques) => {
   while (P.size !== 0) {
     let x = Array.from(P)[0]
@@ -53,25 +51,10 @@ const bicliqueFind = (graph, L, R, P, Q, cliques) => {
 }
 
 const mbea = (graph, h1, h2) => {
-  const subgraph = new Graph()
-  for (const u of h1) {
-    subgraph.addVertex(u, graph.vertex(u))
-  }
-  for (const u of h2) {
-    subgraph.addVertex(u, graph.vertex(u))
-  }
-  for (const u of h1) {
-    for (const v of h2) {
-      if (graph.edge(u, v)) {
-        subgraph.addEdge(u, v, graph.edge(u, v))
-      }
-    }
-  }
-
-  const U = subgraph.vertices().filter((u) => subgraph.outDegree(u))
-  const V = subgraph.vertices().filter((u) => subgraph.inDegree(u))
+  const U = graph.vertices().filter((u) => graph.outDegree(u))
+  const V = graph.vertices().filter((u) => graph.inDegree(u))
   let cliques = []
-  bicliqueFind(subgraph, new Set(U), new Set(), new Set(V), new Set(), cliques)
+  bicliqueFind(graph, new Set(U), new Set(), new Set(V), new Set(), cliques)
   return cliques
 }
 
