@@ -7,6 +7,8 @@ const normalize = (g, layers, layerMap, edgeMargin, layerMargin) => {
       for (i = layerMap[u] + 1; i < layerMap[v]; ++i) {
         w2 = Symbol()
         g.addVertex(w2, {
+          u,
+          v,
           dummy: true,
           width: d.width + edgeMargin,
           origWidth: d.width + edgeMargin,
@@ -15,6 +17,8 @@ const normalize = (g, layers, layerMap, edgeMargin, layerMargin) => {
           layer: i
         })
         g.addEdge(w1, w2, {
+          u,
+          v,
           dummy: true,
           reversed: g.edge(u, v).reversed,
           width: d.width
@@ -23,6 +27,8 @@ const normalize = (g, layers, layerMap, edgeMargin, layerMargin) => {
         w1 = w2
       }
       g.addEdge(w1, v, {
+        u,
+        v,
         dummy: true,
         reversed: g.edge(u, v).reversed,
         width: d.width
