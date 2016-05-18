@@ -11,7 +11,7 @@ const normalize = (g, layers, layerMap, edgeMargin, layerMargin) => {
           v,
           dummy: true,
           width: d.width + edgeMargin,
-          origWidth: d.width + edgeMargin,
+          origWidth: d.width,
           height: layerMargin,
           origHeight: 0,
           layer: i

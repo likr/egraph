@@ -23,13 +23,16 @@ const segment = function * (graph, vertices, upper) {
 }
 
 const adjustPos = (graph, vertices, ltor) => {
-  let sum = 0
+  let sumPos = 0
+  let totalWidth = 0
   for (const u of vertices) {
-    sum += graph.vertex(u)[ltor ? 'x' : 'y']
+    sumPos += graph.vertex(u)[ltor ? 'x' : 'y']
+    totalWidth += graph.vertex(u).origWidth || 0
   }
-  const pos = sum / vertices.length
+  let offset = sumPos / vertices.length - (totalWidth - 1) / 2
   for (const u of vertices) {
-    graph.vertex(u)[ltor ? 'x' : 'y'] = pos
+    graph.vertex(u)[ltor ? 'x' : 'y'] = offset
+    offset += graph.vertex(u).origWidth || 0
   }
 }
 
