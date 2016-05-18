@@ -21,12 +21,15 @@ class AbstractGraph {
     }
   }
 
-  toString () {
-    const obj = {
-      vertices: this.vertices().map(u => ({u, d: this.vertex(u)})),
+  toJSON () {
+    return {
+      vertices: this.vertices().map((u) => ({u, d: this.vertex(u)})),
       edges: this.edges().map(([u, v]) => ({u, v, d: this.edge(u, v)}))
     }
-    return JSON.stringify(obj)
+  }
+
+  toString () {
+    return JSON.stringify(this.toJSON())
   }
 }
 

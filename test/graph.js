@@ -308,6 +308,31 @@ describe('Graph', () => {
     })
   })
 
+  describe('toJSON()', () => {
+    it('returns JSON representation of the graph', () => {
+      const [u, v, w] = [0, 1, 2]
+      const graph = new Graph()
+        .addVertex(u)
+        .addVertex(v)
+        .addVertex(w)
+        .addEdge(u, v)
+        .addEdge(u, w)
+        .addEdge(v, w)
+      assert.deepEqual(graph.toJSON(), {
+        'vertices': [
+          {'u': 0, 'd': {}},
+          {'u': 1, 'd': {}},
+          {'u': 2, 'd': {}}
+        ],
+        'edges': [
+          {'u': 0, 'v': 1, 'd': {}},
+          {'u': 0, 'v': 2, 'd': {}},
+          {'u': 1, 'v': 2, 'd': {}}
+        ]
+      })
+    })
+  })
+
   describe('toString()', () => {
     it('returns string representation of the graph', () => {
       const [u, v, w] = [0, 1, 2]
