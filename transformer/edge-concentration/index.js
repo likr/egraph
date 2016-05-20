@@ -22,7 +22,7 @@ const edgeConcentration = (g, h1, h2, method, dummy, idGenerator) => {
   }
 
   for (const concentration of method(subgraph, h1, h2)) {
-    const w = idGenerator(g, h1, h2)
+    const w = idGenerator(g, concentration.source, concentration.target)
     g.addVertex(w, dummy(concentration.source, concentration.target))
     for (const u of concentration.source) {
       g.addEdge(u, w)
