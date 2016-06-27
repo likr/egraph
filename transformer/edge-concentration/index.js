@@ -1,6 +1,5 @@
 const Graph = require('../../graph')
 const accessor = require('../../utils/accessor')
-const cycleRemoval = require('../../layouter/sugiyama/cycle-removal')
 const layerAssignment = require('../../layouter/sugiyama/layer-assignment')
 const groupLayers = require('../../layouter/sugiyama/misc/group-layers')
 const rectangular = require('./rectangular')
@@ -48,7 +47,6 @@ const privates = new WeakMap()
 class EdgeConcentrationTransformer {
   constructor () {
     privates.set(this, {
-      cycleRemoval: new cycleRemoval.CycleRemoval(),
       layerAssignment: new layerAssignment.QuadHeuristic(),
       method: rectangular,
       dummy: () => ({dummy: true}),
@@ -57,7 +55,6 @@ class EdgeConcentrationTransformer {
   }
 
   transform (g) {
-    this.cycleRemoval().call(g)
     const layerMap = this.layerAssignment().call(g)
     const layers = groupLayers(g, layerMap)
     for (let i = 0; i < layers.length - 1; ++i) {
@@ -73,10 +70,6 @@ class EdgeConcentrationTransformer {
       edgeConcentration(g, h1, Array.from(h2.values()), this.method(), this.dummy(), this.idGenerator())
     }
     return g
-  }
-
-  cycleRemoval () {
-    return accessor(this, privates, 'cycleRemoval', arguments)
   }
 
   layerAssignment () {

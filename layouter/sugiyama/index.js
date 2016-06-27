@@ -2,7 +2,6 @@ const Graph = require('../../graph')
 const accessor = require('../../utils/accessor')
 const connectedComponents = require('./misc/connected-components')
 const groupLayers = require('./misc/group-layers')
-const cycleRemoval = require('./cycle-removal')
 const layerAssignment = require('./layer-assignment')
 const normalize = require('./normalize')
 const crossingReduction = require('./crossing-reduction')
@@ -158,7 +157,6 @@ class SugiyamaLayouter {
       edgeMargin: 10,
       ltor: true,
       edgeBundling: false,
-      cycleRemoval: new cycleRemoval.CycleRemoval(),
       layerAssignment: new layerAssignment.QuadHeuristic(),
       crossingReduction: new crossingReduction.LayerSweep(),
       positionAssignment: new positionAssignment.Brandes()
@@ -178,7 +176,6 @@ class SugiyamaLayouter {
       vertexBottomMargin: this.vertexBottomMargin(),
       ltor: this.ltor()
     })
-    this.cycleRemoval().call(g)
     const layerMap = this.layerAssignment().call(g)
     const layers = groupLayers(g, layerMap, true)
     normalize(g, layers, layerMap, this.edgeMargin(), this.layerMargin())
@@ -254,10 +251,6 @@ class SugiyamaLayouter {
 
   edgeBundling () {
     return accessor(this, privates, 'edgeBundling', arguments)
-  }
-
-  cycleRemoval () {
-    return accessor(this, privates, 'cycleRemoval', arguments)
   }
 
   layerAssignment () {
