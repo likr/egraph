@@ -113,35 +113,8 @@ const quasiBicliqueMining = (graph, mu, S) => {
 
   const result = Array.from(C.values())
     .filter(({source, target}) => source.size > 1 && target.size > 1)
-  result.sort((c1, c2) => c1.source.size === c2.source.size ? c2.target.size - c1.target.size : c2.source.size - c1.source.size)
-  if (result.length === 0) {
-    return []
-  }
-  const maximum = result[0]
-  for (let i = 1; i < result.length; ++i) {
-    const tmpS = new Set(maximum.source)
-    const tmpT = new Set(maximum.target)
-    for (const u of result[i].source) {
-      tmpS.add(u)
-    }
-    for (const u of result[i].target) {
-      tmpT.add(u)
-    }
-    let count = 0
-    for (const u of tmpS) {
-      for (const v of tmpT) {
-        if (graph.edge(u, v)) {
-          count += 1
-        }
-      }
-    }
-    if (count < mu * tmpS.size * tmpT.size) {
-      break
-    }
-    maximum.source = Array.from(tmpS)
-    maximum.target = Array.from(tmpT)
-  }
-  return [maximum]
+    .map(({source, target}) => ({source: Array.from(source), target: Array.from(target)}))
+  return result
 }
 
 const quasiCliqueLayer = (graph, h1, h2, mu) => {
