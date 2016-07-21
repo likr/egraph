@@ -5,6 +5,11 @@ const copy = (g) => {
   for (const u of g.vertices()) {
     newGraph.addVertex(u, g.vertex(u))
   }
+  for (const u of g.vertices()) {
+    for (const v of g.children(u)) {
+      newGraph.setChild(u, v)
+    }
+  }
   for (const [u, v] of g.edges()) {
     newGraph.addEdge(u, v, g.edge(u, v))
   }
