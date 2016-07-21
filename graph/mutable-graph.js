@@ -4,6 +4,12 @@ const privates = new WeakMap()
 
 const p = (self) => privates.get(self)
 
+const checkVertex = (graph, u) => {
+  if (graph.vertex(u) === null) {
+    throw new Error(`Invalid vertex: ${u}`)
+  }
+}
+
 class MutableGraph extends AbstractGraph {
   constructor () {
     super()
@@ -35,17 +41,23 @@ class MutableGraph extends AbstractGraph {
   }
 
   outVertices (u) {
-    if (this.vertex(u) === null) {
-      throw new Error(`Invalid vertex: ${u}`)
-    }
+    checkVertex(this, u)
     return Array.from(p(this).vertices.get(u).outVertices.keys())
   }
 
   inVertices (u) {
-    if (this.vertex(u) === null) {
-      throw new Error(`Invalid vertex: ${u}`)
-    }
+    checkVertex(this, u)
     return Array.from(p(this).vertices.get(u).inVertices.keys())
+  }
+
+  parent (u) {
+    checkVertex(this, u)
+    return p(this).vertices.get(u).parent
+  }
+
+  children (u) {
+    checkVertex(this, u)
+    return Array.from(p(this).vertices.get(u).children)
   }
 
   numVertices () {
@@ -57,16 +69,12 @@ class MutableGraph extends AbstractGraph {
   }
 
   outDegree (u) {
-    if (this.vertex(u) === null) {
-      throw new Error(`Invalid vertex: ${u}`)
-    }
+    checkVertex(this, u)
     return p(this).vertices.get(u).outVertices.size
   }
 
   inDegree (u) {
-    if (this.vertex(u) === null) {
-      throw new Error(`Invalid vertex: ${u}`)
-    }
+    checkVertex(this, u)
     return p(this).vertices.get(u).inVertices.size
   }
 
@@ -77,6 +85,8 @@ class MutableGraph extends AbstractGraph {
     p(this).vertices.set(u, {
       outVertices: new Map(),
       inVertices: new Map(),
+      children: new Set(),
+      parent: null,
       data: obj
     })
     p(this).numVertices++
@@ -84,18 +94,22 @@ class MutableGraph extends AbstractGraph {
   }
 
   addEdge (u, v, obj = {}) {
-    if (this.vertex(u) === null) {
-      throw new Error(`Invalid vertex: ${u}`)
-    }
-    if (this.vertex(v) === null) {
-      throw new Error(`Invalid vertex: ${v}`)
-    }
+    checkVertex(this, u)
+    checkVertex(this, v)
     if (this.edge(u, v)) {
       throw new Error(`Duplicated edge: (${u}, ${v})`)
     }
     p(this).numEdges++
     p(this).vertices.get(u).outVertices.set(v, obj)
     p(this).vertices.get(v).inVertices.set(u, obj)
+    return this
+  }
+
+  setChild (u, v) {
+    checkVertex(this, u)
+    checkVertex(this, v)
+    p(this).vertices.get(u).children.add(v)
+    p(this).vertices.get(v).parent = u
     return this
   }
 
@@ -118,6 +132,14 @@ class MutableGraph extends AbstractGraph {
     p(this).vertices.get(u).outVertices.delete(v)
     p(this).vertices.get(v).inVertices.delete(u)
     p(this).numEdges--
+    return this
+  }
+
+  unsetChild (u, v) {
+    checkVertex(this, u)
+    checkVertex(this, v)
+    p(this).vertices.get(u).children.delete(v)
+    p(this).vertices.get(v).parent = null
     return this
   }
 }

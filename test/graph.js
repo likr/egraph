@@ -82,6 +82,44 @@ describe('Graph', () => {
     })
   })
 
+  describe('setChild(u, v)', () => {
+    const u = 0
+    const v = 1
+    let graph, graph2
+
+    beforeEach(() => {
+      graph = new Graph()
+      graph2 = graph
+        .addVertex(u)
+        .addVertex(v)
+        .setChild(u, v)
+    })
+
+    it('should return self', () => {
+      assert.equal(graph, graph2)
+    })
+
+    it('', () => {
+      assert.equal(graph2.children(u).length, 1)
+    })
+
+    it('', () => {
+      assert.equal(graph2.children(v).length, 0)
+    })
+
+    it('', () => {
+      assert.equal(graph2.parent(u), null)
+    })
+
+    it('', () => {
+      assert.equal(graph2.parent(v), u)
+    })
+
+    it('should not increase numEdges', () => {
+      assert.equal(graph2.numEdges(), 0)
+    })
+  })
+
   describe('removeVertex(u)', () => {
     const u = 0
     const v = 1
@@ -149,6 +187,25 @@ describe('Graph', () => {
       assert.throws(() => {
         graph2.removeEdge(u, v)
       })
+    })
+  })
+
+  describe('unsetChild(u, v)', () => {
+    const u = 0
+    const v = 1
+    let graph, graph2
+
+    beforeEach(() => {
+      graph = new Graph()
+      graph2 = graph
+        .addVertex(u)
+        .addVertex(v)
+        .setChild(u, v)
+        .unsetChild(u, v)
+    })
+
+    it('should return self', () => {
+      assert.equal(graph, graph2)
     })
   })
 
