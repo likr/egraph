@@ -1,5 +1,6 @@
 const Graph = require('../../graph')
 const accessor = require('../../utils/accessor')
+const edgeFunction = require('../../utils/edge-function')
 const connectedComponents = require('./misc/connected-components')
 const groupLayers = require('./misc/group-layers')
 const layerAssignment = require('./layer-assignment')
@@ -25,13 +26,7 @@ const initGraph = (gOrig, {ltor, vertexWidth, vertexHeight, edgeWidth, layerMarg
   }
   for (const [u, v] of gOrig.edges()) {
     g.addEdge(u, v, {
-      width: edgeWidth({
-        u,
-        v,
-        ud: gOrig.vertex(u),
-        vd: gOrig.vertex(v),
-        d: gOrig.edge(u, v)
-      })
+      width: edgeWidth(u, v)
     })
   }
   return g
@@ -167,7 +162,7 @@ class SugiyamaLayouter {
     const g = initGraph(gOrig, {
       vertexWidth: this.vertexWidth(),
       vertexHeight: this.vertexHeight(),
-      edgeWidth: this.edgeWidth(),
+      edgeWidth: edgeFunction(this.edgeWidth(), gOrig),
       layerMargin: this.layerMargin(),
       vertexMargin: this.vertexMargin(),
       vertexLeftMargin: this.vertexLeftMargin(),
