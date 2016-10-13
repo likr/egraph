@@ -6,15 +6,15 @@ describe('orderLayers', () => {
   it('', () => {
     const [a, b, c, g, h, i, j, k, v] = 'abcghijkv'
     const graph = new Graph()
-      .addVertex(a)
-      .addVertex(b)
-      .addVertex(c)
-      .addVertex(g)
-      .addVertex(h)
-      .addVertex(i)
-      .addVertex(j)
-      .addVertex(k)
-      .addVertex(v)
+      .addVertex(a, {layer: [0, 0]})
+      .addVertex(b, {layer: [0, 0]})
+      .addVertex(c, {layer: [0, 0]})
+      .addVertex(g, {layer: [0, 1]})
+      .addVertex(h, {layer: [0, 1]})
+      .addVertex(i, {layer: [0, 1]})
+      .addVertex(j, {layer: [0, 1]})
+      .addVertex(k, {layer: [0, 1]})
+      .addVertex(v, {layer: [0]})
       .addEdge(a, c)
       .addEdge(a, i)
       .addEdge(b, c)
@@ -33,18 +33,7 @@ describe('orderLayers', () => {
       .setChild(v, i)
       .setChild(v, j)
       .setChild(v, k)
-    const layers = new Map([
-      [a, [0, 0]],
-      [b, [0, 0]],
-      [c, [0, 0]],
-      [g, [0, 1]],
-      [h, [0, 1]],
-      [i, [0, 1]],
-      [j, [0, 1]],
-      [k, [0, 1]],
-      [v, [0]]
-    ])
-    const ordering = orderLayers(graph, layers, 1)
+    const ordering = orderLayers(graph, 1)
     console.log(ordering)
   })
 })
