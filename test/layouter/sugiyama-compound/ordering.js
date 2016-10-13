@@ -44,7 +44,7 @@ describe('orderLayers', () => {
       [k, [0, 1]],
       [v, [0]]
     ])
-    const ordering = orderLayers(graph, layers, 1, v)
+    const ordering = orderLayers(graph, layers, 1)
     console.log(ordering)
   })
 })

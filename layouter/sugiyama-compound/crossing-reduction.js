@@ -83,7 +83,7 @@ const bou = (graph, S, T) => {
   T.sort((u1, u2) => weight.get(u1) - weight.get(u2))
 }
 
-const orderLayers = (graph, vertexLayer, repeat, v) => {
+const orderLayersLocal = (graph, vertexLayer, repeat, v) => {
   const depth = vertexLayer.get(v).length
   const ws = graph.children(v)
   const h = Math.max(...ws.map((w) => vertexLayer.get(w)[depth])) + 1
@@ -109,6 +109,31 @@ const orderLayers = (graph, vertexLayer, repeat, v) => {
   }
 
   return layers
+}
+
+const orderLyaersGlobal = (graph, vertexLayer, repeat, result, u) => {
+  const children = graph.children(u)
+  if (children.length > 0) {
+    const layers = orderLayersLocal(graph, vertexLayer, repeat, u)
+    for (const layer of layers) {
+      for (let i = 0; i < layer.length; ++i) {
+        result.set(layer[i], i)
+      }
+    }
+    for (const v of children) {
+      orderLyaersGlobal(graph, vertexLayer, repeat, result, v)
+    }
+  }
+}
+
+const orderLayers = (graph, vertexLayer, repeat) => {
+  const result = new Map()
+  for (const u of graph.vertices()) {
+    if (graph.parent(u) == null) {
+      orderLyaersGlobal(graph, vertexLayer, repeat, result, u)
+    }
+  }
+  return result
 }
 
 module.exports = orderLayers
