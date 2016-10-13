@@ -89,16 +89,18 @@ const orderLayersLocal = (graph, repeat, v) => {
   const layers = childLayer(graph, v)
   const h = layers.length
 
-  for (let j = 0; j < repeat; ++j) {
-    bou(graph, upperLayerWithDummy(graph, layers[0]), layers[0])
-    for (let i = 1; i < h; ++i) {
-      bou(graph, upperLayer(graph, layers[i - 1]), layers[i])
-      bou(graph, upperLayerWithDummy(graph, layers[i]), layers[i])
-    }
-    bou(graph, lowerLayerWithDummy(graph, layers[1]), layers[1])
-    for (let i = h - 2; i >= 0; --i) {
-      bou(graph, lowerLayer(graph, layers[i + 1]), layers[i])
-      bou(graph, lowerLayerWithDummy(graph, layers[i]), layers[i])
+  if (h > 1) {
+    for (let j = 0; j < repeat; ++j) {
+      bou(graph, upperLayerWithDummy(graph, layers[0]), layers[0])
+      for (let i = 1; i < h; ++i) {
+        bou(graph, upperLayer(graph, layers[i - 1]), layers[i])
+        bou(graph, upperLayerWithDummy(graph, layers[i]), layers[i])
+      }
+      bou(graph, lowerLayerWithDummy(graph, layers[1]), layers[1])
+      for (let i = h - 2; i >= 0; --i) {
+        bou(graph, lowerLayer(graph, layers[i + 1]), layers[i])
+        bou(graph, lowerLayerWithDummy(graph, layers[i]), layers[i])
+      }
     }
   }
 

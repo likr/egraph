@@ -30,10 +30,8 @@ const derivedGraph = (inGraph) => {
   const graph = copy(inGraph)
   for (const [u, v] of graph.edges()) {
     const [upPath, downPath] = inclusionPath(graph, u, v)
-    let count = 0
     for (let i = 0; i < upPath.length && i < downPath.length; ++i) {
       if (!graph.edge(upPath[i], downPath[i])) {
-        count += 1
         graph.addEdge(upPath[i], downPath[i], {
           priority: upPath.length === downPath.length ? -2 : -1
         })

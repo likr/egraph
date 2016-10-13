@@ -2,7 +2,6 @@ const Graph = require('../../graph')
 const LongestPath = require('../sugiyama/layer-assignment/longest-path')
 
 const layerAssignment = (graph) => {
-  const result = new Map()
   const longestPath = new LongestPath()
   let children = new Set(graph.vertices().filter((u) => graph.parent(u) === null))
   while (children.size) {
@@ -21,9 +20,9 @@ const layerAssignment = (graph) => {
       }
       const parentLayer = graph.parent(u) === null
         ? []
-        : Array.from(result.get(graph.parent(u)))
+        : Array.from(graph.vertex(graph.parent(u)).layer)
       parentLayer.push(layers[u])
-      result.set(u, parentLayer)
+      graph.vertex(u).layer = parentLayer
     }
 
     const parents = children
@@ -34,7 +33,6 @@ const layerAssignment = (graph) => {
       }
     }
   }
-  return result
 }
 
 module.exports = layerAssignment

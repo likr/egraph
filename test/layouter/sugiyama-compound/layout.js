@@ -6,14 +6,14 @@ describe('layout', () => {
   it('', () => {
     const [a, b, c, g, h, i, j, k, v] = 'abcghijkv'
     const graph = new Graph()
-      .addVertex(a, {layer: [0, 0], order: 0, width: 10})
-      .addVertex(b, {layer: [0, 0], order: 2, width: 10})
-      .addVertex(c, {layer: [0, 0], order: 1, width: 10})
-      .addVertex(g, {layer: [0, 1], order: 3, width: 10})
-      .addVertex(h, {layer: [0, 1], order: 1, width: 10})
-      .addVertex(i, {layer: [0, 1], order: 0, width: 10})
-      .addVertex(j, {layer: [0, 1], order: 4, width: 10})
-      .addVertex(k, {layer: [0, 1], order: 3, width: 10})
+      .addVertex(a, {layer: [0, 0], order: 0, width: 10, height: 10})
+      .addVertex(b, {layer: [0, 0], order: 2, width: 10, height: 10})
+      .addVertex(c, {layer: [0, 0], order: 1, width: 10, height: 10})
+      .addVertex(g, {layer: [0, 1], order: 3, width: 10, height: 10})
+      .addVertex(h, {layer: [0, 1], order: 1, width: 10, height: 10})
+      .addVertex(i, {layer: [0, 1], order: 0, width: 10, height: 10})
+      .addVertex(j, {layer: [0, 1], order: 4, width: 10, height: 10})
+      .addVertex(k, {layer: [0, 1], order: 3, width: 10, height: 10})
       .addVertex(v, {layer: [0], order: 0})
       .addEdge(a, c)
       .addEdge(a, i)
@@ -34,8 +34,5 @@ describe('layout', () => {
       .setChild(v, j)
       .setChild(v, k)
     layout(graph)
-    for (const u of graph.vertices()) {
-      console.log(graph.vertex(u))
-    }
   })
 })

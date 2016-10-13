@@ -33,7 +33,6 @@ describe('orderLayers', () => {
       .setChild(v, i)
       .setChild(v, j)
       .setChild(v, k)
-    const ordering = orderLayers(graph, 1)
-    console.log(ordering)
+    orderLayers(graph, 1)
   })
 })

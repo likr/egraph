@@ -10,20 +10,24 @@ const prev = (layer) => {
   return result
 }
 
-const normalize = (graph, layers) => {
+const normalize = (graph) => {
   for (const [u, v] of graph.edges()) {
-    const uLayer = layers.get(u)
-    const vLayer = layers.get(v)
+    const uLayer = graph.vertex(u).layer
+    const vLayer = graph.vertex(v).layer
     if (uLayer.length !== vLayer.length) {
       const uNeighbor = Symbol()
       const vNeighbor = Symbol()
       graph
-        .addVertex(uNeighbor)
-        .addVertex(vNeighbor)
+        .addVertex(uNeighbor, {
+          layer: next(uLayer),
+          width: 0
+        })
+        .addVertex(vNeighbor, {
+          layer: prev(vLayer),
+          width: 0
+        })
         .addEdge(u, uNeighbor)
         .addEdge(vNeighbor, v)
-      layers.set(uNeighbor, next(uLayer))
-      layers.set(vNeighbor, prev(vLayer))
       if (uLayer.length < vLayer.length) {
         const root = graph.parent(u)
         graph.setChild(root, uNeighbor)

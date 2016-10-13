@@ -1,12 +1,24 @@
+const hDegree = (graph, h, u, inverse) => {
+  if (inverse) {
+    return graph.outVertices(u).filter((v) => h.has(v)).length
+  } else {
+    return graph.inVertices(u).filter((v) => h.has(v)).length
+  }
+}
+
 const priority = (g, h1in, h2in, positions, sizes, inverse = false) => {
   const inVertices = inverse ? (u) => g.outVertices(u) : (u) => g.inVertices(u)
-  const degree = inverse ? (u) => g.outDegree(u) : (u) => g.inDegree(u)
+  const h1 = inverse ? h2in : h1in
   const h2 = inverse ? h1in : h2in
+  const h1Set = new Set(h1)
+  const degree = (u) => hDegree(g, h1Set, u, inverse)
 
   const center = (u) => {
     let sum = 0
     for (let v of inVertices(u)) {
-      sum += positions[v].x
+      if (h1Set.has(v)) {
+        sum += positions[v].x
+      }
     }
     return +(sum / degree(u)).toFixed()
   }
@@ -20,7 +32,9 @@ const priority = (g, h1in, h2in, positions, sizes, inverse = false) => {
     indices[u] = i
     p[u] = 0
     for (const v of inVertices(u)) {
-      p[u] += g.vertex(u).dummy && g.vertex(v).dummy ? 10 : 1
+      if (h1Set.has(v)) {
+        p[u] += g.vertex(u).dummy && g.vertex(v).dummy ? 10 : 1
+      }
     }
   }
   sorted.sort((u, v) => p[v] - p[u])
