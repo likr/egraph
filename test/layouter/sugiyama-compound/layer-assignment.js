@@ -8,7 +8,7 @@ const normalize = require('../../../layouter/sugiyama-compound/normalize')
 
 describe('derivedGraph(graph)', () => {
   it('', () => {
-    const [a, b, c, d, e, f, g, h, i, j, k, l, m, n] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+    const [a, b, c, d, e, f, g, h, i, j, k, l, m, n] = 'abcdefghijklmn'
     const graph = new Graph()
       .addVertex(a)
       .addVertex(b)
@@ -57,7 +57,7 @@ describe('derivedGraph(graph)', () => {
 
 describe('acyclicDerivedGraph(graph)', () => {
   it('', () => {
-    const [a, b, c, d, e, f, g, h, i, j, k, l, m, n] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+    const [a, b, c, d, e, f, g, h, i, j, k, l, m, n] = 'abcdefghijklmn'
     const graph = new Graph()
       .addVertex(a)
       .addVertex(b)
@@ -110,7 +110,7 @@ describe('acyclicDerivedGraph(graph)', () => {
 
 describe('layerAssignment(graph)', () => {
   it('', () => {
-    const [a, b, c, d, e, f, g, h, i, j, k, l, m, n] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+    const [a, b, c, d, e, f, g, h, i, j, k, l, m, n] = 'abcdefghijklmn'
     const graph = new Graph()
       .addVertex(a)
       .addVertex(b)
@@ -128,7 +128,7 @@ describe('layerAssignment(graph)', () => {
       .addVertex(n)
       .addEdge(b, c)
       .addEdge(d, e)
-      .addEdge(e, f)
+      .addEdge(e, f, {priority: -2})
       .addEdge(g, b)
       .addEdge(g, i)
       .addEdge(h, g)
@@ -157,13 +157,13 @@ describe('layerAssignment(graph)', () => {
     assert.deepEqual(graph.vertex(c).layer, [0, 1])
     assert.deepEqual(graph.vertex(d).layer, [0, 0, 0])
     assert.deepEqual(graph.vertex(e).layer, [0, 0, 1])
-    assert.deepEqual(graph.vertex(f).layer, [0, 0, 2])
+    assert.deepEqual(graph.vertex(f).layer, [0, 0, 1])
     assert.deepEqual(graph.vertex(g).layer, [0, 1, 1])
     assert.deepEqual(graph.vertex(h).layer, [0, 1, 0])
     assert.deepEqual(graph.vertex(i).layer, [0, 1, 2])
     assert.deepEqual(graph.vertex(j).layer, [0, 0, 1, 0])
-    assert.deepEqual(graph.vertex(k).layer, [0, 0, 2, 0])
-    assert.deepEqual(graph.vertex(l).layer, [0, 0, 2, 1])
+    assert.deepEqual(graph.vertex(k).layer, [0, 0, 1, 0])
+    assert.deepEqual(graph.vertex(l).layer, [0, 0, 1, 1])
     assert.deepEqual(graph.vertex(m).layer, [0, 1, 1, 0])
     assert.deepEqual(graph.vertex(n).layer, [0, 1, 1, 1])
   })
@@ -171,7 +171,7 @@ describe('layerAssignment(graph)', () => {
 
 describe('normalize(graph, layers)', () => {
   it('', () => {
-    const [a, b, c, d, e, f, g, h, i, j, k, l, m, n] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+    const [a, b, c, d, e, f, g, h, i, j, k, l, m, n] = 'abcdefghijklmn'
     const graph = new Graph()
       .addVertex(a)
       .addVertex(b)
