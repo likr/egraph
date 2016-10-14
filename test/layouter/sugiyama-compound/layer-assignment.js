@@ -170,7 +170,7 @@ describe('layerAssignment(graph)', () => {
 })
 
 describe('normalize(graph, layers)', () => {
-  it('', () => {
+  it('works', () => {
     const [a, b, c, d, e, f, g, h, i, j, k, l, m, n] = 'abcdefghijklmn'
     const graph = new Graph()
       .addVertex(a, {layer: [0]})
@@ -212,5 +212,26 @@ describe('normalize(graph, layers)', () => {
     normalize(graph)
     assert.equal(graph.numVertices(), 22)
     assert.equal(graph.numEdges(), 13)
+  })
+
+  it('works', () => {
+    const [a, b, c, d, e] = 'abcde'
+    const graph = new Graph()
+      .addVertex(a, {layer: [0]})
+      .addVertex(b, {layer: [0, 0]})
+      .addVertex(c, {layer: [0, 1]})
+      .addVertex(d, {layer: [0, 2]})
+      .addVertex(e, {layer: [0, 3]})
+      .addEdge(b, c)
+      .addEdge(b, e)
+      .addEdge(c, d)
+      .addEdge(d, e)
+      .setChild(a, b)
+      .setChild(a, c)
+      .setChild(a, d)
+      .setChild(a, e)
+    normalize(graph)
+    assert.equal(graph.numVertices(), 7)
+    assert.equal(graph.numEdges(), 6)
   })
 })

@@ -10,6 +10,10 @@ const prev = (layer) => {
   return result
 }
 
+const tail = (layer) => {
+  return layer[layer.length - 1]
+}
+
 const normalize = (graph) => {
   for (const [u, v] of graph.edges()) {
     const uLayer = graph.vertex(u).layer
@@ -42,11 +46,33 @@ const normalize = (graph) => {
         graph.setChild(vNeighbor, uNeighbor)
       }
       graph.removeEdge(u, v)
+    } else if (tail(vLayer) - tail(uLayer) > 1) {
+      const parent = graph.parent(u)
+      let w = u
+      let wLayer = uLayer
+      const diff = tail(vLayer) - tail(uLayer)
+      for (let i = diff; i > 1; --i) {
+        const neighbor = Symbol()
+        wLayer = next(wLayer)
+        graph
+          .addVertex(neighbor, {
+            layer: wLayer,
+            width: 0,
+            height: 0,
+            dummy: true
+          })
+          .setChild(parent, neighbor)
+          .addEdge(w, neighbor)
+        w = neighbor
+      }
+      graph
+        .addEdge(w, v)
+        .removeEdge(u, v)
     }
   }
   for (const u of graph.vertices()) {
     const uLayer = graph.vertex(u).layer
-    const x = uLayer[uLayer.length - 1]
+    const x = tail(uLayer)
     if (x < 0) {
       for (const v of graph.vertices()) {
         const vLayer = graph.vertex(v).layer

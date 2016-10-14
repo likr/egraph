@@ -120,6 +120,10 @@ class MutableGraph extends AbstractGraph {
     for (const v of this.inVertices(u)) {
       this.removeEdge(v, u)
     }
+    const parent = this.parent(u)
+    if (parent) {
+      this.unsetChild(parent, u)
+    }
     p(this).vertices.delete(u)
     p(this).numVertices--
     return this

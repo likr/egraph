@@ -37,19 +37,21 @@ const dummyPath = (graph, u, w) => {
   }
   const path = [u]
   let v = w
-  while (graph.outVertices(v).length > 0) {
+  while (graph.vertex(v).dummy && graph.outVertices(v).length > 0) {
     path.push(v)
     v = graph.outVertices(v)[0]
   }
-  if (graph.children(v).length > 0) {
-    while (graph.outVertices(v).length === 0) {
-      path.push(v)
-      v = graph.children(v)[0]
-    }
-  } else {
-    while (graph.outVertices(v).length === 0) {
-      path.push(v)
-      v = graph.parent(v)
+  if (graph.vertex(v).dummy) {
+    if (graph.children(v).length > 0) {
+      while (graph.outVertices(v).length === 0) {
+        path.push(v)
+        v = graph.children(v)[0]
+      }
+    } else {
+      while (graph.outVertices(v).length === 0) {
+        path.push(v)
+        v = graph.parent(v)
+      }
     }
   }
   while (graph.vertex(v).dummy) {
@@ -61,13 +63,11 @@ const dummyPath = (graph, u, w) => {
 }
 
 const pathPoints = (graph, path) => {
-  console.log(path[0], path[path.length - 1])
   const points = []
   const du = graph.vertex(path[0])
   points.push([du.x, du.y + du.height / 2])
   for (let i = 1; i < path.length - 1; ++i) {
     const dw = graph.vertex(path[i])
-    console.log(graph.parent(path[i]) === path[i + 1], graph.parent(path[i + 1]) === path[i])
     if (graph.parent(path[i - 1]) === path[i]) {
       points.push([dw.x, dw.y + dw.height / 2])
     } else if (graph.parent(path[i + 1]) === path[i]) {
@@ -89,7 +89,8 @@ const CompoundSugiyamaLayouter = (() => {
     constructor () {
       privates.set(this, {
         vertexMargin: 30,
-        layerMargin: 30
+        layerMargin: 30,
+        crossingReductionRepeat: 1
       })
     }
 
@@ -100,7 +101,7 @@ const CompoundSugiyamaLayouter = (() => {
       layerAssignment(derived)
       removeCycle(graph)
       normalize(graph)
-      orderLayers(graph, 1)
+      orderLayers(graph, this.crossingReductionRepeat())
       layout(graph, this.vertexMargin() / 2, this.layerMargin() / 2)
       const vertices = {}
       const edges = {}
@@ -139,6 +140,10 @@ const CompoundSugiyamaLayouter = (() => {
 
     vertexMargin () {
       return accessor(this, privates, 'vertexMargin', arguments)
+    }
+
+    crossingReductionRepeat () {
+      return accessor(this, privates, 'crossingReductionRepeat', arguments)
     }
   }
 })()
