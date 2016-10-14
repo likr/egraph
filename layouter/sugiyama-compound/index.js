@@ -66,7 +66,11 @@ const pathPoints = (graph, path) => {
   points.push([du.x, du.y + du.height / 2])
   for (let i = 1; i < path.length - 1; ++i) {
     const dw = graph.vertex(path[i])
-    points.push([dw.x, dw.y])
+    if (dw.y > points[points.length - 1][1]) {
+      points.push([dw.x, dw.y - dw.height / 2])
+    } else {
+      points.push([dw.x, dw.y + dw.height / 2])
+    }
   }
   const dv = graph.vertex(path[path.length - 1])
   points.push([dv.x, dv.y - dv.height / 2])
