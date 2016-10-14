@@ -44,7 +44,7 @@ const minweight = (graph, weight) => {
       SGraph.addEdge(u, v)
     }
   }
-  replace(graph, T)
+  return T
 }
 
 const privates = new WeakMap()
@@ -57,7 +57,8 @@ class MinWeight {
   }
 
   call (graph) {
-    minweight(graph, edgeFunction(this.weight(), graph))
+    const cycleEdges = minweight(graph, edgeFunction(this.weight(), graph))
+    replace(graph, cycleEdges)
   }
 
   weight () {

@@ -107,29 +107,27 @@ const orderLayersLocal = (graph, repeat, v) => {
   return layers
 }
 
-const orderLyaersGlobal = (graph, repeat, result, u) => {
+const orderLyaersGlobal = (graph, repeat, u) => {
   const children = graph.children(u)
   if (children.length > 0) {
     const layers = orderLayersLocal(graph, repeat, u)
     for (const layer of layers) {
       for (let i = 0; i < layer.length; ++i) {
-        result.set(layer[i], i)
+        graph.vertex(layer[i]).order = i
       }
     }
     for (const v of children) {
-      orderLyaersGlobal(graph, repeat, result, v)
+      orderLyaersGlobal(graph, repeat, v)
     }
   }
 }
 
 const orderLayers = (graph, repeat) => {
-  const result = new Map()
   for (const u of graph.vertices()) {
     if (graph.parent(u) == null) {
-      orderLyaersGlobal(graph, repeat, result, u)
+      orderLyaersGlobal(graph, repeat, u)
     }
   }
-  return result
 }
 
 module.exports = orderLayers

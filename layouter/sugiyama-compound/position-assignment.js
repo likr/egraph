@@ -2,6 +2,7 @@ const priorityLayer = require('../sugiyama/position-assignment/priority')
 const childLayers = require('./child-layers')
 
 const priority = (graph, layers) => {
+  layers = layers.filter((layer) => layer.length > 0)
   for (const layer of layers) {
     layer.sort((u, v) => graph.vertex(u).order - graph.vertex(v).order)
   }
@@ -14,7 +15,7 @@ const priority = (graph, layers) => {
       const width = graph.vertex(u).width
       positions[u] = {x: hOffset + width / 2}
       sizes[u] = {width}
-      hOffset += width / 2
+      hOffset += width
     }
   }
 
@@ -28,12 +29,15 @@ const priority = (graph, layers) => {
     priorityLayer(graph, layers[i - 1], layers[i], positions, sizes, false)
   }
 
+  const left = Math.min(...layers.map((layer) => {
+    return Math.min(...layer.map((u) => positions[u].x - graph.vertex(u).width / 2))
+  }))
   let vOffset = 0
   for (let i = 0; i < layers.length; ++i) {
     const layer = layers[i]
     const layerHeight = Math.max(...layer.map((u) => graph.vertex(u).height))
     for (const u of layer) {
-      graph.vertex(u).xLocal = positions[u].x
+      graph.vertex(u).xLocal = positions[u].x - left
       graph.vertex(u).yLocal = vOffset + layerHeight / 2
     }
     vOffset += layerHeight
@@ -52,22 +56,21 @@ const layoutLocal = (graph, u) => {
   const right = Math.max(...children.map((v) => graph.vertex(v).xLocal + graph.vertex(v).width / 2))
   const top = Math.min(...children.map((v) => graph.vertex(v).yLocal - graph.vertex(v).height / 2))
   const bottom = Math.max(...children.map((v) => graph.vertex(v).yLocal + graph.vertex(v).height / 2))
-  graph.vertex(u).width = right - left + 30
-  graph.vertex(u).height = bottom - top + 30
+  graph.vertex(u).width = right - left + 20
+  graph.vertex(u).height = bottom - top + 20
+  graph.vertex(u).origWidth = graph.vertex(u).width - 10
+  graph.vertex(u).origHeight = graph.vertex(u).height - 10
 }
 
 const layoutGlobal = (graph, u) => {
-  const children = graph.children(u)
   const uVertex = graph.vertex(u)
-  const hOffset = uVertex.x - uVertex.width / 2 + 15
-  const vOffset = uVertex.y - uVertex.height / 2 + 15
-  if (children.length > 0) {
-    for (const v of children) {
-      const vertex = graph.vertex(v)
-      vertex.x = hOffset + vertex.xLocal
-      vertex.y = vOffset + vertex.yLocal
-      layoutGlobal(graph, v)
-    }
+  const hOffset = uVertex.x - uVertex.width / 2 + 10
+  const vOffset = uVertex.y - uVertex.height / 2 + 10
+  for (const v of graph.children(u)) {
+    const vertex = graph.vertex(v)
+    vertex.x = hOffset + vertex.xLocal
+    vertex.y = vOffset + vertex.yLocal
+    layoutGlobal(graph, v)
   }
 }
 
