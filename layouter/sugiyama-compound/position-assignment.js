@@ -44,11 +44,11 @@ const priority = (graph, layers) => {
   }
 }
 
-const layoutLocal = (graph, u) => {
+const layoutLocal = (graph, u, hMargin, vMargin) => {
   const children = graph.children(u)
   for (const v of children) {
     if (graph.children(v).length > 0) {
-      layoutLocal(graph, v)
+      layoutLocal(graph, v, hMargin, vMargin)
     }
   }
   priority(graph, childLayers(graph, u))
@@ -56,33 +56,33 @@ const layoutLocal = (graph, u) => {
   const right = Math.max(...children.map((v) => graph.vertex(v).xLocal + graph.vertex(v).width / 2))
   const top = Math.min(...children.map((v) => graph.vertex(v).yLocal - graph.vertex(v).height / 2))
   const bottom = Math.max(...children.map((v) => graph.vertex(v).yLocal + graph.vertex(v).height / 2))
-  graph.vertex(u).width = right - left + 20
-  graph.vertex(u).height = bottom - top + 20
-  graph.vertex(u).origWidth = graph.vertex(u).width - 10
-  graph.vertex(u).origHeight = graph.vertex(u).height - 10
+  graph.vertex(u).width = right - left + hMargin * 2
+  graph.vertex(u).height = bottom - top + vMargin * 2
+  graph.vertex(u).origWidth = graph.vertex(u).width - hMargin
+  graph.vertex(u).origHeight = graph.vertex(u).height - vMargin
 }
 
-const layoutGlobal = (graph, u) => {
+const layoutGlobal = (graph, u, hMargin, vMargin) => {
   const uVertex = graph.vertex(u)
-  const hOffset = uVertex.x - uVertex.width / 2 + 10
-  const vOffset = uVertex.y - uVertex.height / 2 + 10
+  const hOffset = uVertex.x - uVertex.width / 2 + hMargin
+  const vOffset = uVertex.y - uVertex.height / 2 + vMargin
   for (const v of graph.children(u)) {
     const vertex = graph.vertex(v)
     vertex.x = hOffset + vertex.xLocal
     vertex.y = vOffset + vertex.yLocal
-    layoutGlobal(graph, v)
+    layoutGlobal(graph, v, hMargin, vMargin)
   }
 }
 
-const metricalLayout = (graph) => {
+const metricalLayout = (graph, hMargin = 10, vMargin = 10) => {
   const result = new Map()
   for (const u of graph.vertices()) {
     if (graph.parent(u) == null) {
-      layoutLocal(graph, u)
+      layoutLocal(graph, u, hMargin, vMargin)
       const vertex = graph.vertex(u)
       vertex.x = vertex.width / 2
       vertex.y = vertex.height / 2
-      layoutGlobal(graph, u)
+      layoutGlobal(graph, u, hMargin, vMargin)
     }
   }
   return result

@@ -1,14 +1,14 @@
 const Graph = require('../../graph')
+const accessor = require('../../utils/accessor')
 const derivedGraph = require('./derived-graph')
 const acyclicDerivedGraph = require('./acyclic-derived-graph')
 const layerAssignment = require('./layer-assignment')
+const removeCycle = require('./remvoe-cycle')
 const normalize = require('./normalize')
 const orderLayers = require('./crossing-reduction')
 const layout = require('./position-assignment')
 
-const initialize = (graphIn) => {
-  const vertexMargin = 10
-  const layerMargin = 10
+const initialize = (graphIn, vertexMargin, layerMargin) => {
   const graph = new Graph()
   for (const u of graphIn.vertices()) {
     const d = graphIn.vertex(u)
@@ -31,21 +31,46 @@ const initialize = (graphIn) => {
   return graph
 }
 
-const cmpClev = (layer1, layer2) => {
-  const minLen = Math.min(layer1.length, layer2.length)
-  for (let i = 0; i < minLen; ++i) {
-    if (layer1[i] < layer2[i]) {
-      return -1
-    } else if (layer1[i] > layer2[i]) {
-      return 1
+const dummyPath = (graph, u, w) => {
+  if (!graph.vertex(w).dummy) {
+    return [u, w]
+  }
+  const path = [u]
+  let v = w
+  while (graph.outVertices(v).length > 0) {
+    path.push(v)
+    v = graph.outVertices(v)[0]
+  }
+  if (graph.children(v).length > 0) {
+    while (graph.outVertices(v).length === 0) {
+      path.push(v)
+      v = graph.children(v)[0]
+    }
+  } else {
+    while (graph.outVertices(v).length === 0) {
+      path.push(v)
+      v = graph.parent(v)
     }
   }
-  if (layer1.length < layer2.length) {
-    return -1
-  } else if (layer1.length > layer2.length) {
-    return 1
+  while (graph.vertex(v).dummy) {
+    path.push(v)
+    v = graph.outVertices(v)[0]
   }
-  return 0
+  path.push(v)
+  return path
+}
+
+const pathPoints = (graph, path) => {
+  const points = []
+  const du = graph.vertex(path[0])
+  points.push([du.x, du.y + du.height / 2])
+  for (let i = 1; i < path.length - 1; ++i) {
+    const dw = graph.vertex(path[i])
+    points.push([dw.x, dw.y])
+  }
+  const dv = graph.vertex(path[path.length - 1])
+  points.push([dv.x, dv.y - dv.height / 2])
+  return points
 }
 
 const CompoundSugiyamaLayouter = (() => {
@@ -54,37 +79,58 @@ const CompoundSugiyamaLayouter = (() => {
   return class CompoundSugiyamaLayouter {
     constructor () {
       privates.set(this, {
+        vertexMargin: 30,
+        layerMargin: 30
       })
     }
 
     layout (graphIn) {
-      const graph = initialize(graphIn)
+      const graph = initialize(graphIn, this.vertexMargin(), this.layerMargin())
       const derived = derivedGraph(graph)
       acyclicDerivedGraph(derived)
       layerAssignment(derived)
-      const reverseEdges = []
-      for (const [u, v] of graph.edges()) {
-        if (cmpClev(graph.vertex(u).layer, graph.vertex(v).layer) > 0) {
-          reverseEdges.push([u, v])
-        }
-      }
-      for (const [u, v] of reverseEdges) {
-        const d = graph.edge(u, v)
-        graph.removeEdge(u, v)
-        graph.addEdge(v, u, {reversed: true, d})
-      }
+      removeCycle(graph)
       normalize(graph)
       orderLayers(graph, 1)
-      layout(graph)
+      layout(graph, this.vertexMargin() / 2, this.layerMargin() / 2)
       const vertices = {}
+      const edges = {}
       for (const u of graphIn.vertices()) {
         const d = graph.vertex(u)
         vertices[u] = Object.assign(d, {
           width: d.origWidth || d.width,
           height: d.origHeight || d.height
         })
+        edges[u] = {}
       }
-      return {vertices}
+      for (const [u, w] of graph.edges()) {
+        if (!graph.vertex(u).dummy) {
+          const path = dummyPath(graph, u, w)
+          const v = path[path.length - 1]
+          const points = pathPoints(graph, path)
+          if (graphIn.edge(u, v)) {
+            edges[u][v] = {
+              points,
+              reversed: false
+            }
+          } else {
+            points.reverse()
+            edges[v][u] = {
+              points,
+              reversed: true
+            }
+          }
+        }
+      }
+      return {vertices, edges}
+    }
+
+    layerMargin () {
+      return accessor(this, privates, 'layerMargin', arguments)
+    }
+
+    vertexMargin () {
+      return accessor(this, privates, 'vertexMargin', arguments)
     }
   }
 })()

@@ -144,8 +144,5 @@ describe('layout', () => {
       .setChild(t, s)
       .setChild(v, u)
     layout(graph)
-    // for (const u of graph.vertices()) {
-    //   console.log(u, graph.vertex(u))
-    // }
   })
 })
