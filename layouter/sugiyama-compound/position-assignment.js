@@ -84,7 +84,11 @@ const assignHeight = (graph, layerVertices, vMargin, offset, key) => {
   if (childLayers.size === 0) {
     const maxHeight = Math.max(...vertices.map((u) => graph.vertex(u).height))
     for (const u of vertices) {
-      graph.vertex(u).y = offset + maxHeight / 2
+      const vertex = graph.vertex(u)
+      vertex.y = offset + maxHeight / 2
+      if (vertex.dummy) {
+        vertex.height = maxHeight
+      }
     }
     return maxHeight
   } else {

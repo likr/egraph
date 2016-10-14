@@ -61,14 +61,19 @@ const dummyPath = (graph, u, w) => {
 }
 
 const pathPoints = (graph, path) => {
+  console.log(path[0], path[path.length - 1])
   const points = []
   const du = graph.vertex(path[0])
   points.push([du.x, du.y + du.height / 2])
   for (let i = 1; i < path.length - 1; ++i) {
     const dw = graph.vertex(path[i])
-    if (dw.y > points[points.length - 1][1]) {
+    console.log(graph.parent(path[i]) === path[i + 1], graph.parent(path[i + 1]) === path[i])
+    if (graph.parent(path[i - 1]) === path[i]) {
+      points.push([dw.x, dw.y + dw.height / 2])
+    } else if (graph.parent(path[i + 1]) === path[i]) {
       points.push([dw.x, dw.y - dw.height / 2])
     } else {
+      points.push([dw.x, dw.y - dw.height / 2])
       points.push([dw.x, dw.y + dw.height / 2])
     }
   }
@@ -118,7 +123,6 @@ const CompoundSugiyamaLayouter = (() => {
               reversed: false
             }
           } else {
-            points.reverse()
             edges[v][u] = {
               points,
               reversed: true
