@@ -2,7 +2,7 @@ const Graph = require('../../graph')
 const accessor = require('../../utils/accessor')
 const derivedGraph = require('./derived-graph')
 const acyclicDerivedGraph = require('./acyclic-derived-graph')
-const {LayerAssignment} = require('./layering')
+const {CompoundLayering} = require('./layering')
 const removeCycle = require('./remvoe-cycle')
 const normalize = require('./normalize')
 const orderLayers = require('./crossing-reduction')
@@ -90,7 +90,8 @@ const CompoundSugiyamaLayouter = (() => {
       privates.set(this, {
         vertexMargin: 30,
         layerMargin: 30,
-        crossingReductionRepeat: 1
+        crossingReductionRepeat: 1,
+        layering: new CompoundLayering()
       })
     }
 
@@ -98,7 +99,7 @@ const CompoundSugiyamaLayouter = (() => {
       const graph = initialize(graphIn, this.vertexMargin(), this.layerMargin())
       const derived = derivedGraph(graph)
       acyclicDerivedGraph(derived)
-      new LayerAssignment().call(derived)
+      this.layering().call(derived)
       removeCycle(graph)
       normalize(graph)
       orderLayers(graph, this.crossingReductionRepeat())
@@ -144,6 +145,10 @@ const CompoundSugiyamaLayouter = (() => {
 
     crossingReductionRepeat () {
       return accessor(this, privates, 'crossingReductionRepeat', arguments)
+    }
+
+    layering () {
+      return accessor(this, privates, 'layering', arguments)
     }
   }
 })()
