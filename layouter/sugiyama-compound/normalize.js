@@ -24,13 +24,13 @@ const normalize = (graph) => {
       graph
         .addVertex(uNeighbor, {
           layer: next(uLayer),
-          width: 0,
+          width: 10,
           height: 0,
           dummy: true
         })
         .addVertex(vNeighbor, {
           layer: prev(vLayer),
-          width: 0,
+          width: 10,
           height: 0,
           dummy: true
         })
@@ -57,7 +57,7 @@ const normalize = (graph) => {
         graph
           .addVertex(neighbor, {
             layer: wLayer,
-            width: 0,
+            width: 10,
             height: 0,
             dummy: true
           })

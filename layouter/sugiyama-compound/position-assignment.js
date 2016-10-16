@@ -1,5 +1,6 @@
 const priorityLayer = require('../sugiyama/position-assignment/priority')
 const childLayers = require('./child-layers')
+const compareClev = require('./compare-clev')
 
 const priority = (graph, layers) => {
   layers = layers.filter((layer) => layer.length > 0)
@@ -95,7 +96,9 @@ const assignHeight = (graph, layerVertices, vMargin, offset, key) => {
     let totalHeight = vMargin * 2
     let childOffset = offset + vMargin
     const childKeys = Array.from(childLayers.keys())
-    childKeys.sort()
+    childKeys.sort((key1, key2) => {
+      return compareClev(key1.split(',').map((v) => +v), key2.split(',').map((v) => +v))
+    })
     for (const childKey of childKeys) {
       const childHeight = assignHeight(graph, layerVertices, vMargin, childOffset, childKey)
       totalHeight += childHeight
