@@ -1,4 +1,4 @@
-const Graph = require('../../graph')
+const Graph = require('../../../graph')
 
 const longestPath = (graph) => {
   const visited = {}
@@ -61,4 +61,4 @@ const layerAssignment = (graph) => {
   }
 }
 
-module.exports = layerAssignment
+exports.layerAssignment = layerAssignment

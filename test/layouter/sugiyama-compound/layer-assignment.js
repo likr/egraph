@@ -3,7 +3,7 @@ const assert = require('power-assert')
 const Graph = require('../../../graph')
 const derivedGraph = require('../../../layouter/sugiyama-compound/derived-graph')
 const acyclicDerivedGraph = require('../../../layouter/sugiyama-compound/acyclic-derived-graph')
-const layerAssignment = require('../../../layouter/sugiyama-compound/layer-assignment')
+const {layerAssignment} = require('../../../layouter/sugiyama-compound/layering/layer-assignment')
 const normalize = require('../../../layouter/sugiyama-compound/normalize')
 
 describe('derivedGraph(graph)', () => {
