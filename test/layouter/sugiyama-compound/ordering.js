@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 const Graph = require('../../../graph')
-const orderLayers = require('../../../layouter/sugiyama-compound/crossing-reduction')
+const {compoundOrdering} = require('../../../layouter/sugiyama-compound/ordering/compound-ordering')
 
 describe('orderLayers', () => {
   it('', () => {
@@ -33,7 +33,7 @@ describe('orderLayers', () => {
       .setChild(v, i)
       .setChild(v, j)
       .setChild(v, k)
-    orderLayers(graph, 1)
+    compoundOrdering(graph, 1)
   })
 
   it('works', () => {
@@ -95,6 +95,6 @@ describe('orderLayers', () => {
       .setChild(q, r)
       .setChild(t, s)
       .setChild(v, u)
-    orderLayers(graph, 1)
+    compoundOrdering(graph, 1)
   })
 })

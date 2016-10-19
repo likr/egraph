@@ -1,4 +1,4 @@
-const childLayer = require('./child-layers')
+const childLayer = require('../child-layers')
 
 const upperLayer = (graph, S) => {
   const setS = new Set(S)
@@ -130,4 +130,4 @@ const orderLayers = (graph, repeat) => {
   }
 }
 
-module.exports = orderLayers
+exports.compoundOrdering = orderLayers
