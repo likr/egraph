@@ -1,5 +1,7 @@
 const Graph = require('../../graph')
 const accessor = require('../../utils/accessor')
+const edgeFunction = require('../../utils/edge-function')
+const vertexFunction = require('../../utils/vertex-function')
 const derivedGraph = require('./derived-graph')
 const acyclicDerivedGraph = require('./acyclic-derived-graph')
 const {CompoundLayering} = require('./layering')
@@ -8,20 +10,34 @@ const removeCycle = require('./remvoe-cycle')
 const normalize = require('./normalize')
 const layout = require('./position-assignment')
 
-const initialize = (graphIn, vertexMargin, layerMargin) => {
+const initialize = (graphIn, options) => {
+  const {
+    vertexMargin,
+    layerMargin,
+    edgeMargin,
+    vertexWidth,
+    vertexHeight,
+    edgeWidth
+  } = options
   const graph = new Graph()
   for (const u of graphIn.vertices()) {
     const d = graphIn.vertex(u)
+    const width = vertexWidth(u)
+    const height = vertexHeight(u)
     graph.addVertex(u, Object.assign({}, d, {
-      width: d.width + vertexMargin,
-      height: d.height + layerMargin,
-      origWidth: d.width,
-      origHeight: d.height
+      width: width + vertexMargin,
+      height: height + layerMargin,
+      origWidth: width,
+      origHeight: height
     }))
   }
   for (const [u, v] of graphIn.edges()) {
     const d = graphIn.edge(u, v)
-    graph.addEdge(u, v, d)
+    const width = edgeWidth(u, v)
+    graph.addEdge(u, v, Object.assign({}, d, {
+      width: width + edgeMargin,
+      origWidth: width
+    }))
   }
   for (const u of graphIn.vertices()) {
     if (graphIn.parent(u) != null) {
@@ -88,15 +104,26 @@ const CompoundSugiyamaLayouter = (() => {
   return class CompoundSugiyamaLayouter {
     constructor () {
       privates.set(this, {
-        vertexMargin: 30,
-        layerMargin: 30,
+        vertexMargin: 10,
+        layerMargin: 10,
+        edgeMargin: 10,
+        vertexWidth: ({d}) => d.width,
+        vertexHeight: ({d}) => d.height,
+        edgeWidth: () => 1,
         layering: new CompoundLayering(),
         ordering: new CompoundOrdering()
       })
     }
 
     layout (graphIn) {
-      const graph = initialize(graphIn, this.vertexMargin(), this.layerMargin())
+      const graph = initialize(graphIn, {
+        vertexMargin: this.vertexMargin(),
+        layerMargin: this.layerMargin(),
+        edgeMargin: this.edgeMargin(),
+        vertexWidth: vertexFunction(this.vertexWidth(), graphIn),
+        vertexHeight: vertexFunction(this.vertexHeight(), graphIn),
+        edgeWidth: edgeFunction(this.edgeWidth(), graphIn)
+      })
       const derived = derivedGraph(graph)
       acyclicDerivedGraph(derived)
       this.layering().call(derived)
@@ -141,6 +168,22 @@ const CompoundSugiyamaLayouter = (() => {
 
     vertexMargin () {
       return accessor(this, privates, 'vertexMargin', arguments)
+    }
+
+    edgeMargin () {
+      return accessor(this, privates, 'edgeMargin', arguments)
+    }
+
+    vertexWidth () {
+      return accessor(this, privates, 'vertexWidth', arguments)
+    }
+
+    vertexHeight () {
+      return accessor(this, privates, 'vertexHeight', arguments)
+    }
+
+    edgeWidth () {
+      return accessor(this, privates, 'edgeWidth', arguments)
     }
 
     layering () {
