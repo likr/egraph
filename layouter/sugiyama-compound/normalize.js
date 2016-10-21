@@ -16,6 +16,7 @@ const tail = (layer) => {
 
 const normalize = (graph) => {
   for (const [u, v] of graph.edges()) {
+    const {width, origWidth} = graph.edge(u, v)
     const uLayer = graph.vertex(u).layer
     const vLayer = graph.vertex(v).layer
     if (uLayer.length !== vLayer.length) {
@@ -24,13 +25,15 @@ const normalize = (graph) => {
       graph
         .addVertex(uNeighbor, {
           layer: next(uLayer),
-          width: 10,
+          width,
+          origWidth,
           height: 0,
           dummy: true
         })
         .addVertex(vNeighbor, {
           layer: prev(vLayer),
-          width: 10,
+          width,
+          origWidth,
           height: 0,
           dummy: true
         })
