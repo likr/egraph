@@ -37,8 +37,14 @@ const normalize = (graph) => {
           height: 0,
           dummy: true
         })
-        .addEdge(u, uNeighbor)
-        .addEdge(vNeighbor, v)
+        .addEdge(u, uNeighbor, {
+          width,
+          origWidth
+        })
+        .addEdge(vNeighbor, v, {
+          width,
+          origWidth
+        })
       if (uLayer.length < vLayer.length) {
         const root = graph.parent(u)
         graph.setChild(root, uNeighbor)
@@ -65,11 +71,17 @@ const normalize = (graph) => {
             dummy: true
           })
           .setChild(parent, neighbor)
-          .addEdge(w, neighbor)
+          .addEdge(w, neighbor, {
+            width,
+            origWidth
+          })
         w = neighbor
       }
       graph
-        .addEdge(w, v)
+        .addEdge(w, v, {
+          width,
+          origWidth
+        })
         .removeEdge(u, v)
     }
   }

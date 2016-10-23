@@ -148,14 +148,17 @@ const CompoundSugiyamaLayouter = (() => {
           const path = dummyPath(graph, u, w)
           const v = path[path.length - 1]
           const points = pathPoints(graph, path)
+          const width = graph.edge(u, w).origWidth
           if (graphIn.edge(u, v)) {
             edges[u][v] = {
               points,
+              width,
               reversed: false
             }
           } else {
             edges[v][u] = {
               points,
+              width,
               reversed: true
             }
           }
