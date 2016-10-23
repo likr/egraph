@@ -107,6 +107,8 @@ const CompoundSugiyamaLayouter = (() => {
         vertexMargin: 10,
         layerMargin: 10,
         edgeMargin: 10,
+        parentHorizontalMargin: 10,
+        parentVerticalMargin: 10,
         vertexWidth: ({d}) => d.width,
         vertexHeight: ({d}) => d.height,
         edgeWidth: () => 1,
@@ -130,7 +132,7 @@ const CompoundSugiyamaLayouter = (() => {
       removeCycle(graph)
       normalize(graph)
       this.ordering().call(graph)
-      layout(graph, this.vertexMargin() / 2, this.layerMargin() / 2)
+      layout(graph, this.parentHorizontalMargin(), this.parentVerticalMargin())
       const vertices = {}
       const edges = {}
       for (const u of graphIn.vertices()) {
@@ -172,6 +174,14 @@ const CompoundSugiyamaLayouter = (() => {
 
     edgeMargin () {
       return accessor(this, privates, 'edgeMargin', arguments)
+    }
+
+    parentHorizontalMargin () {
+      return accessor(this, privates, 'parentHorizontalMargin', arguments)
+    }
+
+    parentVerticalMargin () {
+      return accessor(this, privates, 'parentVerticalMargin', arguments)
     }
 
     vertexWidth () {
