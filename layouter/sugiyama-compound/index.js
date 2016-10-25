@@ -17,7 +17,8 @@ const initialize = (graphIn, options) => {
     edgeMargin,
     vertexWidth,
     vertexHeight,
-    edgeWidth
+    edgeWidth,
+    ltor
   } = options
   const graph = new Graph()
   for (const u of graphIn.vertices()) {
@@ -25,10 +26,10 @@ const initialize = (graphIn, options) => {
     const width = vertexWidth(u)
     const height = vertexHeight(u)
     graph.addVertex(u, Object.assign({}, d, {
-      width: width + vertexMargin,
-      height: height + layerMargin,
-      origWidth: width,
-      origHeight: height
+      width: (ltor ? height : width) + vertexMargin,
+      height: (ltor ? width : height) + layerMargin,
+      origWidth: ltor ? height : width,
+      origHeight: ltor ? width : height
     }))
   }
   for (const [u, v] of graphIn.edges()) {
@@ -78,23 +79,26 @@ const dummyPath = (graph, u, w) => {
   return path
 }
 
-const pathPoints = (graph, path) => {
+const pathPoints = (graph, path, ltor) => {
   const points = []
   const du = graph.vertex(path[0])
-  points.push([du.x, du.y + du.height / 2])
+  points.push([du.x, du.y + (du.origHeight || du.height) / 2])
   for (let i = 1; i < path.length - 1; ++i) {
     const dw = graph.vertex(path[i])
     if (graph.parent(path[i - 1]) === path[i]) {
-      points.push([dw.x, dw.y + dw.height / 2])
+      points.push([dw.x, dw.y + (dw.origHeight || dw.height) / 2])
     } else if (graph.parent(path[i + 1]) === path[i]) {
-      points.push([dw.x, dw.y - dw.height / 2])
+      points.push([dw.x, dw.y - (dw.origHeight || dw.height) / 2])
     } else {
-      points.push([dw.x, dw.y - dw.height / 2])
-      points.push([dw.x, dw.y + dw.height / 2])
+      points.push([dw.x, dw.y - (dw.origHeight || dw.height) / 2])
+      points.push([dw.x, dw.y + (dw.origHeight || dw.height) / 2])
     }
   }
   const dv = graph.vertex(path[path.length - 1])
-  points.push([dv.x, dv.y - dv.height / 2])
+  points.push([dv.x, dv.y - (dv.origHeight || dv.height) / 2])
+  if (ltor) {
+    return points.map(([x, y]) => [y, x])
+  }
   return points
 }
 
@@ -112,19 +116,22 @@ const CompoundSugiyamaLayouter = (() => {
         vertexWidth: ({d}) => d.width,
         vertexHeight: ({d}) => d.height,
         edgeWidth: () => 1,
+        ltor: true,
         layering: new CompoundLayering(),
         ordering: new CompoundOrdering()
       })
     }
 
     layout (graphIn) {
+      const ltor = this.ltor()
       const graph = initialize(graphIn, {
         vertexMargin: this.vertexMargin(),
         layerMargin: this.layerMargin(),
         edgeMargin: this.edgeMargin(),
         vertexWidth: vertexFunction(this.vertexWidth(), graphIn),
         vertexHeight: vertexFunction(this.vertexHeight(), graphIn),
-        edgeWidth: edgeFunction(this.edgeWidth(), graphIn)
+        edgeWidth: edgeFunction(this.edgeWidth(), graphIn),
+        ltor
       })
       const derived = derivedGraph(graph)
       acyclicDerivedGraph(derived)
@@ -132,14 +139,20 @@ const CompoundSugiyamaLayouter = (() => {
       removeCycle(graph)
       normalize(graph)
       this.ordering().call(graph)
-      layout(graph, this.parentHorizontalMargin(), this.parentVerticalMargin())
+      if (ltor) {
+        layout(graph, this.parentVerticalMargin(), this.parentHorizontalMargin())
+      } else {
+        layout(graph, this.parentHorizontalMargin(), this.parentVerticalMargin())
+      }
       const vertices = {}
       const edges = {}
       for (const u of graphIn.vertices()) {
         const d = graph.vertex(u)
-        vertices[u] = Object.assign(d, {
-          width: d.origWidth || d.width,
-          height: d.origHeight || d.height
+        vertices[u] = Object.assign({}, d, {
+          x: ltor ? d.y : d.x,
+          y: ltor ? d.x : d.y,
+          width: ltor ? (d.origHeight || d.height) : (d.origWidth || d.width),
+          height: ltor ? (d.origWidth || d.width) : (d.origHeight || d.height)
         })
         edges[u] = {}
       }
@@ -147,7 +160,7 @@ const CompoundSugiyamaLayouter = (() => {
         if (!graph.vertex(u).dummy) {
           const path = dummyPath(graph, u, w)
           const v = path[path.length - 1]
-          const points = pathPoints(graph, path)
+          const points = pathPoints(graph, path, ltor)
           const width = graph.edge(u, w).origWidth
           if (graphIn.edge(u, v)) {
             edges[u][v] = {
@@ -197,6 +210,10 @@ const CompoundSugiyamaLayouter = (() => {
 
     edgeWidth () {
       return accessor(this, privates, 'edgeWidth', arguments)
+    }
+
+    ltor () {
+      return accessor(this, privates, 'ltor', arguments)
     }
 
     layering () {
