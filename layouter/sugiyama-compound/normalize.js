@@ -66,7 +66,8 @@ const normalize = (graph) => {
         graph
           .addVertex(neighbor, {
             layer: wLayer,
-            width: 10,
+            width,
+            origWidth,
             height: 0,
             dummy: true
           })
