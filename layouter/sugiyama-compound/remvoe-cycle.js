@@ -10,7 +10,7 @@ const removeCycle = (graph) => {
   for (const [u, v] of reverseEdges) {
     const d = graph.edge(u, v)
     graph.removeEdge(u, v)
-    graph.addEdge(v, u, {reversed: true, d})
+    graph.addEdge(v, u, Object.assign({}, d, {reversed: true}))
   }
 }
 
