@@ -1,93 +1,9 @@
 const hashKey = (vertices) => {
+  vertices.sort()
   return vertices.map((u) => u.toString()).join(',')
 }
 
-const maxKey = (iter) => {
-  let maxVal = -Infinity
-  let result = null
-  for (const [id, val] of iter) {
-    if (val > maxVal) {
-      maxVal = val
-      result = id
-    }
-  }
-  return result
-}
-
-const partition = (graph, U) => {
-  const L = new Set()
-  for (const u of U) {
-    for (const v of graph.outVertices(u)) {
-      L.add(v)
-    }
-  }
-  const hashKeys = new Map()
-  for (const u of U) {
-    hashKeys.set(u, hashKey(graph.outVertices(u)))
-  }
-  for (const u of L) {
-    const degrees = graph.inVertices(u).map((v) => [v, graph.outDegree(v)])
-    const maxId = maxKey(degrees)
-    hashKeys.set(u, hashKeys.get(maxId))
-  }
-  let changed = false
-  do {
-    changed = false
-    for (const u of U) {
-      const M = new Map()
-      for (const v of graph.outVertices(u)) {
-        const hash = hashKeys.get(v)
-        if (!M.has(hash)) {
-          M.set(hash, 0)
-        }
-        M.set(hash, M.get(hash) + 1)
-      }
-      const newKey = maxKey(M.entries())
-      if (hashKeys.get(u) !== newKey) {
-        changed = true
-        hashKeys.set(u, newKey)
-      }
-    }
-    for (const u of L) {
-      const M = new Map()
-      for (const v of graph.inVertices(u)) {
-        const hash = hashKeys.get(v)
-        if (!M.has(hash)) {
-          M.set(hash, 0)
-        }
-        M.set(hash, M.get(hash) + 1)
-      }
-      const newKey = maxKey(M.entries())
-      if (hashKeys.get(u) !== newKey) {
-        changed = true
-        hashKeys.set(u, newKey)
-      }
-    }
-  } while (changed)
-  const result = new Map()
-  for (const u of U) {
-    const hash = hashKeys.get(u)
-    if (!result.has(hash)) {
-      result.set(hash, [])
-    }
-    result.get(hash).push(u)
-  }
-  return Array.from(result.values())
-}
-
-const augument = (graph, S) => {
-  const result = new Set()
-  for (const u of S) {
-    for (const v of graph.outVertices(u)) {
-      for (const w of graph.inVertices(v)) {
-        result.add(w)
-      }
-    }
-  }
-  return Array.from(result)
-}
-
-const quasiBicliqueMining = (graph, mu, S) => {
+const quasiBicliqueMining = (graph, S, T, mu, minS = 2, minT = 2) => {
   const C = new Map()
   for (const u of S) {
     const tmpS = new Set()
@@ -112,19 +28,9 @@ const quasiBicliqueMining = (graph, mu, S) => {
   }
 
   const result = Array.from(C.values())
-    .filter(({source, target}) => source.size > 1 && target.size > 1)
+    .filter(({source, target}) => source.size >= minS && target.size >= minT)
     .map(({source, target}) => ({source: Array.from(source), target: Array.from(target)}))
   return result
 }
 
-const quasiCliqueLayer = (graph, h1, h2, mu) => {
-  const cliques = []
-  for (const S of partition(graph, h1)) {
-    for (const clique of quasiBicliqueMining(graph, mu, augument(graph, S))) {
-      cliques.push(clique)
-    }
-  }
-  return cliques
-}
-
-module.exports = quasiCliqueLayer
+module.exports = quasiBicliqueMining
